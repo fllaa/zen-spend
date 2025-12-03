@@ -10,16 +10,33 @@ const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 interface Props extends AnimatedProps<ScrollViewProps> {
   className?: string;
   contentContainerClassName?: string;
+  useHeaderHeight?: boolean;
 }
 
 export const ScreenScrollView: FC<PropsWithChildren<Props>> = ({
   children,
   className,
   contentContainerClassName,
+  useHeaderHeight: shouldCalculateHeaderHeight = true,
   ...props
 }) => {
   const insets = useSafeAreaInsets();
-  const headerHeight = useHeaderHeight();
+  
+  // Always call the hook, but handle the error if context is missing
+  let headerHeight = 0;
+  try {
+    // We can't conditionally call hooks, so we just wrap the call in try/catch
+    // However, useHeaderHeight might throw if context is missing.
+    // A better approach is to check if we are in a screen that provides it,
+    // but for now let's just default to 0 if it fails or if disabled.
+    const height = useHeaderHeight();
+    if (shouldCalculateHeaderHeight) {
+      headerHeight = height;
+    }
+  } catch (e) {
+    // Ignore error if not inside a navigator with header
+  }
+
   return (
     <AnimatedScrollView
       className={cn('bg-background', className)}

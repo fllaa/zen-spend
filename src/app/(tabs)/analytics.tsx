@@ -91,6 +91,7 @@ export default function Analytics() {
                 data={pieData}
                 donut
                 showText
+                backgroundColor="transparent"
                 textColor={textColor}
                 radius={width * 0.35}
                 innerRadius={width * 0.20}

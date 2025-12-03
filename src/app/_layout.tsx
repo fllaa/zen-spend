@@ -5,6 +5,7 @@ import {
   Inter_700Bold,
   useFonts,
 } from '@expo-google-fonts/inter';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Slot } from 'expo-router';
 import { HeroUINativeProvider } from 'heroui-native';
 import { useCallback } from 'react';
@@ -19,7 +20,9 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import '../../global.css';
+import { BottomSheetModalWrapper } from '../components/bottom-sheet-modal-wrapper';
 import { AppThemeProvider } from '../contexts/app-theme-context';
+import { ModalProvider } from '../contexts/modal-context';
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -54,7 +57,12 @@ function AppContent() {
           },
         }}
       >
-        <Slot />
+        <BottomSheetModalProvider>
+          <ModalProvider>
+            <Slot />
+            <BottomSheetModalWrapper />
+          </ModalProvider>
+        </BottomSheetModalProvider>
       </HeroUINativeProvider>
     </AppThemeProvider>
   );

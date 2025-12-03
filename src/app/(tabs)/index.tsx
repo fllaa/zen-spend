@@ -1,8 +1,10 @@
+import { useModal } from '@/src/contexts/modal-context';
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
 import { Button, useThemeColor } from 'heroui-native';
 import React, { useEffect } from 'react';
 import { RefreshControl, View } from 'react-native';
+import { AddTransaction } from '../../components/add-transaction';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
 import { SummaryCard } from '../../components/summary-card';
@@ -20,6 +22,7 @@ export default function Dashboard() {
     isLoading 
   } = useStore();
   const textColorReversed = useThemeColor('background');
+  const modal = useModal();
 
   useEffect(() => {
     initialize();
@@ -100,7 +103,7 @@ export default function Dashboard() {
       <View className="absolute bottom-8 right-8">
         <Button 
           className="w-14 h-14 rounded-full shadow-lg bg-foreground items-center justify-center p-0"
-          onPress={() => router.push('/add-transaction' as any)}
+          onPress={() => modal.open(<AddTransaction close={modal.close} />)}
         >
           <Feather name="plus" size={24} color={textColorReversed} />
         </Button>

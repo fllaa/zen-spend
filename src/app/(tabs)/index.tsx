@@ -14,12 +14,13 @@ import { useStore } from '../../store';
 
 export default function Dashboard() {
   const router = useRouter();
-  const { 
-    initialize, 
-    fetchDashboardData, 
-    monthlySummary, 
-    recentTransactions, 
-    isLoading 
+  const {
+    initialize,
+    fetchDashboardData,
+    monthlySummary,
+    recentTransactions,
+    isLoading,
+    removeTransaction
   } = useStore();
   const textColorReversed = useThemeColor('background');
   const modal = useModal();
@@ -90,9 +91,10 @@ export default function Dashboard() {
             </View>
           ) : (
             recentTransactions.map((transaction) => (
-              <TransactionCard 
-                key={transaction.id} 
-                transaction={transaction} 
+              <TransactionCard
+                key={transaction.id}
+                transaction={transaction}
+                onDelete={() => removeTransaction(transaction.id)}
               />
             ))
           )}

@@ -46,7 +46,7 @@ export default function AddTransaction() {
       <ScreenScrollView useHeaderHeight={false}>
         <View className="p-4 gap-6">
           {/* Type Selection */}
-          <View className="flex-row bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg">
+          <View className="flex-row bg-zinc-200 dark:bg-zinc-800 p-1 rounded-lg">
             <TouchableOpacity 
               className={`flex-1 py-2 items-center rounded-md ${type === 'expense' ? 'bg-white dark:bg-zinc-700 shadow-sm' : ''}`}
               onPress={() => {
@@ -54,7 +54,7 @@ export default function AddTransaction() {
                 setSelectedCategory(null);
               }}
             >
-              <AppText className={type === 'expense' ? 'font-semibold' : 'text-muted'}>Expense</AppText>
+              <AppText className={type === 'expense' ? 'font-semibold text-foreground' : 'text-muted'}>Expense</AppText>
             </TouchableOpacity>
             <TouchableOpacity 
               className={`flex-1 py-2 items-center rounded-md ${type === 'income' ? 'bg-white dark:bg-zinc-700 shadow-sm' : ''}`}
@@ -63,7 +63,7 @@ export default function AddTransaction() {
                 setSelectedCategory(null);
               }}
             >
-              <AppText className={type === 'income' ? 'font-semibold' : 'text-muted'}>Income</AppText>
+              <AppText className={type === 'income' ? 'font-semibold text-foreground' : 'text-muted'}>Income</AppText>
             </TouchableOpacity>
           </View>
 
@@ -95,7 +95,7 @@ export default function AddTransaction() {
                   onPress={() => setSelectedCategory(cat.id)}
                   className={`items-center justify-center p-3 rounded-xl border ${
                     selectedCategory === cat.id 
-                      ? 'bg-primary/10 border-primary' 
+                      ? 'bg-foreground/20 border-foreground' 
                       : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
                   }`}
                   style={{ width: '30%' }}
@@ -107,7 +107,7 @@ export default function AddTransaction() {
                     <Feather name={cat.icon as any} size={20} color={cat.color} />
                   </View>
                   <AppText 
-                    className={`text-xs font-medium ${selectedCategory === cat.id ? 'text-primary' : 'text-foreground'}`}
+                    className={`text-xs font-medium ${selectedCategory === cat.id ? 'text-foreground' : 'text-foreground'}`}
                     numberOfLines={1}
                   >
                     {cat.name}

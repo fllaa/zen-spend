@@ -260,7 +260,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.flla.zenspend";
-				PRODUCT_NAME = "HeroUINativeExample";
+				PRODUCT_NAME = "ZenSpend";
 				SWIFT_OBJC_BRIDGING_HEADER = "HeroUINativeExample/HeroUINativeExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -289,7 +289,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.flla.zenspend";
-				PRODUCT_NAME = "HeroUINativeExample";
+				PRODUCT_NAME = "ZenSpend";
 				SWIFT_OBJC_BRIDGING_HEADER = "HeroUINativeExample/HeroUINativeExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -4,6 +4,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
 import { Button, cn, Surface, useThemeColor } from 'heroui-native';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, RefreshControl, View } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { AppText } from '../../components/app-text';
@@ -13,6 +14,7 @@ import { useStore } from '../../store';
 const { width } = Dimensions.get('window');
 
 export default function Analytics() {
+  const { t } = useTranslation();
   const { categorySummary, fetchAnalytics, isLoading } = useStore();
   const { currency, numberFormat, style } = useSettingsStore();
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -69,7 +71,7 @@ export default function Analytics() {
       >
         <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-6">
-            <AppText className="text-3xl font-bold text-foreground">Analytics</AppText>
+            <AppText className="text-3xl font-bold text-foreground">{t('analytics')}</AppText>
           </View>
 
           {/* Month Selector */}
@@ -105,13 +107,13 @@ export default function Analytics() {
           ) : (
             <View className="items-center justify-center py-20 border border-dashed border-border rounded-xl">
               <Feather name="pie-chart" size={40} className="text-muted mb-2" color={textColor} />
-              <AppText className="text-muted">No data for this month</AppText>
+              <AppText className="text-muted">{t('noDataForThisMonth')}</AppText>
             </View>
           )}
 
           {/* Breakdown List */}
           <View className="mt-8">
-            <AppText className="text-xl font-semibold mb-4 text-foreground">Breakdown</AppText>
+            <AppText className="text-xl font-semibold mb-4 text-foreground">{t('breakdown')}</AppText>
             {categorySummary.map((item, index) => (
               <View 
                 key={index} 

@@ -1,6 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Button, TextField } from 'heroui-native';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View } from 'react-native';
 import { getCurrencySymbol } from '../helpers/currency-helper';
 import { useStore } from '../store';
@@ -8,6 +9,7 @@ import { useSettingsStore } from '../store/settings';
 import { AppText } from './app-text';
 
 export const AddTransaction: React.FC<{close: () => void}> = (props) => {
+  const { t } = useTranslation();
   const { categories, addNewTransaction, isLoading } = useStore();
   const { currency } = useSettingsStore();
 
@@ -44,7 +46,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
               setSelectedCategory(null);
             }}
           >
-            <AppText className={type === 'expense' ? 'font-semibold text-foreground' : 'text-muted'}>Expense</AppText>
+            <AppText className={type === 'expense' ? 'font-semibold text-foreground' : 'text-muted'}>{t('expense')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity 
             className={`flex-1 py-2 items-center rounded-md ${type === 'income' ? 'bg-background shadow-sm' : ''}`}
@@ -53,13 +55,13 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
               setSelectedCategory(null);
             }}
           >
-            <AppText className={type === 'income' ? 'font-semibold text-foreground' : 'text-muted'}>Income</AppText>
+            <AppText className={type === 'income' ? 'font-semibold text-foreground' : 'text-muted'}>{t('income')}</AppText>
           </TouchableOpacity>
         </View>
 
         {/* Amount Input */}
         <View>
-          <AppText className="text-sm font-medium mb-2 text-muted">Amount</AppText>
+          <AppText className="text-sm font-medium mb-2 text-muted">{t('amount')}</AppText>
           <TextField>
             <TextField.Input
               placeholder="0.00"
@@ -77,7 +79,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
 
         {/* Category Selection */}
         <View>
-          <AppText className="text-sm font-medium mb-3 text-muted">Category</AppText>
+          <AppText className="text-sm font-medium mb-3 text-muted">{t('category')}</AppText>
           <View className="flex-row flex-wrap gap-3">
             {filteredCategories.map((cat) => (
               <TouchableOpacity
@@ -109,10 +111,10 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
 
         {/* Note Input */}
         <View>
-          <AppText className="text-sm font-medium mb-2 text-muted">Note (Optional)</AppText>
+          <AppText className="text-sm font-medium mb-2 text-muted">{t('noteOptional')}</AppText>
           <TextField>
             <TextField.Input
-              placeholder="What is this for?"
+              placeholder={t('whatIsThisFor')}
               value={note}
               onChangeText={setNote}
             />
@@ -121,7 +123,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
 
         {/* Date Input (Simplified for MVP) */}
         <View>
-          <AppText className="text-sm font-medium mb-2 text-muted">Date</AppText>
+          <AppText className="text-sm font-medium mb-2 text-muted">{t('date')}</AppText>
           <View className="p-3 bg-background rounded-xl border border-border">
             <AppText className="text-foreground">{date.toLocaleDateString()}</AppText>
           </View>
@@ -135,7 +137,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
           onPress={handleSave}
           isDisabled={!amount || !selectedCategory || isLoading}
         >
-          {isLoading ? 'Saving...' : 'Save Transaction'}
+          {isLoading ? t('saving') : t('saveTransaction')}
         </Button>
       </View>
     </View>

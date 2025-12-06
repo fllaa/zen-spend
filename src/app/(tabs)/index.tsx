@@ -45,8 +45,8 @@ export default function Dashboard() {
         <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-6">
             <View>
-              <AppText className="text-3xl font-bold mb-1 text-foreground">Dashboard</AppText>
-              <AppText className="text-muted">Overview of your finances</AppText>
+              <AppText className="text-3xl font-bold mb-1 text-foreground">{t('dashboard')}</AppText>
+              <AppText className="text-muted">{t('overviewOfFinances')}</AppText>
             </View>
           </View>
 

@@ -49,6 +49,15 @@ const resources = {
       indonesian: 'Bahasa Indonesia',
       dotSeparator: '1,000.00 (Dot)',
       commaSeparator: '1.000,00 (Comma)',
+
+      // Add Transaction
+      amount: 'Amount',
+      category: 'Category',
+      noteOptional: 'Note (Optional)',
+      whatIsThisFor: 'What is this for?',
+      date: 'Date',
+      saveTransaction: 'Save Transaction',
+      saving: 'Saving...',
     },
   },
   id: {
@@ -98,6 +107,15 @@ const resources = {
       indonesian: 'Bahasa Indonesia',
       dotSeparator: '1,000.00 (Titik)',
       commaSeparator: '1.000,00 (Koma)',
+
+      // Add Transaction
+      amount: 'Jumlah',
+      category: 'Kategori',
+      noteOptional: 'Catatan (Opsional)',
+      whatIsThisFor: 'Untuk apa ini?',
+      date: 'Tanggal',
+      saveTransaction: 'Simpan Transaksi',
+      saving: 'Menyimpan...',
     },
   },
 };

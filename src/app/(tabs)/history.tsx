@@ -1,6 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import { TextField } from 'heroui-native';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, View } from 'react-native';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
@@ -10,7 +11,8 @@ import { useStore } from '../../store';
 import { TransactionWithCategory } from '../../types';
 
 export default function History() {
-  const { isLoading, removeTransaction } = useStore();
+  const { t } = useTranslation();
+  const { removeTransaction } = useStore();
   const [transactions, setTransactions] = useState<TransactionWithCategory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<TransactionWithCategory[]>([]);
@@ -59,14 +61,14 @@ export default function History() {
       >
         <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-4">
-            <AppText className="text-3xl font-bold text-foreground">History</AppText>
+            <AppText className="text-3xl font-bold text-foreground">{t('history')}</AppText>
           </View>
 
           {/* Search Bar */}
           <View className="mb-4">
             <TextField>
               <TextField.Input
-                placeholder="Search transactions..."
+                placeholder={t('searchTransactions')}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               >
@@ -81,7 +83,7 @@ export default function History() {
           {filteredTransactions.length === 0 ? (
             <View className="items-center justify-center py-20">
               <Feather name="list" size={40} className="text-muted mb-2" />
-              <AppText className="text-muted">No transactions found</AppText>
+              <AppText className="text-muted">{t('noTransactionsFound')}</AppText>
             </View>
           ) : (
             filteredTransactions.map((item) => (

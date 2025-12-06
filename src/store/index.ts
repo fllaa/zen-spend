@@ -5,17 +5,25 @@ import {
   deleteTransaction,
   getCategories,
   getCategorySummary,
+  getDailyExpenses,
   getMonthlySummary,
   getTransactions,
   initDatabase,
 } from '../db';
-import type { Category, CategorySummary, MonthlySummary, TransactionWithCategory } from '../types';
+import type {
+  Category,
+  CategorySummary,
+  DailyExpense,
+  MonthlySummary,
+  TransactionWithCategory,
+} from '../types';
 
 interface AppState {
   categories: Category[];
   recentTransactions: TransactionWithCategory[];
   monthlySummary: MonthlySummary;
   categorySummary: CategorySummary[];
+  dailyExpenses: DailyExpense[];
   isLoading: boolean;
   error: string | null;
   lastUpdated: number;
@@ -33,6 +41,7 @@ export const useStore = create<AppState>((set, get) => ({
   recentTransactions: [],
   monthlySummary: { income: 0, expense: 0, balance: 0 },
   categorySummary: [],
+  dailyExpenses: [],
   isLoading: false,
   error: null,
   lastUpdated: 0,
@@ -112,7 +121,10 @@ export const useStore = create<AppState>((set, get) => ({
       const start = getUnixTime(monthStart);
       const end = getUnixTime(monthEnd);
 
-      const summary = await getCategorySummary(start, end);
+      const [summary, daily] = await Promise.all([
+        getCategorySummary(start, end),
+        getDailyExpenses(start, end),
+      ]);
 
       // Calculate percentages
       const totalExpense = summary.reduce((acc: number, curr: any) => acc + curr.totalAmount, 0);
@@ -121,7 +133,7 @@ export const useStore = create<AppState>((set, get) => ({
         percentage: totalExpense > 0 ? (item.totalAmount / totalExpense) * 100 : 0,
       }));
 
-      set({ categorySummary: summaryWithPercentage });
+      set({ categorySummary: summaryWithPercentage, dailyExpenses: daily });
     } catch (error) {
       set({ error: 'Failed to fetch analytics' });
       console.error(error);

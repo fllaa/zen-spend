@@ -26,6 +26,8 @@ const resources = {
       // Analytics
       breakdown: 'Breakdown',
       noDataForThisMonth: 'No data for this month',
+      dailyTrend: 'Daily Trend',
+      categories: 'Categories',
 
       // Settings
       customizeAppExperience: 'Customize your app experience',
@@ -84,6 +86,8 @@ const resources = {
       // Analytics
       breakdown: 'Rincian',
       noDataForThisMonth: 'Tidak ada data untuk bulan ini',
+      dailyTrend: 'Tren Harian',
+      categories: 'Kategori',
 
       // Settings
       customizeAppExperience: 'Ubah pengalaman aplikasi Anda',

@@ -34,3 +34,8 @@ export interface CategorySummary {
   totalAmount: number;
   percentage: number;
 }
+
+export interface DailyExpense {
+  day: number;
+  amount: number;
+}

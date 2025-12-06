@@ -29,7 +29,7 @@ export const initDatabase = async () => {
 
     // Seed default categories if empty
     const result = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM categories');
-    if (result && result.count === 0) {
+    if (result?.count === 0) {
       await seedCategories();
     }
   } catch (error) {
@@ -149,4 +149,20 @@ export const getCategorySummary = async (monthStart: number, monthEnd: number) =
       ORDER BY totalAmount DESC
     `;
   return await db.getAllAsync<any>(query, monthStart, monthEnd);
+};
+
+export const getDailyExpenses = async (monthStart: number, monthEnd: number) => {
+  if (!db) await initDatabase();
+  const query = `
+    SELECT strftime('%d', datetime(date, 'unixepoch', 'localtime')) as day, SUM(amount) as total
+    FROM transactions
+    WHERE type = 'expense' AND date >= ? AND date <= ?
+    GROUP BY day
+    ORDER BY day ASC
+  `;
+  const rows = await db.getAllAsync<{ day: string; total: number }>(query, monthStart, monthEnd);
+  return rows.map((row) => ({
+    day: Number.parseInt(row.day, 10),
+    amount: row.total,
+  }));
 };

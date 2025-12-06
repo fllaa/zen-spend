@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>heroui-native-example</string>
-          <string>com.anonymous.herouinativeexample</string>
+          <string>zen-spend</string>
+          <string>com.flla.zenspend</string>
         </array>
       </dict>
     </array>

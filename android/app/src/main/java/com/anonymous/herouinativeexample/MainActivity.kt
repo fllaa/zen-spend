@@ -1,4 +1,4 @@
-package com.anonymous.herouinativeexample
+package com.flla.zenspend
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

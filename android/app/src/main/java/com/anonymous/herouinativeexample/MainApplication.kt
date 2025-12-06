@@ -1,4 +1,4 @@
-package com.anonymous.herouinativeexample
+package com.flla.zenspend
 
 import android.app.Application
 import android.content.res.Configuration

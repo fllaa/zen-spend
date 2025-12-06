@@ -62,6 +62,17 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color, focused }) => (
+            <View className={`items-center justify-center w-16 h-8 rounded-full ${focused ? 'bg-primary/10' : ''}`}>
+              <Feather name="settings" size={24} color={color} />
+            </View>
+          ),
+        }}
+      />
     </Tabs>
   );
 }

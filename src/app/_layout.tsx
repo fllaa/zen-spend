@@ -9,6 +9,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { Slot } from 'expo-router';
 import { HeroUINativeProvider } from 'heroui-native';
 import { useCallback } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
@@ -23,6 +24,7 @@ import '../../global.css';
 import { BottomSheetModalWrapper } from '../components/bottom-sheet-modal-wrapper';
 import { AppThemeProvider } from '../contexts/app-theme-context';
 import { ModalProvider } from '../contexts/modal-context';
+import i18n from '../i18n';
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -49,22 +51,24 @@ function AppContent() {
   );
 
   return (
-    <AppThemeProvider>
-      <HeroUINativeProvider
-        config={{
-          toast: {
-            contentWrapper,
-          },
-        }}
-      >
-        <BottomSheetModalProvider>
-          <ModalProvider>
-            <Slot />
-            <BottomSheetModalWrapper />
-          </ModalProvider>
-        </BottomSheetModalProvider>
-      </HeroUINativeProvider>
-    </AppThemeProvider>
+    <I18nextProvider i18n={i18n}>
+      <AppThemeProvider>
+        <HeroUINativeProvider
+          config={{
+            toast: {
+              contentWrapper,
+            },
+          }}
+        >
+          <BottomSheetModalProvider>
+            <ModalProvider>
+              <Slot />
+              <BottomSheetModalWrapper />
+            </ModalProvider>
+          </BottomSheetModalProvider>
+        </HeroUINativeProvider>
+      </AppThemeProvider>
+    </I18nextProvider>
   );
 }
 

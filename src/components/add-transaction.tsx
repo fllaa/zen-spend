@@ -33,9 +33,9 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
     <View className="flex-1">
       <View className="flex-1 p-4 gap-6">
         {/* Type Selection */}
-        <View className="flex-row bg-zinc-200 dark:bg-zinc-800 p-1 rounded-lg">
+        <View className="flex-row bg-surface p-1 rounded-lg">
           <TouchableOpacity 
-            className={`flex-1 py-2 items-center rounded-md ${type === 'expense' ? 'bg-white dark:bg-zinc-700 shadow-sm' : ''}`}
+            className={`flex-1 py-2 items-center rounded-md ${type === 'expense' ? 'bg-background shadow-sm' : ''}`}
             onPress={() => {
               setType('expense');
               setSelectedCategory(null);
@@ -44,7 +44,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
             <AppText className={type === 'expense' ? 'font-semibold text-foreground' : 'text-muted'}>Expense</AppText>
           </TouchableOpacity>
           <TouchableOpacity 
-            className={`flex-1 py-2 items-center rounded-md ${type === 'income' ? 'bg-white dark:bg-zinc-700 shadow-sm' : ''}`}
+            className={`flex-1 py-2 items-center rounded-md ${type === 'income' ? 'bg-background shadow-sm' : ''}`}
             onPress={() => {
               setType('income');
               setSelectedCategory(null);
@@ -82,8 +82,8 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
                 onPress={() => setSelectedCategory(cat.id)}
                 className={`items-center justify-center p-3 rounded-xl border ${
                   selectedCategory === cat.id 
-                    ? 'bg-foreground/20 border-foreground' 
-                    : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                    ? 'bg-surface border-accent-foreground' 
+                    : 'bg-background border-border'
                 }`}
                 style={{ width: '30%' }}
               >
@@ -119,14 +119,14 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
         {/* Date Input (Simplified for MVP) */}
         <View>
           <AppText className="text-sm font-medium mb-2 text-muted">Date</AppText>
-          <View className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
-            <AppText className="text-foreground">{date.toDateString()}</AppText>
+          <View className="p-3 bg-background rounded-xl border border-border">
+            <AppText className="text-foreground">{date.toLocaleDateString()}</AppText>
           </View>
         </View>
 
       </View>
 
-      <View className="p-4 border-t border-zinc-200 dark:border-zinc-800">
+      <View className="p-4 border-t border-border">
         <Button 
           size="lg" 
           onPress={handleSave}

@@ -1,9 +1,12 @@
-import React, { createContext, useCallback, useContext, useMemo } from 'react';
-import { Uniwind, useUniwind } from 'uniwind';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Appearance } from 'react-native';
+import { Uniwind } from 'uniwind';
+import { useSettingsStore } from '../store/settings';
 
 type ThemeName =
   | 'light'
   | 'dark'
+  | 'system'
   | 'lavender-light'
   | 'lavender-dark'
   | 'mint-light'
@@ -12,6 +15,7 @@ type ThemeName =
   | 'sky-dark';
 
 interface AppThemeContextType {
+  selectedTheme: ThemeName;
   currentTheme: string;
   isLight: boolean;
   isDark: boolean;
@@ -26,58 +30,83 @@ const AppThemeContext = createContext<AppThemeContextType | undefined>(
 export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { theme } = useUniwind();
-
-  const isLight = useMemo(() => {
-    return theme === 'light' || theme.endsWith('-light');
-  }, [theme]);
-
-  const isDark = useMemo(() => {
-    return theme === 'dark' || theme.endsWith('-dark');
-  }, [theme]);
+  const { theme: selectedTheme, setTheme: setSelectedTheme } = useSettingsStore();
+  const [systemColorScheme, setSystemColorScheme] = useState(Appearance.getColorScheme());
 
   const setTheme = useCallback((newTheme: ThemeName) => {
-    Uniwind.setTheme(newTheme);
+    setSelectedTheme(newTheme);
+    if (newTheme === 'system') {
+      Uniwind.setTheme(systemColorScheme === 'dark' ? 'dark' : 'light');
+    } else {
+      Uniwind.setTheme(newTheme);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [systemColorScheme]);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setSystemColorScheme(colorScheme);
+    });
+    setTheme(selectedTheme);
+    return () => subscription?.remove();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const currentTheme = useMemo(() => {
+    if (selectedTheme === 'system') {
+      return systemColorScheme === 'dark' ? 'dark' : 'light';
+    }
+    return selectedTheme;
+  }, [selectedTheme, systemColorScheme]);
+
+  const isLight = useMemo(() => {
+    return currentTheme === 'light' || currentTheme.endsWith('-light');
+  }, [currentTheme]);
+
+  const isDark = useMemo(() => {
+    return currentTheme === 'dark' || currentTheme.endsWith('-dark');
+  }, [currentTheme]);
+
   const toggleTheme = useCallback(() => {
-    switch (theme) {
+    const actualTheme = currentTheme;
+    switch (actualTheme) {
       case 'light':
-        Uniwind.setTheme('dark');
+        setTheme('dark');
         break;
       case 'dark':
-        Uniwind.setTheme('light');
+        setTheme('light');
         break;
       case 'lavender-light':
-        Uniwind.setTheme('lavender-dark');
+        setTheme('lavender-dark');
         break;
       case 'lavender-dark':
-        Uniwind.setTheme('lavender-light');
+        setTheme('lavender-light');
         break;
       case 'mint-light':
-        Uniwind.setTheme('mint-dark');
+        setTheme('mint-dark');
         break;
       case 'mint-dark':
-        Uniwind.setTheme('mint-light');
+        setTheme('mint-light');
         break;
       case 'sky-light':
-        Uniwind.setTheme('sky-dark');
+        setTheme('sky-dark');
         break;
       case 'sky-dark':
-        Uniwind.setTheme('sky-light');
+        setTheme('sky-light');
         break;
     }
-  }, [theme]);
+  }, [currentTheme, setTheme]);
 
   const value = useMemo(
     () => ({
-      currentTheme: theme,
+      selectedTheme,
+      currentTheme,
       isLight,
       isDark,
       setTheme,
       toggleTheme,
     }),
-    [theme, isLight, isDark, setTheme, toggleTheme]
+    [selectedTheme, currentTheme, isLight, isDark, setTheme, toggleTheme]
   );
 
   return (

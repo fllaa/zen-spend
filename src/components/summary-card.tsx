@@ -28,7 +28,7 @@ export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
   };
 
   return (
-    <Card className="flex-1 p-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+    <Card className="flex-1 p-3 border border-border bg-surface">
       <View className="flex-row items-center gap-2 mb-2">
         <View className={`p-1.5 rounded-full bg-opacity-10 ${type === 'income' ? 'bg-green-500' : type === 'expense' ? 'bg-red-500' : 'bg-blue-500'}`}>
           <Feather

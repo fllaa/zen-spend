@@ -6,7 +6,6 @@ import { Dimensions, RefreshControl, View } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
-import { ThemeToggle } from '../../components/theme-toggle';
 import { useStore } from '../../store';
 
 const { width } = Dimensions.get('window');
@@ -65,14 +64,13 @@ export default function Analytics() {
           <RefreshControl refreshing={isLoading} onRefresh={loadData} />
         }
       >
-        <View className="px-4 pt-12 pb-4">
+        <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-6">
             <AppText className="text-3xl font-bold text-foreground">Analytics</AppText>
-            <ThemeToggle />
           </View>
 
           {/* Month Selector */}
-          <View className="flex-row items-center justify-between mb-8 bg-zinc-50 dark:bg-zinc-900 p-2 rounded-xl border border-zinc-200 dark:border-zinc-800">
+          <View className="flex-row items-center justify-between mb-8 bg-surface p-2 rounded-xl border border-border">
             <Button variant="ghost" size="sm" onPress={handlePrevMonth}>
               <Feather name="chevron-left" color={textColor} size={20} />
             </Button>
@@ -86,7 +84,7 @@ export default function Analytics() {
 
           {/* Chart Area */}
           {categorySummary.length > 0 ? (
-            <View className="items-center bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <View className="items-center bg-surface p-6 rounded-2xl border border-border shadow-sm">
               <PieChart
                 data={pieData}
                 donut
@@ -102,8 +100,8 @@ export default function Analytics() {
               {renderLegend()}
             </View>
           ) : (
-            <View className="items-center justify-center py-20 border border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl">
-              <Feather name="pie-chart" size={40} className="text-muted mb-2" />
+            <View className="items-center justify-center py-20 border border-dashed border-border rounded-xl">
+              <Feather name="pie-chart" size={40} className="text-muted mb-2" color={textColor} />
               <AppText className="text-muted">No data for this month</AppText>
             </View>
           )}

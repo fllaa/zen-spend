@@ -55,7 +55,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
         renderRightActions={renderRightActions}
         overshootRight={false}
       >
-        <Card className="p-4 mb-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+        <Card className="p-4 mb-3 border border-border bg-surface">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-3">
               <View

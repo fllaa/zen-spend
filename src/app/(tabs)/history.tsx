@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
-import { ThemeToggle } from '../../components/theme-toggle';
 import { TransactionCard } from '../../components/transaction-card';
 import { getTransactions } from '../../db';
 import { useStore } from '../../store';
@@ -58,10 +57,9 @@ export default function History() {
           <RefreshControl refreshing={isRefreshing} onRefresh={loadTransactions} />
         }
       >
-        <View className="px-4 pt-12 pb-4">
+        <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-4">
             <AppText className="text-3xl font-bold text-foreground">History</AppText>
-            <ThemeToggle />
           </View>
 
           {/* Search Bar */}

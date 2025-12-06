@@ -12,7 +12,7 @@ import type { TransactionWithCategory } from '../../types';
 
 export default function History() {
   const { t } = useTranslation();
-  const { removeTransaction } = useStore();
+  const { removeTransaction, lastUpdated } = useStore();
   const [transactions, setTransactions] = useState<TransactionWithCategory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<TransactionWithCategory[]>([]);
@@ -36,9 +36,10 @@ export default function History() {
     // loadTransactions() is now triggered by useEffect listening to lastUpdated
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refresh automatically when data has changes
   useEffect(() => {
     loadTransactions();
-  }, [loadTransactions]);
+  }, [loadTransactions, lastUpdated]);
 
   useEffect(() => {
     if (searchQuery) {

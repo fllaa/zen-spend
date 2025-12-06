@@ -15,7 +15,7 @@ const { width } = Dimensions.get('window');
 
 export default function Analytics() {
   const { t } = useTranslation();
-  const { categorySummary, dailyExpenses, fetchAnalytics, isLoading } = useStore();
+  const { categorySummary, dailyExpenses, fetchAnalytics, isLoading, lastUpdated } = useStore();
   const { currency, numberFormat, style } = useSettingsStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const textColor = useThemeColor('foreground');
@@ -29,9 +29,10 @@ export default function Analytics() {
     fetchAnalytics(start, end);
   }, [currentDate, fetchAnalytics]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refresh automatically when data has changes
   useEffect(() => {
     loadData();
-  }, [loadData]);
+  }, [loadData, lastUpdated]);
 
   const handlePrevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));

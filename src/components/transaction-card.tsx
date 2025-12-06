@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { cn, Surface } from 'heroui-native';
+import { cn, Surface, useThemeColor } from 'heroui-native';
 import type React from 'react';
 import { useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
@@ -24,6 +24,8 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onDelete }) => {
   const swipeableRef = useRef<SwipeableMethods>(null);
   const translateX = new Animated.Value(0);
 
+  const dangerForegroundColor = useThemeColor('danger-foreground')
+
   const handleDelete = () => {
     if (swipeableRef.current) {
       swipeableRef.current.close();
@@ -41,9 +43,9 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onDelete }) => {
 
   const renderRightActions = () => {
     return (
-      <View className="flex-row items-center justify-center bg-red-500 w-24 h-18.5 -ml-8 pl-5.5 rounded-r-3xl">
+      <View className={cn("flex-row items-center justify-center bg-danger w-24 h-19 -ml-8 pl-5.5 rounded-r-3xl", style === 'bordered' ? 'border border-danger-soft' : 'border-0')}>
         <TouchableOpacity className="items-center justify-center w-full h-full" onPress={handleDelete}>
-          <Feather name="trash-2" size={24} color="white" />
+          <Feather name="trash-2" size={24} color={dangerForegroundColor} />
         </TouchableOpacity>
       </View>
     );
@@ -69,7 +71,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onDelete }) => {
             </View>
 
             <View className="items-end">
-              <AppText className={`font-bold text-base ${isExpense ? 'text-red-500' : 'text-green-500'}`}>
+              <AppText className={`font-bold text-base ${isExpense ? 'text-danger' : 'text-success'}`}>
                 {isExpense ? '-' : '+'}
                 {formatCurrency(transaction.amount, currency, numberFormat)}
               </AppText>

@@ -28,11 +28,11 @@ export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
   const getColor = () => {
     switch (type) {
       case 'income':
-        return 'text-green-500';
+        return 'text-success';
       case 'expense':
-        return 'text-red-500';
+        return 'text-danger';
       default:
-        return 'text-blue-500';
+        return 'text-accent';
     }
   };
 
@@ -40,7 +40,7 @@ export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
     <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', 'flex-1 p-3')}>
       <View className="flex-row items-center gap-2 mb-2">
         <View
-          className={`p-1.5 rounded-full bg-opacity-10 ${type === 'income' ? 'bg-green-500' : type === 'expense' ? 'bg-red-500' : 'bg-blue-500'}`}
+          className={`p-1.5 rounded-full bg-opacity-10 ${type === 'income' ? 'bg-success' : type === 'expense' ? 'bg-danger' : 'bg-accent'}`}
         >
           <Feather name={getIcon()} size={14} className={getColor()} />
         </View>

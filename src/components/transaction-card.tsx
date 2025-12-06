@@ -1,6 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import { format } from 'date-fns';
-import { Card } from 'heroui-native';
+import { cn, Surface } from 'heroui-native';
 import React, { useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelete }) => {
-  const { currency, numberFormat } = useSettingsStore();
+  const { currency, numberFormat, style } = useSettingsStore();
   const isExpense = transaction.type === 'expense';
   const formattedDate = format(new Date(transaction.date * 1000), 'MMM dd, yyyy');
 
@@ -58,7 +58,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
         renderRightActions={renderRightActions}
         overshootRight={false}
       >
-        <Card className="p-4 mb-3 border border-border bg-surface">
+        <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', "p-4 mb-3")}>
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-3">
               <View
@@ -94,7 +94,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
               ) : null}
             </View>
           </View>
-        </Card>
+        </Surface>
       </Swipeable>
     </Animated.View>
   );

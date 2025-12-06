@@ -2,7 +2,7 @@ import { formatCurrency } from '@/src/helpers/currency-helper';
 import { useSettingsStore } from '@/src/store/settings';
 import Feather from '@expo/vector-icons/Feather';
 import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
-import { Button, useThemeColor } from 'heroui-native';
+import { Button, cn, Surface, useThemeColor } from 'heroui-native';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, RefreshControl, View } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
@@ -14,7 +14,7 @@ const { width } = Dimensions.get('window');
 
 export default function Analytics() {
   const { categorySummary, fetchAnalytics, isLoading } = useStore();
-  const { currency, numberFormat } = useSettingsStore();
+  const { currency, numberFormat, style } = useSettingsStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const textColor = useThemeColor('foreground');
 
@@ -73,7 +73,7 @@ export default function Analytics() {
           </View>
 
           {/* Month Selector */}
-          <View className="flex-row items-center justify-between mb-8 bg-surface p-2 rounded-xl border border-border">
+          <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', "flex-row items-center justify-between mb-8 p-2 rounded-xl")}>
             <Button variant="ghost" size="sm" onPress={handlePrevMonth}>
               <Feather name="chevron-left" color={textColor} size={20} />
             </Button>
@@ -83,11 +83,11 @@ export default function Analytics() {
             <Button variant="ghost" size="sm" onPress={handleNextMonth}>
               <Feather name="chevron-right" color={textColor} size={20} />
             </Button>
-          </View>
+          </Surface>
 
           {/* Chart Area */}
           {categorySummary.length > 0 ? (
-            <View className="items-center bg-surface p-6 rounded-2xl border border-border shadow-sm">
+            <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', "items-center p-6 rounded-2xl shadow-sm")}>
               <PieChart
                 data={pieData}
                 donut
@@ -95,13 +95,13 @@ export default function Analytics() {
                 backgroundColor="transparent"
                 textColor={textColor}
                 radius={width * 0.35}
-                innerRadius={width * 0.20}
+                innerRadius={width * 0.2}
                 textSize={12}
                 focusOnPress
                 showValuesAsLabels={false}
               />
               {renderLegend()}
-            </View>
+            </Surface>
           ) : (
             <View className="items-center justify-center py-20 border border-dashed border-border rounded-xl">
               <Feather name="pie-chart" size={40} className="text-muted mb-2" color={textColor} />
@@ -115,7 +115,7 @@ export default function Analytics() {
             {categorySummary.map((item, index) => (
               <View 
                 key={index} 
-                className="flex-row items-center justify-between py-3 border-b border-zinc-100 dark:border-zinc-800"
+                className="flex-row items-center justify-between py-3 border-b border-border"
               >
                 <View className="flex-row items-center gap-3">
                   <View 

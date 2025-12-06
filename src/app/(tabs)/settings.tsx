@@ -1,6 +1,6 @@
 import { availableThemes, ThemeCircle, ThemeOption } from '@/src/components/themes-content/theme-circle';
 import { useSettingsStore } from '@/src/store/settings';
-import { Divider, FormField, Select, Surface, Switch } from 'heroui-native';
+import { cn, Divider, FormField, Select, Surface, Switch } from 'heroui-native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -27,10 +27,15 @@ const languages: { value: Language; label: string }[] = [
   { value: 'id', label: 'Bahasa Indonesia' },
 ];
 
+const styles: { value: string; label: string }[] = [
+  { value: 'default', label: 'Default' },
+  { value: 'bordered', label: 'Bordered' },
+];
+
 export default function Settings() {
   const { t } = useTranslation();
   const { setTheme: setAppTheme, isLight, isDark, toggleTheme } = useAppTheme();
-  const { currency, setCurrency, numberFormat, setNumberFormat, language, setLanguage, theme, setTheme } = useSettingsStore();
+  const { currency, setCurrency, numberFormat, setNumberFormat, language, setLanguage, theme, setTheme, style, setStyle } = useSettingsStore();
 
     const getCurrentThemeId = () => {
     if (theme === 'light' || theme === 'dark') return 'default';
@@ -64,7 +69,7 @@ export default function Settings() {
           {/* Appearance */}
           <View className="mb-8">
             <AppText className="text-xl font-semibold text-foreground mb-4">{t('appearance')}</AppText>
-            <Surface>
+            <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0')}>
               {/* Theme Picker */}
               <View className="flex-row justify-around">
                 {availableThemes.map((theme) => (
@@ -88,13 +93,45 @@ export default function Settings() {
                   <Switch />
                 </FormField.Indicator>
               </FormField>
+              <Divider className="my-4" />
+
+              {/* Style */}
+              <Select
+                value={styles.find(f => f.value === style)}
+                onValueChange={(newValue) => setStyle((newValue?.value as string) || 'default')}
+              >
+                <FormField>
+                  <FormField.Content>
+                    <FormField.Title>{t('style')}</FormField.Title>
+                    <FormField.Description>{t('styleDescription')}</FormField.Description>
+                  </FormField.Content>
+                  <FormField.Indicator>
+                    <Select.Trigger>
+                      <View className="bg-background h-10 px-2 rounded-xl justify-center border border-border">
+                        <Select.Value placeholder="Select style" className="text-sm" />
+                      </View>
+                    </Select.Trigger>
+                  </FormField.Indicator>
+                </FormField>
+                <Select.Portal>
+                  <Select.Overlay />
+                  <Select.Content width="full" className="bg-background text-foreground">
+                    {styles.map((style, index) => (
+                      <React.Fragment key={style.value}>
+                        <Select.Item value={style.value} label={style.label} />
+                        {index < styles.length - 1 && <Divider />}
+                      </React.Fragment>
+                    ))}
+                  </Select.Content>
+                </Select.Portal>
+              </Select>
             </Surface>
           </View>
 
           {/* Currency & Localization */}
           <View className="mb-8">
             <AppText className="text-xl font-semibold text-foreground mb-4">{t('currencyAndLocalization')}</AppText>
-            <Surface>
+            <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0')}>
               {/* Currency */}
               <Select
                 value={currencies.find(c => c.value === currency)}
@@ -115,7 +152,7 @@ export default function Settings() {
                 </FormField>
                 <Select.Portal>
                   <Select.Overlay />
-                  <Select.Content width="full">
+                  <Select.Content width="full" className="bg-background text-foreground">
                     {currencies.map((curr, index) => (
                       <React.Fragment key={curr.value}>
                         <Select.Item value={curr.value} label={curr.label} />
@@ -147,7 +184,7 @@ export default function Settings() {
                 </FormField>
                 <Select.Portal>
                   <Select.Overlay />
-                  <Select.Content width="full">
+                  <Select.Content width="full" className="bg-background text-foreground">
                     {numberFormats.map((format, index) => (
                       <React.Fragment key={format.value}>
                         <Select.Item value={format.value} label={format.label} />
@@ -179,7 +216,7 @@ export default function Settings() {
                 </FormField>
                 <Select.Portal>
                   <Select.Overlay />
-                  <Select.Content width="full">
+                  <Select.Content width="full" className="bg-background text-foreground">
                     {languages.map((lang, index) => (
                       <React.Fragment key={lang.value}>
                         <Select.Item value={lang.value} label={lang.label} />

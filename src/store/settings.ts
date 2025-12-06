@@ -46,10 +46,12 @@ interface SettingsState {
   numberFormat: NumberFormat;
   language: Language;
   theme: ThemeName;
+  style: string;
   setCurrency: (currency: string) => void;
   setNumberFormat: (format: NumberFormat) => void;
   setLanguage: (language: Language) => void;
   setTheme: (theme: ThemeName) => void;
+  setStyle: (style: string) => void;
 }
 
 const _useSettingsStore = create<SettingsState>()(
@@ -59,10 +61,12 @@ const _useSettingsStore = create<SettingsState>()(
       numberFormat: 'dot',
       language: 'en',
       theme: 'light',
+      style: 'default',
       setCurrency: (currency) => set({ currency }),
       setNumberFormat: (numberFormat) => set({ numberFormat }),
       setLanguage: (language) => set({ language }),
       setTheme: (theme) => set({ theme }),
+      setStyle: (style) => set({ style }),
     }),
     {
       name: 'settings-storage',

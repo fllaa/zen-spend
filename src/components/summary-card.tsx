@@ -1,5 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
-import { Card } from 'heroui-native';
+import { cn, Surface } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
 import { formatCurrency } from '../helpers/currency-helper';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
-  const { currency, numberFormat } = useSettingsStore();
+  const { currency, numberFormat, style } = useSettingsStore();
   const getIcon = () => {
     switch (type) {
       case 'income': return 'arrow-down-left';
@@ -31,7 +31,7 @@ export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
   };
 
   return (
-    <Card className="flex-1 p-3 border border-border bg-surface">
+    <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', "flex-1 p-3")}>
       <View className="flex-row items-center gap-2 mb-2">
         <View className={`p-1.5 rounded-full bg-opacity-10 ${type === 'income' ? 'bg-green-500' : type === 'expense' ? 'bg-red-500' : 'bg-blue-500'}`}>
           <Feather
@@ -47,6 +47,6 @@ export const SummaryCard: React.FC<Props> = ({ title, amount, type }) => {
       <AppText className="text-lg font-bold text-foreground">
         {formatCurrency(amount, currency, numberFormat)}
       </AppText>
-    </Card>
+    </Surface>
   );
 };

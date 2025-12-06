@@ -2,11 +2,14 @@ import Feather from '@expo/vector-icons/Feather';
 import { Button, TextField } from 'heroui-native';
 import React, { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { getCurrencySymbol } from '../helpers/currency-helper';
 import { useStore } from '../store';
+import { useSettingsStore } from '../store/settings';
 import { AppText } from './app-text';
 
 export const AddTransaction: React.FC<{close: () => void}> = (props) => {
   const { categories, addNewTransaction, isLoading } = useStore();
+  const { currency } = useSettingsStore();
 
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
@@ -66,7 +69,7 @@ export const AddTransaction: React.FC<{close: () => void}> = (props) => {
               className="text-3xl font-bold"
             >
               <TextField.InputStartContent>
-                <AppText className="text-xl font-bold text-muted">$</AppText>
+                <AppText className="text-xl font-bold text-muted">{getCurrencySymbol(currency)}</AppText>
               </TextField.InputStartContent>
             </TextField.Input>
           </TextField>

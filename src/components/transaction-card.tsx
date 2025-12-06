@@ -4,6 +4,8 @@ import { Card } from 'heroui-native';
 import React, { useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { formatCurrency } from '../helpers/currency-helper';
+import { useSettingsStore } from '../store/settings';
 import { TransactionWithCategory } from '../types';
 import { AppText } from './app-text';
 
@@ -14,6 +16,7 @@ interface Props {
 }
 
 export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelete }) => {
+  const { currency, numberFormat } = useSettingsStore();
   const isExpense = transaction.type === 'expense';
   const formattedDate = format(new Date(transaction.date * 1000), 'MMM dd, yyyy');
 
@@ -82,7 +85,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
               <AppText
                 className={`font-bold text-base ${isExpense ? 'text-red-500' : 'text-green-500'}`}
               >
-                {isExpense ? '-' : '+'}${transaction.amount.toFixed(2)}
+                {isExpense ? '-' : '+'}{formatCurrency(transaction.amount, currency, numberFormat)}
               </AppText>
               {transaction.note ? (
                 <AppText className="text-xs text-muted max-w-[100px]" numberOfLines={1}>

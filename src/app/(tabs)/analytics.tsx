@@ -1,3 +1,5 @@
+import { formatCurrency } from '@/src/helpers/currency-helper';
+import { useSettingsStore } from '@/src/store/settings';
 import Feather from '@expo/vector-icons/Feather';
 import { endOfMonth, format, startOfMonth, subMonths } from 'date-fns';
 import { Button, useThemeColor } from 'heroui-native';
@@ -12,6 +14,7 @@ const { width } = Dimensions.get('window');
 
 export default function Analytics() {
   const { categorySummary, fetchAnalytics, isLoading } = useStore();
+  const { currency, numberFormat } = useSettingsStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const textColor = useThemeColor('foreground');
 
@@ -126,7 +129,7 @@ export default function Analytics() {
                   <AppText className="font-medium text-foreground">{item.categoryName}</AppText>
                 </View>
                 <AppText className="font-semibold text-foreground">
-                  ${item.totalAmount.toFixed(2)}
+                  {formatCurrency(item.totalAmount, currency, numberFormat)}
                 </AppText>
               </View>
             ))}

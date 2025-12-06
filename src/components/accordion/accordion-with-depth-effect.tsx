@@ -14,24 +14,14 @@ import {
   useAccordionItem,
   useThemeColor,
 } from 'heroui-native';
-import { createContext, use, useState, type FC } from 'react';
+import { createContext, type FC, use, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  Easing,
-  FadeIn,
-  Keyframe,
-  LinearTransition,
-  ZoomIn,
-  ZoomOut,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, Keyframe, LinearTransition, ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../app-text';
 
-const LAYOUT_TRANSITION = LinearTransition.springify()
-  .damping(70)
-  .stiffness(1000)
-  .mass(2);
+const LAYOUT_TRANSITION = LinearTransition.springify().damping(70).stiffness(1000).mass(2);
 
 const StyledMaterialCommunityIcons = withUniwind(MaterialCommunityIcons);
 const StyledAntDesign = withUniwind(AntDesign);
@@ -44,52 +34,28 @@ const accordionData = [
   {
     id: '1',
     title: 'What is design engineering?',
-    icon: (
-      <StyledAntDesign
-        name="tool"
-        size={TRIGGER_ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledAntDesign name="tool" size={TRIGGER_ICON_SIZE} className="text-muted" />,
     content:
       'The intersection of creative vision and technical implementation - empowering you to identify interface challenges and craft solutions from scratch.',
   },
   {
     id: '2',
     title: 'What defines UI craftsmanship?',
-    icon: (
-      <StyledMaterialCommunityIcons
-        name="minecraft"
-        size={TRIGGER_ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledMaterialCommunityIcons name="minecraft" size={TRIGGER_ICON_SIZE} className="text-muted" />,
     content:
       "The art of building things with excellence - achieving platform mastery so you're never constrained by frameworks or tooling",
   },
   {
     id: '3',
     title: 'Why is craftsmanship important?',
-    icon: (
-      <StyledIonicons
-        name="sparkles-sharp"
-        size={TRIGGER_ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledIonicons name="sparkles-sharp" size={TRIGGER_ICON_SIZE} className="text-muted" />,
     content:
       "Because it transcends mere functionality - it's about creating experiences that feel intuitive: accessible, robust and maintainable.",
   },
   {
     id: '4',
     title: 'Who should embrace this?',
-    icon: (
-      <StyledEntypo
-        name="users"
-        size={TRIGGER_ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledEntypo name="users" size={TRIGGER_ICON_SIZE} className="text-muted" />,
     content:
       'Creative coders and technical designers - individuals prepared to move beyond copy-paste solutions and evolve into builders who *can create anything*.',
   },
@@ -115,9 +81,7 @@ const SettingsContext = createContext<SettingsContextType>({
 
 // ------------------------------------------------------------------------------
 
-const CUSTOM_INDICATOR_ENTERING = ZoomIn.duration(200).easing(
-  Easing.inOut(Easing.ease)
-);
+const CUSTOM_INDICATOR_ENTERING = ZoomIn.duration(200).easing(Easing.inOut(Easing.ease));
 
 const CLOSE_INDICATOR_ENTERING = new Keyframe({
   0: {
@@ -130,9 +94,7 @@ const CLOSE_INDICATOR_ENTERING = new Keyframe({
   },
 });
 
-const CUSTOM_INDICATOR_EXITING = ZoomOut.duration(200).easing(
-  Easing.inOut(Easing.ease)
-);
+const CUSTOM_INDICATOR_EXITING = ZoomOut.duration(200).easing(Easing.inOut(Easing.ease));
 
 const CustomIndicator = () => {
   const { isExpanded } = useAccordionItem();
@@ -140,19 +102,11 @@ const CustomIndicator = () => {
   return (
     <View className="size-5 items-center justify-center">
       {isExpanded ? (
-        <Animated.View
-          key="close"
-          entering={CLOSE_INDICATOR_ENTERING.duration(250)}
-          exiting={CUSTOM_INDICATOR_EXITING}
-        >
+        <Animated.View key="close" entering={CLOSE_INDICATOR_ENTERING.duration(250)} exiting={CUSTOM_INDICATOR_EXITING}>
           <StyledIonicons name="close" size={18} className="text-muted" />
         </Animated.View>
       ) : (
-        <Animated.View
-          key="expand"
-          entering={CUSTOM_INDICATOR_ENTERING}
-          exiting={CUSTOM_INDICATOR_EXITING}
-        >
+        <Animated.View key="expand" entering={CUSTOM_INDICATOR_ENTERING} exiting={CUSTOM_INDICATOR_EXITING}>
           <StyledIonicons name="add" size={18} className="text-muted" />
         </Animated.View>
       )}
@@ -175,14 +129,10 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
 
   const themeColorSurfaceHover = useThemeColor('on-surface-hover');
 
-  const selectedItemIndex = accordionData.findIndex(
-    (accordionItem) => accordionItem.id === value
-  );
+  const selectedItemIndex = accordionData.findIndex((accordionItem) => accordionItem.id === value);
 
-  const isBeforeSelected =
-    selectedItemIndex !== -1 && index === selectedItemIndex - 1;
-  const isAfterSelected =
-    selectedItemIndex !== -1 && index === selectedItemIndex + 1;
+  const isBeforeSelected = selectedItemIndex !== -1 && index === selectedItemIndex - 1;
+  const isAfterSelected = selectedItemIndex !== -1 && index === selectedItemIndex + 1;
 
   // Show divider if:
   // 1. Not the last item
@@ -190,10 +140,7 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
   // 3. Current item is NOT selected
   // 4. Next item is NOT selected
   const showDivider =
-    index < accordionData.length - 1 &&
-    !isBeforeSelected &&
-    !isExpanded &&
-    index + 1 !== selectedItemIndex;
+    index < accordionData.length - 1 && !isBeforeSelected && !isExpanded && index + 1 !== selectedItemIndex;
 
   return (
     <Animated.View
@@ -223,10 +170,7 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
           // First item gets rounded top corners
           index === 0 && !isExpanded && 'rounded-t-2xl',
           // Last item gets rounded bottom corners
-          index === accordionData.length - 1 &&
-            !isExpanded &&
-            !isBeforeSelected &&
-            'rounded-b-3xl',
+          index === accordionData.length - 1 && !isExpanded && !isBeforeSelected && 'rounded-b-3xl',
           // Item before selected: rounded bottom corners
           isBeforeSelected && 'rounded-b-2xl',
           // Selected item: full border with all corners rounded
@@ -235,20 +179,11 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
           isAfterSelected && 'rounded-t-2xl',
           // Spacing for selected items
           isExpanded && index === 0 && cn('mb-6', depth && 'mb-4'),
-          isExpanded &&
-            index > 0 &&
-            index < accordionData.length - 1 &&
-            cn('my-6', depth && 'my-4'),
-          isExpanded &&
-            index === accordionData.length - 1 &&
-            cn('mt-6', depth && 'mt-4')
+          isExpanded && index > 0 && index < accordionData.length - 1 && cn('my-6', depth && 'my-4'),
+          isExpanded && index === accordionData.length - 1 && cn('mt-6', depth && 'mt-4'),
         )}
       >
-        <Accordion.Trigger
-          className="px-5"
-          highlightOpacity={depth ? 0 : 0.25}
-          highlightColor={themeColorSurfaceHover}
-        >
+        <Accordion.Trigger className="px-5" highlightOpacity={depth ? 0 : 0.25} highlightColor={themeColorSurfaceHover}>
           <View className={classNames.triggerContentContainer}>
             {item.icon}
             <AppText className={classNames.triggerTitle}>{item.title}</AppText>
@@ -298,26 +233,16 @@ export const AccordionWithDepthEffect: FC = () => {
           className="w-full overflow-visible"
         >
           {accordionData.map((item, index) => (
-            <Accordion.Item
-              key={item.id}
-              value={item.id}
-              className="overflow-visible"
-            >
+            <Accordion.Item key={item.id} value={item.id} className="overflow-visible">
               <AccordionItemContent item={item} index={index} />
             </Accordion.Item>
           ))}
         </Accordion>
         <View>
-          <FormField
-            isSelected={depth}
-            onSelectedChange={setDepth}
-            className="pr-2"
-          >
+          <FormField isSelected={depth} onSelectedChange={setDepth} className="pr-2">
             <FormField.Content>
               <FormField.Title>Depth</FormField.Title>
-              <FormField.Description>
-                Enable depth effect for the accordion
-              </FormField.Description>
+              <FormField.Description>Enable depth effect for the accordion</FormField.Description>
             </FormField.Content>
             <FormField.Indicator>
               <Switch />

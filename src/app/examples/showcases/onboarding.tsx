@@ -6,9 +6,7 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
-import MarqueeCarousel, {
-  type CardProps,
-} from '../../../components/showcases/onboarding/marquee-carousel';
+import MarqueeCarousel, { type CardProps } from '../../../components/showcases/onboarding/marquee-carousel';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -64,10 +62,7 @@ const OnboardingScreen = () => {
         paddingBottom: insets.bottom + 12,
       }}
     >
-      <AnimatedView
-        entering={FadeIn.duration(500)}
-        className="px-4 flex-row items-center justify-between"
-      >
+      <AnimatedView entering={FadeIn.duration(500)} className="px-4 flex-row items-center justify-between">
         <Button
           size="sm"
           className={cn('rounded-full bg-black/10', isDark && 'bg-white/20')}
@@ -75,11 +70,7 @@ const OnboardingScreen = () => {
           onPress={router.back}
           animation={{ highlight: 'disabled' }}
         >
-          <StyledFeather
-            name="chevron-left"
-            size={24}
-            className={cn('text-black', isDark && 'text-white')}
-          />
+          <StyledFeather name="chevron-left" size={24} className={cn('text-black', isDark && 'text-white')} />
         </Button>
         <Button
           size="sm"
@@ -88,29 +79,17 @@ const OnboardingScreen = () => {
           onPress={router.back}
           animation={{ highlight: 'disabled' }}
         >
-          <StyledFeather
-            name="x"
-            size={24}
-            className={cn('text-black', isDark && 'text-white')}
-          />
+          <StyledFeather name="x" size={24} className={cn('text-black', isDark && 'text-white')} />
         </Button>
       </AnimatedView>
 
       <MarqueeCarousel cards={cards} />
 
-      <AnimatedView
-        className="items-center gap-2 px-8"
-        entering={FadeInDown.delay(300).springify()}
-      >
-        <AppText className="text-muted text-xs font-semibold uppercase tracking-wider">
-          Lesson 1
-        </AppText>
-        <AppText className="text-3xl font-semibold text-foreground">
-          Setting Up a Show
-        </AppText>
+      <AnimatedView className="items-center gap-2 px-8" entering={FadeInDown.delay(300).springify()}>
+        <AppText className="text-muted text-xs font-semibold uppercase tracking-wider">Lesson 1</AppText>
+        <AppText className="text-3xl font-semibold text-foreground">Setting Up a Show</AppText>
         <AppText className="text-base text-center text-foreground/75">
-          It's fast and simple, and we've got a few pointers to help you get
-          started successfully.
+          It's fast and simple, and we've got a few pointers to help you get started successfully.
         </AppText>
       </AnimatedView>
 
@@ -124,9 +103,7 @@ const OnboardingScreen = () => {
           className="mx-8 rounded-full bg-[#F8DD00]"
           animation={{ highlight: 'disabled' }}
         >
-          <Button.Label className="text-lg font-semibold text-black">
-            Next
-          </Button.Label>
+          <Button.Label className="text-lg font-semibold text-black">Next</Button.Label>
         </Button>
       </AnimatedView>
     </View>

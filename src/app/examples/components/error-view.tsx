@@ -18,21 +18,10 @@ const BasicErrorViewContent = () => {
       <View className="w-full h-[160px] justify-between">
         <TextField isInvalid={slideError} isRequired>
           <TextField.Label isInvalid={false}>Username</TextField.Label>
-          <TextField.Input
-            placeholder="Enter username"
-            editable={false}
-            isInvalid={false}
-          />
-          <TextField.ErrorMessage>
-            Username is already taken
-          </TextField.ErrorMessage>
+          <TextField.Input placeholder="Enter username" editable={false} isInvalid={false} />
+          <TextField.ErrorMessage>Username is already taken</TextField.ErrorMessage>
         </TextField>
-        <Button
-          variant="secondary"
-          onPress={() => setSlideError(!slideError)}
-          size="sm"
-          className="self-start"
-        >
+        <Button variant="secondary" onPress={() => setSlideError(!slideError)} size="sm" className="self-start">
           Toggle Error
         </Button>
       </View>
@@ -46,36 +35,22 @@ const CustomTextWithIconsContent = () => {
       <View className="gap-4">
         <ErrorView isInvalid={true}>
           <View className="flex-row items-center gap-2">
-            <StyledIonicons
-              name="close-circle"
-              size={16}
-              className="text-danger"
-            />
-            <AppText className="text-danger text-sm">
-              Payment method declined
-            </AppText>
+            <StyledIonicons name="close-circle" size={16} className="text-danger" />
+            <AppText className="text-danger text-sm">Payment method declined</AppText>
           </View>
         </ErrorView>
 
         <ErrorView isInvalid={true}>
           <View className="flex-row items-center gap-2">
             <StyledIonicons name="warning" size={16} className="text-warning" />
-            <AppText className="text-warning text-sm">
-              Account verification pending
-            </AppText>
+            <AppText className="text-warning text-sm">Account verification pending</AppText>
           </View>
         </ErrorView>
 
         <ErrorView isInvalid={true}>
           <View className="flex-row items-center gap-2">
-            <StyledIonicons
-              name="information-circle"
-              size={16}
-              className="text-foreground"
-            />
-            <AppText className="text-foreground text-sm">
-              Profile completion required
-            </AppText>
+            <StyledIonicons name="information-circle" size={16} className="text-foreground" />
+            <AppText className="text-foreground text-sm">Profile completion required</AppText>
           </View>
         </ErrorView>
       </View>
@@ -128,12 +103,7 @@ const InlineErrorMessagesContent = () => {
         <TextField>
           <TextField.Label>Email Address</TextField.Label>
           <View className="flex-row items-center gap-2">
-            <TextField.Input
-              placeholder="user@example"
-              value="user@example"
-              editable={false}
-              className="flex-1"
-            />
+            <TextField.Input placeholder="user@example" value="user@example" editable={false} className="flex-1" />
             <ErrorView isInvalid={true}>
               <AppText className="text-danger text-xs">Invalid email</AppText>
             </ErrorView>
@@ -143,19 +113,10 @@ const InlineErrorMessagesContent = () => {
         <TextField>
           <TextField.Label>Phone Number</TextField.Label>
           <View className="flex-row items-center gap-2">
-            <TextField.Input
-              placeholder="+1 (555) 000-0000"
-              value=""
-              editable={false}
-              className="flex-1"
-            />
+            <TextField.Input placeholder="+1 (555) 000-0000" value="" editable={false} className="flex-1" />
             <ErrorView isInvalid={true}>
               <View className="flex-row items-center gap-1">
-                <StyledIonicons
-                  name="warning"
-                  size={14}
-                  className="text-danger"
-                />
+                <StyledIonicons name="warning" size={14} className="text-danger" />
                 <AppText className="text-danger text-xs">Required</AppText>
               </View>
             </ErrorView>
@@ -175,33 +136,18 @@ const MultipleErrorsContent = () => {
         <View className="gap-2">
           <TextField>
             <TextField.Label>Create Password</TextField.Label>
-            <TextField.Input
-              placeholder="Enter your password"
-              secureTextEntry
-              editable={false}
-            />
+            <TextField.Input placeholder="Enter your password" secureTextEntry editable={false} />
           </TextField>
 
           <View className="gap-2">
-            <ErrorView isInvalid={showMultipleErrors}>
-              • At least 8 characters long
-            </ErrorView>
-            <ErrorView
-              isInvalid={showMultipleErrors}
-              entering={FadeInDown.delay(100)}
-            >
+            <ErrorView isInvalid={showMultipleErrors}>• At least 8 characters long</ErrorView>
+            <ErrorView isInvalid={showMultipleErrors} entering={FadeInDown.delay(100)}>
               • At least one uppercase letter
             </ErrorView>
-            <ErrorView
-              isInvalid={showMultipleErrors}
-              entering={FadeInDown.delay(200)}
-            >
+            <ErrorView isInvalid={showMultipleErrors} entering={FadeInDown.delay(200)}>
               • At least one number
             </ErrorView>
-            <ErrorView
-              isInvalid={showMultipleErrors}
-              entering={FadeInDown.delay(300)}
-            >
+            <ErrorView isInvalid={showMultipleErrors} entering={FadeInDown.delay(300)}>
               • At least one special character (!@#$%^&*)
             </ErrorView>
           </View>

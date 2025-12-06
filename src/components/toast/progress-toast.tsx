@@ -1,12 +1,7 @@
 import { Toast, type ToastComponentProps } from 'heroui-native';
 import { useCallback, useEffect } from 'react';
 import { View } from 'react-native';
-import Animated, {
-  LinearTransition,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { LinearTransition, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSharedState } from './use-shared-state';
 
 const PROGRESS_STATE_KEY = 'progress-toast-state';
@@ -40,7 +35,7 @@ export const useProgressState = (initialProgress = 0) => {
       const clampedProgress = Math.max(0, Math.min(100, newProgress));
       setProgressState(clampedProgress);
     },
-    [setProgressState]
+    [setProgressState],
   );
 
   /**
@@ -90,7 +85,7 @@ export const ProgressToast = (props: ToastComponentProps) => {
     }
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progress, id]);
+  }, [progress, id, hide]);
 
   /**
    * Animated style for progress bar
@@ -103,22 +98,17 @@ export const ProgressToast = (props: ToastComponentProps) => {
 
   return (
     <Toast
-      // @ts-ignore
+      // @ts-expect-error
       layout={LinearTransition.springify().mass(2)}
       isSwipeable={false}
       {...props}
     >
       <View className="flex-col gap-2 px-4 py-3">
         <Toast.Label className="text-sm mb-2">
-          {progress < 100
-            ? `Uploading... ${Math.round(progress)}%`
-            : 'Upload complete!'}
+          {progress < 100 ? `Uploading... ${Math.round(progress)}%` : 'Upload complete!'}
         </Toast.Label>
         <View className="h-1 w-full overflow-hidden rounded-full bg-muted/20">
-          <Animated.View
-            className="h-full bg-accent rounded-full"
-            style={progressBarStyle}
-          />
+          <Animated.View className="h-full bg-accent rounded-full" style={progressBarStyle} />
         </View>
       </View>
     </Toast>

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/useIterableCallbackReturn: just ignore it */
 import { useCallback, useEffect, useState } from 'react';
 
 /**
@@ -92,10 +93,7 @@ export function useSharedState<T>(key: string, initialValue: T) {
    */
   const setState = useCallback(
     (value: T | ((prev: T) => T)) => {
-      const newValue =
-        typeof value === 'function'
-          ? (value as (prev: T) => T)(sharedStateStore.get(key) as T)
-          : value;
+      const newValue = typeof value === 'function' ? (value as (prev: T) => T)(sharedStateStore.get(key) as T) : value;
 
       sharedStateStore.set(key, newValue);
 
@@ -104,7 +102,7 @@ export function useSharedState<T>(key: string, initialValue: T) {
         listeners.forEach((listener) => listener(newValue));
       }
     },
-    [key]
+    [key],
   );
 
   /**

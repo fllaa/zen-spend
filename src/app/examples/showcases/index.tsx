@@ -65,8 +65,7 @@ const data = [
     imageDark:
       'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/showcase-paywall.png',
     title: 'Hero Paywall',
-    description:
-      'Modern, animated paywall with free trial, secure checkout, and flexible plans.',
+    description: 'Modern, animated paywall with free trial, secure checkout, and flexible plans.',
     href: '/showcases/paywall',
     components: [
       { name: 'Switch', href: '/components/switch' },

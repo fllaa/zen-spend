@@ -1,17 +1,10 @@
+import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { colorKit, Select, useThemeColor } from 'heroui-native';
-import {
-  FlatList,
-  Platform,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { type FlatList, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { Easing, SlideInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SelectBlurBackdrop } from '../../select/select-blur-backdrop';
 import type { UsageVariant } from '../types';
 import { CloseButton } from './close-button';
@@ -28,12 +21,7 @@ type Props = {
   listRef: React.RefObject<FlatList<UsageVariant> | null>;
 };
 
-export const UsageVariantsSelect = ({
-  data,
-  variant,
-  setVariant,
-  listRef,
-}: Props) => {
+export const UsageVariantsSelect = ({ data, variant, setVariant, listRef }: Props) => {
   const insets = useSafeAreaInsets();
   const { height: screenHeight } = useWindowDimensions();
 
@@ -111,17 +99,11 @@ export const UsageVariantsSelect = ({
             ))}
           </AnimatedScrollView>
           <LinearGradient
-            colors={[
-              themeColorSurface,
-              colorKit.setAlpha(themeColorSurface, 0).hex(),
-            ]}
+            colors={[themeColorSurface, colorKit.setAlpha(themeColorSurface, 0).hex()]}
             style={[styles.topGradient, { height: insets.top + 100 }]}
           />
           <LinearGradient
-            colors={[
-              colorKit.setAlpha(themeColorSurface, 0).hex(),
-              themeColorSurface,
-            ]}
+            colors={[colorKit.setAlpha(themeColorSurface, 0).hex(), themeColorSurface]}
             style={[styles.bottomGradient, { height: insets.bottom + 100 }]}
           />
           <CloseButton />

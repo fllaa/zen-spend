@@ -1,6 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import { TextField } from 'heroui-native';
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl, View } from 'react-native';
 import { AppText } from '../../components/app-text';
@@ -8,17 +8,17 @@ import { ScreenScrollView } from '../../components/screen-scroll-view';
 import { TransactionCard } from '../../components/transaction-card';
 import { getTransactions } from '../../db';
 import { useStore } from '../../store';
-import { TransactionWithCategory } from '../../types';
+import type { TransactionWithCategory } from '../../types';
 
 export default function History() {
   const { t } = useTranslation();
-  const { removeTransaction, lastUpdated } = useStore();
+  const { removeTransaction } = useStore();
   const [transactions, setTransactions] = useState<TransactionWithCategory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<TransactionWithCategory[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const loadTransactions = async () => {
+  const loadTransactions = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const data = await getTransactions(100, 0); // Get last 100 transactions
@@ -29,7 +29,7 @@ export default function History() {
     } finally {
       setIsRefreshing(false);
     }
-  };
+  }, []);
 
   const handleDelete = async (id: number) => {
     await removeTransaction(id);
@@ -38,13 +38,14 @@ export default function History() {
 
   useEffect(() => {
     loadTransactions();
-  }, [lastUpdated]);
+  }, [loadTransactions]);
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = transactions.filter(t => 
-        t.note?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t.category.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = transactions.filter(
+        (t) =>
+          t.note?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          t.category.name.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setFilteredTransactions(filtered);
     } else {
@@ -54,11 +55,7 @@ export default function History() {
 
   return (
     <View className="flex-1 bg-background">
-      <ScreenScrollView
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={loadTransactions} />
-        }
-      >
+      <ScreenScrollView refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={loadTransactions} />}>
         <View className="pt-12 pb-4">
           <View className="flex-row items-start justify-between mb-4">
             <AppText className="text-3xl font-bold text-foreground">{t('history')}</AppText>
@@ -67,11 +64,7 @@ export default function History() {
           {/* Search Bar */}
           <View className="mb-4">
             <TextField>
-              <TextField.Input
-                placeholder={t('searchTransactions')}
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-              >
+              <TextField.Input placeholder={t('searchTransactions')} value={searchQuery} onChangeText={setSearchQuery}>
                 <TextField.InputStartContent>
                   <Feather name="search" size={20} className="text-muted" />
                 </TextField.InputStartContent>

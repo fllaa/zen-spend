@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as Haptics from 'expo-haptics';
 import { Avatar, Chip, Dialog, RadioGroup } from 'heroui-native';
-import { useMemo, useState, type FC } from 'react';
+import { type FC, useMemo, useState } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -38,13 +38,7 @@ export const Assignee: FC = () => {
       {
         value: 'no-assignee',
         label: 'No Assignee',
-        indicator: (
-          <StyledMaterialCommunityIcons
-            name="account-circle"
-            size={18}
-            className="text-muted"
-          />
-        ),
+        indicator: <StyledMaterialCommunityIcons name="account-circle" size={18} className="text-muted" />,
       },
       {
         value: 'junior',
@@ -79,14 +73,12 @@ export const Assignee: FC = () => {
         ),
       },
     ],
-    []
+    [],
   );
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return items;
-    return items.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return items.filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [searchQuery, items]);
 
   return (
@@ -111,20 +103,12 @@ export const Assignee: FC = () => {
           <DialogBlurBackdrop />
         </Dialog.Overlay>
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={24}>
-          <Dialog.Content
-            style={{ marginTop: insetTop, height: dialogContentHeight }}
-          >
+          <Dialog.Content style={{ marginTop: insetTop, height: dialogContentHeight }}>
             <DialogHeader>Assignee</DialogHeader>
-            <SearchBar
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholder="Assign to..."
-            />
+            <SearchBar value={searchQuery} onChangeText={setSearchQuery} placeholder="Assign to..." />
             {filteredItems.length === 0 && (
               <View className="flex-1 items-center justify-center">
-                <AppText className="text-base font-medium text-muted">
-                  No results
-                </AppText>
+                <AppText className="text-base font-medium text-muted">No results</AppText>
               </View>
             )}
             {filteredItems.length > 0 && (
@@ -134,24 +118,14 @@ export const Assignee: FC = () => {
                 bounces={false}
                 keyboardShouldPersistTaps="handled"
               >
-                <RadioGroup
-                  value={value}
-                  onValueChange={setValue}
-                  className="gap-7"
-                >
+                <RadioGroup value={value} onValueChange={setValue} className="gap-7">
                   {filteredItems.map((item) => (
-                    <Dialog.Close
-                      key={item.value}
-                      className="self-stretch"
-                      asChild
-                    >
+                    <Dialog.Close key={item.value} className="self-stretch" asChild>
                       <RadioGroup.Item
                         value={item.value}
                         onPress={() => {
                           if (Platform.OS === 'ios') {
-                            Haptics.impactAsync(
-                              Haptics.ImpactFeedbackStyle.Light
-                            );
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                           }
                         }}
                       >
@@ -163,15 +137,8 @@ export const Assignee: FC = () => {
                         </View>
                         <RadioGroup.Indicator className="border-0 bg-transparent">
                           {value === item.value && (
-                            <Animated.View
-                              key={item.value}
-                              entering={FadeIn.duration(200)}
-                            >
-                              <StyledFeather
-                                name="check"
-                                size={18}
-                                className="text-foreground"
-                              />
+                            <Animated.View key={item.value} entering={FadeIn.duration(200)}>
+                              <StyledFeather name="check" size={18} className="text-foreground" />
                             </Animated.View>
                           )}
                         </RadioGroup.Indicator>

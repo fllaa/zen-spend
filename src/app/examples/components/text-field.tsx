@@ -11,11 +11,7 @@ import { useAppTheme } from '../../../contexts/app-theme-context';
 
 const StyledIonicons = withUniwind(Ionicons);
 
-const KeyboardAvoidingContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const KeyboardAvoidingContainer = ({ children }: { children: React.ReactNode }) => {
   const { height } = useWindowDimensions();
 
   const { progress } = useReanimatedKeyboardAnimation();
@@ -35,14 +31,8 @@ const BasicTextFieldContent = () => {
       <KeyboardAvoidingContainer>
         <TextField isRequired>
           <TextField.Label>Email</TextField.Label>
-          <TextField.Input
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <TextField.Description>
-            We'll never share your email with anyone else.
-          </TextField.Description>
+          <TextField.Input placeholder="Enter your email" keyboardType="email-address" autoCapitalize="none" />
+          <TextField.Description>We'll never share your email with anyone else.</TextField.Description>
         </TextField>
       </KeyboardAvoidingContainer>
     </View>
@@ -57,21 +47,12 @@ const TextFieldWithIconsContent = () => {
       <KeyboardAvoidingContainer>
         <TextField isRequired>
           <TextField.Label>Password</TextField.Label>
-          <TextField.Input
-            placeholder="Enter your password"
-            secureTextEntry={!isPasswordVisible}
-          >
+          <TextField.Input placeholder="Enter your password" secureTextEntry={!isPasswordVisible}>
             <TextField.InputStartContent className="pointer-events-none">
-              <StyledIonicons
-                name="lock-closed-outline"
-                size={16}
-                className="text-muted"
-              />
+              <StyledIonicons name="lock-closed-outline" size={16} className="text-muted" />
             </TextField.InputStartContent>
             <TextField.InputEndContent>
-              <Pressable
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
+              <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
                 <StyledIonicons
                   name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
                   size={16}
@@ -93,24 +74,14 @@ const DisabledTextFieldContent = () => {
         <View className="gap-8">
           <TextField>
             <TextField.Label>Account ID</TextField.Label>
-            <TextField.Input
-              placeholder="Enter account ID"
-              value="ACC-2024-12345"
-            />
-            <TextField.Description>
-              Your unique account identifier
-            </TextField.Description>
+            <TextField.Input placeholder="Enter account ID" value="ACC-2024-12345" />
+            <TextField.Description>Your unique account identifier</TextField.Description>
           </TextField>
 
           <TextField isDisabled>
             <TextField.Label>User Role</TextField.Label>
-            <TextField.Input
-              placeholder="Role assignment"
-              value="Administrator"
-            />
-            <TextField.Description>
-              Contact support to change your role
-            </TextField.Description>
+            <TextField.Input placeholder="Role assignment" value="Administrator" />
+            <TextField.Description>Contact support to change your role</TextField.Description>
           </TextField>
         </View>
       </KeyboardAvoidingContainer>
@@ -153,12 +124,8 @@ const TextFieldWithValidationContent = () => {
               onChangeText={setTestFieldValue}
               autoCapitalize="characters"
             />
-            <TextField.Description>
-              Enter a valid code to receive discount
-            </TextField.Description>
-            <TextField.ErrorMessage>
-              This promo code is invalid or has expired
-            </TextField.ErrorMessage>
+            <TextField.Description>Enter a valid code to receive discount</TextField.Description>
+            <TextField.ErrorMessage>This promo code is invalid or has expired</TextField.ErrorMessage>
           </TextField>
           <Button
             onPress={() => setIsTestFieldInvalid(!isTestFieldInvalid)}
@@ -195,9 +162,7 @@ const TextFieldWithCustomStylesContent = () => {
               focusBackground: isDark ? '#18181b' : '#fafafa',
             }}
           />
-          <TextField.Description>
-            Redeem your gift card at checkout
-          </TextField.Description>
+          <TextField.Description>Redeem your gift card at checkout</TextField.Description>
         </TextField>
       </KeyboardAvoidingContainer>
     </View>

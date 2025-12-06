@@ -62,11 +62,7 @@ const DisabledStateContent = () => {
             <Button.Label>Loading</Button.Label>
           </Button>
           <Button variant="tertiary" isDisabled>
-            <StyledIonicons
-              name="alert-circle"
-              size={16}
-              className="text-muted"
-            />
+            <StyledIonicons name="alert-circle" size={16} className="text-muted" />
             <Button.Label>Access Denied</Button.Label>
           </Button>
         </View>
@@ -108,43 +104,23 @@ const WithIconsContent = () => {
       <View className="flex-1 items-center justify-center">
         <View className="gap-8 w-full px-8">
           <Button variant="primary">
-            <StyledIonicons
-              name="add"
-              size={20}
-              className="text-accent-foreground"
-            />
+            <StyledIonicons name="add" size={20} className="text-accent-foreground" />
             <Button.Label>Add Item</Button.Label>
           </Button>
 
           <Button variant="secondary">
             <Button.Label>Download</Button.Label>
-            <StyledIonicons
-              name="download"
-              size={18}
-              className="text-accent-soft-foreground"
-            />
+            <StyledIonicons name="download" size={18} className="text-accent-soft-foreground" />
           </Button>
 
           <Button variant="tertiary">
-            <StyledIonicons
-              name="heart"
-              size={14}
-              className="text-default-foreground"
-            />
+            <StyledIonicons name="heart" size={14} className="text-default-foreground" />
             <Button.Label>Favorite</Button.Label>
-            <StyledIonicons
-              name="chevron-forward"
-              size={18}
-              className="text-default-foreground"
-            />
+            <StyledIonicons name="chevron-forward" size={18} className="text-default-foreground" />
           </Button>
 
           <Button variant="destructive" size="sm">
-            <StyledIonicons
-              name="trash"
-              size={14}
-              className="text-danger-foreground"
-            />
+            <StyledIonicons name="trash" size={14} className="text-danger-foreground" />
             <Button.Label>Delete</Button.Label>
           </Button>
         </View>
@@ -162,29 +138,17 @@ const IconOnlyContent = () => {
         <View className="flex-row gap-8">
           <Button size="sm" isIconOnly>
             <Button.Label>
-              <StyledIonicons
-                name="add"
-                size={16}
-                className="text-accent-foreground"
-              />
+              <StyledIonicons name="add" size={16} className="text-accent-foreground" />
             </Button.Label>
           </Button>
           <Button size="md" variant="secondary" isIconOnly>
             <Button.Label>
-              <StyledIonicons
-                name="heart"
-                size={18}
-                className="text-pink-500"
-              />
+              <StyledIonicons name="heart" size={18} className="text-pink-500" />
             </Button.Label>
           </Button>
           <Button size="lg" variant="destructive" isIconOnly>
             <Button.Label>
-              <StyledIonicons
-                name="trash"
-                size={20}
-                className="text-danger-foreground"
-              />
+              <StyledIonicons name="trash" size={20} className="text-danger-foreground" />
             </Button.Label>
           </Button>
         </View>
@@ -215,9 +179,7 @@ const CustomStylingContent = () => {
               },
             }}
           >
-            <Button.Label className="text-white font-semibold">
-              Custom Purple
-            </Button.Label>
+            <Button.Label className="text-white font-semibold">Custom Purple</Button.Label>
           </Button>
 
           <Button
@@ -239,15 +201,10 @@ const CustomStylingContent = () => {
               end={{ x: 1, y: 0 }}
               style={StyleSheet.absoluteFill}
             />
-            <Button.Label className="text-white font-bold">
-              Gradient
-            </Button.Label>
+            <Button.Label className="text-white font-bold">Gradient</Button.Label>
           </Button>
           <Button
-            className={cn(
-              'bg-neutral-950 rounded-none',
-              isDark && 'bg-neutral-50'
-            )}
+            className={cn('bg-neutral-950 rounded-none', isDark && 'bg-neutral-50')}
             animation={{
               highlight: { backgroundColor: { value: 'transparent' } },
             }}
@@ -257,11 +214,7 @@ const CustomStylingContent = () => {
               size={18}
               className={cn('text-neutral-50', isDark && 'text-neutral-950')}
             />
-            <Button.Label
-              className={cn('text-neutral-50', isDark && 'text-neutral-950')}
-            >
-              Add to Cart
-            </Button.Label>
+            <Button.Label className={cn('text-neutral-50', isDark && 'text-neutral-950')}>Add to Cart</Button.Label>
           </Button>
         </View>
       </View>
@@ -288,11 +241,7 @@ const LayoutTransitionsContent = () => {
           }}
           isIconOnly={isDownloading}
         >
-          {isDownloading ? (
-            <Spinner entering={FadeIn.delay(50)} color="white" />
-          ) : (
-            'Download now'
-          )}
+          {isDownloading ? <Spinner entering={FadeIn.delay(50)} color="white" /> : 'Download now'}
         </Button>
       </View>
     </View>

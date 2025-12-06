@@ -4,13 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Card, Chip, cn } from 'heroui-native';
 import type { FC } from 'react';
 import { Image, Pressable, View } from 'react-native';
-import Animated, {
-  Easing,
-  FadeIn,
-  FadeInDown,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, FadeInDown, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
@@ -96,16 +90,8 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
         .easing(Easing.out(Easing.ease))}
       onPress={() => router.push(path)}
     >
-      <Card
-        className={cn(
-          'p-0 border border-zinc-200',
-          isDark && 'border-zinc-900'
-        )}
-      >
-        <AnimatedView
-          entering={FadeIn}
-          className="absolute inset-0 w-full h-full"
-        >
+      <Card className={cn('p-0 border border-zinc-200', isDark && 'border-zinc-900')}>
+        <AnimatedView entering={FadeIn} className="absolute inset-0 w-full h-full">
           <AnimatedImage
             source={{ uri: imageLight }}
             className="absolute inset-0 w-full h-full"
@@ -122,27 +108,17 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
         <View className="gap-4">
           <Card.Header className="p-3">
             <Chip size="sm" className="bg-background/25">
-              <Chip.Label className="text-foreground/85">
-                {`${count} total`}
-              </Chip.Label>
+              <Chip.Label className="text-foreground/85">{`${count} total`}</Chip.Label>
             </Chip>
           </Card.Header>
           <Card.Body className="h-16" />
           <Card.Footer className="px-3 pb-3 flex-row items-end gap-4">
             <View className="flex-1">
-              <Card.Title className="text-2xl text-foreground/85">
-                {title}
-              </Card.Title>
-              <Card.Description className="text-foreground/65 pl-0.5">
-                {footer}
-              </Card.Description>
+              <Card.Title className="text-2xl text-foreground/85">{title}</Card.Title>
+              <Card.Description className="text-foreground/65 pl-0.5">{footer}</Card.Description>
             </View>
             <View className="size-9 rounded-full bg-background/25 items-center justify-center">
-              <StyledFeather
-                name="arrow-up-right"
-                size={20}
-                className="text-foreground"
-              />
+              <StyledFeather name="arrow-up-right" size={20} className="text-foreground" />
             </View>
           </Card.Footer>
         </View>

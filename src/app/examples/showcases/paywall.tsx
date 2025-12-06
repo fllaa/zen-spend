@@ -6,12 +6,7 @@ import { useRouter } from 'expo-router';
 import { Button, Chip, RadioGroup } from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import Animated, {
-  Easing,
-  FadeIn,
-  FadeInDown,
-  FadeInUp,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Uniwind, useUniwind, withUniwind } from 'uniwind';
 import BG from '../../../../assets/images/paywall-showcase-bg.jpeg';
@@ -45,32 +40,18 @@ export default function Paywall() {
         Uniwind.setTheme(prevTheme.current);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [theme]),
   );
 
   return (
-    <View
-      className="flex-1 bg-black px-6"
-      style={{ paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }}
-    >
-      <Animated.View
-        style={StyleSheet.absoluteFill}
-        entering={FadeInUp.duration(1000)}
-      >
+    <View className="flex-1 bg-black px-6" style={{ paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }}>
+      <Animated.View style={StyleSheet.absoluteFill} entering={FadeInUp.duration(1000)}>
         <Image source={BG} style={StyleSheet.absoluteFill} blurRadius={50} />
       </Animated.View>
       <Animated.View entering={FadeIn.duration(1000)}>
         <View>
-          <Pressable
-            className="absolute top0 left-0 z-50"
-            onPress={router.back}
-            hitSlop={16}
-          >
-            <StyledFeather
-              name="chevron-left"
-              size={28}
-              className="text-black"
-            />
+          <Pressable className="absolute top0 left-0 z-50" onPress={router.back} hitSlop={16}>
+            <StyledFeather name="chevron-left" size={28} className="text-black" />
           </Pressable>
           <Image source={LogoDark} style={styles.logo} contentFit="contain" />
         </View>
@@ -79,28 +60,18 @@ export default function Paywall() {
         </AppText>
       </Animated.View>
       <AnimatedView
-        entering={FadeInDown.duration(500)
-          .delay(500)
-          .easing(Easing.out(Easing.ease))}
+        entering={FadeInDown.duration(500).delay(500).easing(Easing.out(Easing.ease))}
         className="flex-1 justify-end"
       >
-        <StyledFormField
-          isSelected={isFreeTrialEnabled}
-          onSelectedChange={setIsFreeTrialEnabled}
-        />
+        <StyledFormField isSelected={isFreeTrialEnabled} onSelectedChange={setIsFreeTrialEnabled} />
         <RadioGroup
           value={access}
           onValueChange={(value) => setAccess(value as 'yearly' | 'monthly')}
           className="gap-4 mb-6"
         >
           <View>
-            <Chip
-              size="sm"
-              className="absolute -top-2.5 right-6 bg-rose-600 z-50"
-            >
-              <Chip.Label className="text-white uppercase font-medium">
-                Best offer
-              </Chip.Label>
+            <Chip size="sm" className="absolute -top-2.5 right-6 bg-rose-600 z-50">
+              <Chip.Label className="text-white uppercase font-medium">Best offer</Chip.Label>
             </Chip>
             <StyledRadio
               value="yearly"
@@ -119,14 +90,8 @@ export default function Paywall() {
           />
         </RadioGroup>
         <View className="flex-row items-center justify-center gap-2 mb-6">
-          <StyledIonicons
-            name="shield-checkmark"
-            size={20}
-            className="text-[#f9fafb]"
-          />
-          <AppText className="text-base text-gray-50">
-            Secure payment with Stripe
-          </AppText>
+          <StyledIonicons name="shield-checkmark" size={20} className="text-[#f9fafb]" />
+          <AppText className="text-base text-gray-50">Secure payment with Stripe</AppText>
         </View>
         <Button
           size="lg"
@@ -150,9 +115,7 @@ export default function Paywall() {
             <AppText className="text-gray-400">•</AppText>
           </View>
           <Pressable onPress={simulatePress}>
-            <AppText className="text-sm text-gray-400">
-              Restore Purchases
-            </AppText>
+            <AppText className="text-sm text-gray-400">Restore Purchases</AppText>
           </Pressable>
         </View>
       </AnimatedView>

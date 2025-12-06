@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { View } from 'react-native';
 import { AppText } from '../../app-text';
 
@@ -11,9 +11,7 @@ const HighlightItem: FC<HighlightItemProps> = ({ label, value }) => {
   return (
     <View>
       <AppText className="text-base text-muted">{label}</AppText>
-      <AppText className="text-base font-semibold text-foreground">
-        {value}
-      </AppText>
+      <AppText className="text-base font-semibold text-foreground">{value}</AppText>
     </View>
   );
 };

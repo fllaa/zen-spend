@@ -232,12 +232,7 @@ const WithEndContentContent = () => {
           <Chip.Label>Remove</Chip.Label>
           <StyledIonicons name="close" size={16} className="text-white" />
         </Chip>
-        <Chip
-          size="lg"
-          variant="secondary"
-          color="default"
-          className="pr-1.5 p-0.5 pl-2 gap-2"
-        >
+        <Chip size="lg" variant="secondary" color="default" className="pr-1.5 p-0.5 pl-2 gap-2">
           <Chip.Label className="text-muted">Clear</Chip.Label>
           <View className="rounded-full p-1 bg-muted/20">
             <StyledIonicons name="close" size={12} className="text-muted" />
@@ -257,10 +252,7 @@ const CustomStylingContent = () => {
         <Chip className="bg-purple-600 px-6">
           <Chip.Label className="text-background text-base">Custom</Chip.Label>
         </Chip>
-        <Chip
-          variant="secondary"
-          className="border-purple-600 bg-purple-100 rounded-sm"
-        >
+        <Chip variant="secondary" className="border-purple-600 bg-purple-100 rounded-sm">
           <Chip.Label className="text-purple-800">Purple</Chip.Label>
         </Chip>
 

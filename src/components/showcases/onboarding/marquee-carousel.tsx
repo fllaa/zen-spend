@@ -1,21 +1,12 @@
 import { type FC, memo } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  Easing,
-  FadeInUp,
-  useFrameCallback,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeInUp, useFrameCallback, useSharedValue, withTiming } from 'react-native-reanimated';
 import { PreviewCard, type PreviewCardProps } from './preview-card';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export type CardProps = Pick<
-  PreviewCardProps,
-  'title' | 'image' | 'liveCount' | 'category' | 'brands'
->;
+export type CardProps = Pick<PreviewCardProps, 'title' | 'image' | 'liveCount' | 'category' | 'brands'>;
 
 const _defaultScrollSpeed = 40;
 
@@ -54,13 +45,10 @@ const MarqueeCarousel: FC<Props> = ({ cards }) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <AnimatedView
-        entering={FadeInUp.delay(300).springify()}
-        className="flex-1 flex-row items-center overflow-hidden"
-      >
+      <AnimatedView entering={FadeInUp.delay(300).springify()} className="flex-1 flex-row items-center overflow-hidden">
         {cards.map((card, index) => (
           <PreviewCard
-            key={index}
+            key={card.title}
             index={index}
             title={card.title}
             image={card.image}

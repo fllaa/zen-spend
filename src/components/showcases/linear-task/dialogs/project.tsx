@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as Haptics from 'expo-haptics';
 import { Chip, Dialog, RadioGroup } from 'heroui-native';
-import { useMemo, useState, type FC } from 'react';
+import { type FC, useMemo, useState } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -38,56 +38,30 @@ export const Project: FC = () => {
       {
         value: 'no-project',
         label: 'No Project',
-        indicator: (
-          <StyledMaterialCommunityIcons
-            name="cube-outline"
-            size={14}
-            className="text-muted"
-          />
-        ),
+        indicator: <StyledMaterialCommunityIcons name="cube-outline" size={14} className="text-muted" />,
       },
       {
         value: 'hero-ui-native',
         label: 'HeroUI Native',
-        indicator: (
-          <StyledMaterialCommunityIcons
-            name="arrow-right-drop-circle"
-            size={14}
-            className="text-danger"
-          />
-        ),
+        indicator: <StyledMaterialCommunityIcons name="arrow-right-drop-circle" size={14} className="text-danger" />,
       },
       {
         value: 'hero-ui-web',
         label: 'HeroUI Web',
-        indicator: (
-          <StyledMaterialCommunityIcons
-            name="web"
-            size={14}
-            className="text-warning"
-          />
-        ),
+        indicator: <StyledMaterialCommunityIcons name="web" size={14} className="text-warning" />,
       },
       {
         value: 'hero-ui-chat',
         label: 'HeroUI Chat',
-        indicator: (
-          <StyledMaterialCommunityIcons
-            name="adjust"
-            size={14}
-            className="text-success"
-          />
-        ),
+        indicator: <StyledMaterialCommunityIcons name="adjust" size={14} className="text-success" />,
       },
     ],
-    []
+    [],
   );
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return items;
-    return items.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return items.filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [searchQuery, items]);
 
   return (
@@ -112,20 +86,12 @@ export const Project: FC = () => {
           <DialogBlurBackdrop />
         </Dialog.Overlay>
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={24}>
-          <Dialog.Content
-            style={{ marginTop: insetTop, height: dialogContentHeight }}
-          >
+          <Dialog.Content style={{ marginTop: insetTop, height: dialogContentHeight }}>
             <DialogHeader>Project</DialogHeader>
-            <SearchBar
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholder="Move to project..."
-            />
+            <SearchBar value={searchQuery} onChangeText={setSearchQuery} placeholder="Move to project..." />
             {filteredItems.length === 0 && (
               <View className="flex-1 items-center justify-center">
-                <AppText className="text-base font-medium text-muted">
-                  No results
-                </AppText>
+                <AppText className="text-base font-medium text-muted">No results</AppText>
               </View>
             )}
             {filteredItems.length > 0 && (
@@ -135,24 +101,14 @@ export const Project: FC = () => {
                 bounces={false}
                 keyboardShouldPersistTaps="handled"
               >
-                <RadioGroup
-                  value={value}
-                  onValueChange={setValue}
-                  className="gap-7"
-                >
+                <RadioGroup value={value} onValueChange={setValue} className="gap-7">
                   {filteredItems.map((item) => (
-                    <Dialog.Close
-                      key={item.value}
-                      className="self-stretch"
-                      asChild
-                    >
+                    <Dialog.Close key={item.value} className="self-stretch" asChild>
                       <RadioGroup.Item
                         value={item.value}
                         onPress={() => {
                           if (Platform.OS === 'ios') {
-                            Haptics.impactAsync(
-                              Haptics.ImpactFeedbackStyle.Light
-                            );
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                           }
                         }}
                       >
@@ -164,15 +120,8 @@ export const Project: FC = () => {
                         </View>
                         <RadioGroup.Indicator className="border-0 bg-transparent">
                           {value === item.value && (
-                            <Animated.View
-                              key={item.value}
-                              entering={FadeIn.duration(200)}
-                            >
-                              <StyledFeather
-                                name="check"
-                                size={18}
-                                className="text-foreground"
-                              />
+                            <Animated.View key={item.value} entering={FadeIn.duration(200)}>
+                              <StyledFeather name="check" size={18} className="text-foreground" />
                             </Animated.View>
                           )}
                         </RadioGroup.Indicator>

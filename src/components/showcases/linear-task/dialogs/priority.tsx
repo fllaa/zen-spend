@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as Haptics from 'expo-haptics';
 import { Chip, Dialog, RadioGroup } from 'heroui-native';
-import { useState, type FC } from 'react';
+import { type FC, useState } from 'react';
 import { Platform, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
@@ -36,13 +36,7 @@ export const Priority: FC = () => {
     {
       value: 'urgent',
       label: 'Urgent',
-      indicator: (
-        <StyledFontAwesome6
-          name="circle-exclamation"
-          size={13}
-          className="text-foreground"
-        />
-      ),
+      indicator: <StyledFontAwesome6 name="circle-exclamation" size={13} className="text-foreground" />,
     },
     {
       value: 'high',
@@ -121,15 +115,8 @@ export const Priority: FC = () => {
                   </View>
                   <RadioGroup.Indicator className="border-0 bg-transparent">
                     {value === item.value && (
-                      <Animated.View
-                        key={item.value}
-                        entering={FadeIn.duration(200)}
-                      >
-                        <StyledFeather
-                          name="check"
-                          size={18}
-                          className="text-foreground"
-                        />
+                      <Animated.View key={item.value} entering={FadeIn.duration(200)}>
+                        <StyledFeather name="check" size={18} className="text-foreground" />
                       </Animated.View>
                     )}
                   </RadioGroup.Indicator>

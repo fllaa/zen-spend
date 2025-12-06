@@ -8,12 +8,8 @@ const DividerInActionContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <Surface variant="secondary" className="px-6 py-7">
-        <AppText className="text-base font-medium text-foreground">
-          HeroUI Native
-        </AppText>
-        <AppText className="text-sm text-muted">
-          A modern React Native component library.
-        </AppText>
+        <AppText className="text-base font-medium text-foreground">HeroUI Native</AppText>
+        <AppText className="text-sm text-muted">A modern React Native component library.</AppText>
         <Divider className="my-4" />
         <View className="flex-row items-center h-5">
           <AppText className="text-sm text-foreground">Components</AppText>
@@ -54,9 +50,7 @@ const OrientationContent = () => {
     <View className="flex-1 items-center justify-center px-5">
       <View className="gap-8 w-full">
         <View>
-          <AppText className="text-sm text-muted mb-2">
-            Horizontal (default)
-          </AppText>
+          <AppText className="text-sm text-muted mb-2">Horizontal (default)</AppText>
           <Divider />
         </View>
 
@@ -78,9 +72,7 @@ const CustomThicknessContent = () => {
     <View className="flex-1 items-center justify-center px-5">
       <View className="gap-8 w-full">
         <View>
-          <AppText className="text-sm text-muted mb-2">
-            Default (hairline width)
-          </AppText>
+          <AppText className="text-sm text-muted mb-2">Default (hairline width)</AppText>
           <Divider />
         </View>
 
@@ -115,9 +107,7 @@ const CustomColorsContent = () => {
     <View className="flex-1 items-center justify-center px-5">
       <View className="gap-8 w-full">
         <View>
-          <AppText className="text-sm text-muted mb-2">
-            Custom Background Color
-          </AppText>
+          <AppText className="text-sm text-muted mb-2">Custom Background Color</AppText>
           <Divider className="bg-accent" thickness={2} />
         </View>
 

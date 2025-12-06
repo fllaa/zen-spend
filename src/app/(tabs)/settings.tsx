@@ -1,9 +1,9 @@
-import { availableThemes, ThemeCircle, ThemeOption } from '@/src/components/themes-content/theme-circle';
-import { useSettingsStore } from '@/src/store/settings';
 import { cn, Divider, FormField, Select, Surface, Switch } from 'heroui-native';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { availableThemes, ThemeCircle, type ThemeOption } from '@/src/components/themes-content/theme-circle';
+import { type ThemeName, useSettingsStore } from '@/src/store/settings';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
 import { useAppTheme } from '../../contexts/app-theme-context';
@@ -35,9 +35,20 @@ const styles: { value: string; label: string }[] = [
 export default function Settings() {
   const { t } = useTranslation();
   const { setTheme: setAppTheme, isLight, isDark, toggleTheme } = useAppTheme();
-  const { currency, setCurrency, numberFormat, setNumberFormat, language, setLanguage, theme, setTheme, style, setStyle } = useSettingsStore();
+  const {
+    currency,
+    setCurrency,
+    numberFormat,
+    setNumberFormat,
+    language,
+    setLanguage,
+    theme,
+    setTheme,
+    style,
+    setStyle,
+  } = useSettingsStore();
 
-    const getCurrentThemeId = () => {
+  const getCurrentThemeId = () => {
     if (theme === 'light' || theme === 'dark') return 'default';
     if (theme.startsWith('lavender')) return 'lavender';
     if (theme.startsWith('mint')) return 'mint';
@@ -50,9 +61,9 @@ export default function Settings() {
   };
 
   const handleThemeChange = (theme: ThemeOption) => {
-    const variant = isLight ? theme.lightVariant : theme.darkVariant;
-    setTheme(variant as any);
-    setAppTheme(variant as any);
+    const variant = (isLight ? theme.lightVariant : theme.darkVariant) as ThemeName;
+    setTheme(variant);
+    setAppTheme(variant);
   };
 
   return (
@@ -97,7 +108,7 @@ export default function Settings() {
 
               {/* Style */}
               <Select
-                value={styles.find(f => f.value === style)}
+                value={styles.find((f) => f.value === style)}
                 onValueChange={(newValue) => setStyle((newValue?.value as string) || 'default')}
               >
                 <FormField>
@@ -134,7 +145,7 @@ export default function Settings() {
             <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0')}>
               {/* Currency */}
               <Select
-                value={currencies.find(c => c.value === currency)}
+                value={currencies.find((c) => c.value === currency)}
                 onValueChange={(newValue) => setCurrency(newValue?.value || 'USD')}
               >
                 <FormField>
@@ -166,7 +177,7 @@ export default function Settings() {
 
               {/* Number Formatting */}
               <Select
-                value={numberFormats.find(f => f.value === numberFormat)}
+                value={numberFormats.find((f) => f.value === numberFormat)}
                 onValueChange={(newValue) => setNumberFormat((newValue?.value as NumberFormat) || 'dot')}
               >
                 <FormField>
@@ -198,7 +209,7 @@ export default function Settings() {
 
               {/* Language */}
               <Select
-                value={languages.find(l => l.value === language)}
+                value={languages.find((l) => l.value === language)}
                 onValueChange={(newValue) => handleLanguageChange((newValue?.value as Language) || 'en')}
               >
                 <FormField>

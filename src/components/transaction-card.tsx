@@ -1,26 +1,27 @@
-import Feather from '@expo/vector-icons/Feather';
+import { Feather } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { cn, Surface } from 'heroui-native';
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Swipeable, { type SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { formatCurrency } from '../helpers/currency-helper';
 import { useSettingsStore } from '../store/settings';
-import { TransactionWithCategory } from '../types';
+import type { TransactionWithCategory } from '../types';
 import { AppText } from './app-text';
 
 interface Props {
   transaction: TransactionWithCategory;
-  onPress?: () => void;
+
   onDelete?: () => void;
 }
 
-export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelete }) => {
+export const TransactionCard: React.FC<Props> = ({ transaction, onDelete }) => {
   const { currency, numberFormat, style } = useSettingsStore();
   const isExpense = transaction.type === 'expense';
   const formattedDate = format(new Date(transaction.date * 1000), 'MMM dd, yyyy');
 
-  const swipeableRef = useRef<any>(null);
+  const swipeableRef = useRef<SwipeableMethods>(null);
   const translateX = new Animated.Value(0);
 
   const handleDelete = () => {
@@ -41,10 +42,7 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
   const renderRightActions = () => {
     return (
       <View className="flex-row items-center justify-center bg-red-500 w-24 h-18.5 -ml-8 pl-5.5 rounded-r-3xl">
-        <TouchableOpacity
-          className="items-center justify-center w-full h-full"
-          onPress={handleDelete}
-        >
+        <TouchableOpacity className="items-center justify-center w-full h-full" onPress={handleDelete}>
           <Feather name="trash-2" size={24} color="white" />
         </TouchableOpacity>
       </View>
@@ -53,39 +51,27 @@ export const TransactionCard: React.FC<Props> = ({ transaction, onPress, onDelet
 
   return (
     <Animated.View style={{ transform: [{ translateX }] }}>
-      <Swipeable
-        ref={swipeableRef}
-        renderRightActions={renderRightActions}
-        overshootRight={false}
-      >
-        <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', "p-4 mb-3")}>
+      <Swipeable ref={swipeableRef} renderRightActions={renderRightActions} overshootRight={false}>
+        <Surface className={cn(style === 'bordered' ? 'border border-border' : 'border-0', 'p-4 mb-3')}>
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-3">
               <View
                 className="w-10 h-10 rounded-full items-center justify-center"
-                style={{ backgroundColor: transaction.category.color + '20' }}
+                style={{ backgroundColor: `${transaction.category.color}20` }}
               >
-                <Feather
-                  name={transaction.category.icon as any}
-                  size={20}
-                  color={transaction.category.color}
-                />
+                {/** biome-ignore lint/suspicious/noExplicitAny: cannot import type FeatherProps */}
+                <Feather name={transaction.category.icon as any} size={20} color={transaction.category.color} />
               </View>
               <View>
-                <AppText className="font-medium text-base text-foreground">
-                  {transaction.category.name}
-                </AppText>
-                <AppText className="text-sm text-muted">
-                  {formattedDate}
-                </AppText>
+                <AppText className="font-medium text-base text-foreground">{transaction.category.name}</AppText>
+                <AppText className="text-sm text-muted">{formattedDate}</AppText>
               </View>
             </View>
 
             <View className="items-end">
-              <AppText
-                className={`font-bold text-base ${isExpense ? 'text-red-500' : 'text-green-500'}`}
-              >
-                {isExpense ? '-' : '+'}{formatCurrency(transaction.amount, currency, numberFormat)}
+              <AppText className={`font-bold text-base ${isExpense ? 'text-red-500' : 'text-green-500'}`}>
+                {isExpense ? '-' : '+'}
+                {formatCurrency(transaction.amount, currency, numberFormat)}
               </AppText>
               {transaction.note ? (
                 <AppText className="text-xs text-muted max-w-[100px]" numberOfLines={1}>

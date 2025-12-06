@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { Category, TransactionWithCategory } from '../types';
+import type { Category, TransactionWithCategory } from '../types';
 
 let db: SQLite.SQLiteDatabase;
 
@@ -54,7 +54,7 @@ const seedCategories = async () => {
       cat.name,
       cat.icon,
       cat.color,
-      cat.type
+      cat.type,
     );
   }
 };
@@ -69,7 +69,7 @@ export const addTransaction = async (
   categoryId: number,
   date: number,
   note: string,
-  type: string
+  type: string,
 ): Promise<number> => {
   if (!db) await initDatabase();
   const result = await db.runAsync(
@@ -78,15 +78,12 @@ export const addTransaction = async (
     categoryId,
     date,
     note,
-    type
+    type,
   );
   return result.lastInsertRowId;
 };
 
-export const getTransactions = async (
-  limit: number = 50,
-  offset: number = 0
-): Promise<TransactionWithCategory[]> => {
+export const getTransactions = async (limit: number = 50, offset: number = 0): Promise<TransactionWithCategory[]> => {
   if (!db) await initDatabase();
   const query = `
     SELECT t.*, c.name as categoryName, c.icon as categoryIcon, c.color as categoryColor, c.type as categoryType
@@ -96,8 +93,8 @@ export const getTransactions = async (
     LIMIT ? OFFSET ?
   `;
   const rows = await db.getAllAsync<any>(query, limit, offset);
-  
-  return rows.map(row => ({
+
+  return rows.map((row) => ({
     id: row.id,
     amount: row.amount,
     categoryId: row.categoryId,
@@ -109,8 +106,8 @@ export const getTransactions = async (
       name: row.categoryName,
       icon: row.categoryIcon,
       color: row.categoryColor,
-      type: row.categoryType
-    }
+      type: row.categoryType,
+    },
   }));
 };
 
@@ -118,17 +115,21 @@ export const getMonthlySummary = async (monthStart: number, monthEnd: number) =>
   if (!db) await initDatabase();
   const incomeResult = await db.getFirstAsync<{ total: number }>(
     'SELECT SUM(amount) as total FROM transactions WHERE type = ? AND date >= ? AND date <= ?',
-    'income', monthStart, monthEnd
+    'income',
+    monthStart,
+    monthEnd,
   );
   const expenseResult = await db.getFirstAsync<{ total: number }>(
     'SELECT SUM(amount) as total FROM transactions WHERE type = ? AND date >= ? AND date <= ?',
-    'expense', monthStart, monthEnd
+    'expense',
+    monthStart,
+    monthEnd,
   );
 
   return {
     income: incomeResult?.total || 0,
     expense: expenseResult?.total || 0,
-    balance: (incomeResult?.total || 0) - (expenseResult?.total || 0)
+    balance: (incomeResult?.total || 0) - (expenseResult?.total || 0),
   };
 };
 
@@ -138,8 +139,8 @@ export const deleteTransaction = async (id: number) => {
 };
 
 export const getCategorySummary = async (monthStart: number, monthEnd: number) => {
-    if (!db) await initDatabase();
-    const query = `
+  if (!db) await initDatabase();
+  const query = `
       SELECT c.id as categoryId, c.name as categoryName, c.color as categoryColor, SUM(t.amount) as totalAmount
       FROM transactions t
       JOIN categories c ON t.categoryId = c.id
@@ -147,5 +148,5 @@ export const getCategorySummary = async (monthStart: number, monthEnd: number) =
       GROUP BY c.id
       ORDER BY totalAmount DESC
     `;
-    return await db.getAllAsync<any>(query, monthStart, monthEnd);
+  return await db.getAllAsync<any>(query, monthStart, monthEnd);
 };

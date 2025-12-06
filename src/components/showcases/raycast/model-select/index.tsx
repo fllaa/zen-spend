@@ -2,13 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, cn, colorKit, Select, useThemeColor } from 'heroui-native';
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { Easing, SlideInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,7 +13,7 @@ import { AppText } from '../../../app-text';
 import { SelectBlurBackdrop } from '../../../select/select-blur-backdrop';
 import { SelectContentContainer } from './select-content-container';
 import { SelectItem } from './select-item';
-import { type ModelOption } from './types';
+import type { ModelOption } from './types';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const StyledFeather = withUniwind(Feather);
@@ -53,7 +47,7 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
           size="sm"
           className={cn(
             'rounded-full px-4 h-11 bg-transparent border border-neutral-400/25',
-            isDark && 'border-neutral-600/25'
+            isDark && 'border-neutral-600/25',
           )}
           onPress={() => {
             if (Platform.OS === 'android') return;
@@ -61,9 +55,7 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
           }}
         >
           <AppText className="text-foreground">{model.emoji}</AppText>
-          <AppText className="text-foreground font-medium">
-            {model.label}
-          </AppText>
+          <AppText className="text-foreground font-medium">{model.label}</AppText>
         </Button>
       </Select.Trigger>
       <Select.Portal
@@ -104,22 +96,11 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
             </Pressable>
             <View className="flex-1" />
             <Pressable className="absolute" onPress={simulatePress}>
-              <AppText
-                className={cn(
-                  'text-xl font-semibold text-foreground',
-                  isDark && 'font-bold'
-                )}
-              >
-                Presets
-              </AppText>
+              <AppText className={cn('text-xl font-semibold text-foreground', isDark && 'font-bold')}>Presets</AppText>
             </Pressable>
             <Pressable onPress={simulatePress}>
               <AppText className="text-medium text-foreground">
-                <StyledFeather
-                  name="plus"
-                  size={20}
-                  className="text-foreground"
-                />
+                <StyledFeather name="plus" size={20} className="text-foreground" />
               </AppText>
             </Pressable>
           </View>
@@ -143,17 +124,11 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
             ))}
           </AnimatedScrollView>
           <LinearGradient
-            colors={[
-              themeColorSurface,
-              colorKit.setAlpha(themeColorSurface, 0).hex(),
-            ]}
+            colors={[themeColorSurface, colorKit.setAlpha(themeColorSurface, 0).hex()]}
             style={[styles.topGradient, { height: insets.top + 100 }]}
           />
           <LinearGradient
-            colors={[
-              colorKit.setAlpha(themeColorSurface, 0).hex(),
-              themeColorSurface,
-            ]}
+            colors={[colorKit.setAlpha(themeColorSurface, 0).hex(), themeColorSurface]}
             style={[styles.bottomGradient, { height: insets.bottom + 100 }]}
           />
         </SelectContentContainer>

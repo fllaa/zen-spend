@@ -1,17 +1,8 @@
-import {
-  Divider,
-  Select,
-  useSelect,
-  useThemeColor,
-  type SelectTriggerRef,
-} from 'heroui-native';
-import React, { useRef, useState, type FC } from 'react';
+import { Divider, Select, type SelectTriggerRef, useSelect, useThemeColor } from 'heroui-native';
+import React, { type FC, useRef, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { KeyboardController } from 'react-native-keyboard-controller';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { AppText } from '../app-text';
 
 type SelectOption = {
@@ -68,9 +59,7 @@ export function SearchableSelect() {
         <TextInput
           value={isFocused ? searchQuery : searchQuery || value?.label}
           onChangeText={setSearchQuery}
-          placeholder={
-            isFocused ? (value?.label ?? 'Search state...') : 'Search state...'
-          }
+          placeholder={isFocused ? (value?.label ?? 'Search state...') : 'Search state...'}
           placeholderTextColor={themeColorMuted}
           className="w-[256px] h-[48px] px-3 rounded-2xl flex-row items-center bg-surface text-foreground text-base/5 shadow-md shadow-black/5"
           onFocus={() => {
@@ -85,26 +74,17 @@ export function SearchableSelect() {
         />
       </Select.Trigger>
       <Select.Portal>
-        <Select.Overlay
-          className="bg-transparent"
-          onPress={() => KeyboardController.dismiss()}
-        />
+        <Select.Overlay className="bg-transparent" onPress={() => KeyboardController.dismiss()} />
         <Select.Content width="trigger">
-          {US_STATES.filter((state) =>
-            state.label.toLowerCase().includes(searchQuery.toLowerCase())
-          ).map((state, index, filteredArray) => (
-            <React.Fragment key={state.value}>
-              <Select.Item
-                value={state.value}
-                label={state.label}
-                onPress={() => KeyboardController.dismiss()}
-              />
-              {index < filteredArray.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
-          {US_STATES.filter((state) =>
-            state.label.toLowerCase().includes(searchQuery.toLowerCase())
-          ).length === 0 && (
+          {US_STATES.filter((state) => state.label.toLowerCase().includes(searchQuery.toLowerCase())).map(
+            (state, index, filteredArray) => (
+              <React.Fragment key={state.value}>
+                <Select.Item value={state.value} label={state.label} onPress={() => KeyboardController.dismiss()} />
+                {index < filteredArray.length - 1 && <Divider />}
+              </React.Fragment>
+            ),
+          )}
+          {US_STATES.filter((state) => state.label.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
             <View className="py-6 items-center">
               <AppText className="text-muted">No states found</AppText>
             </View>

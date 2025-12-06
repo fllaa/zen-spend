@@ -1,8 +1,7 @@
-import { ThemeCircle, type ThemeOption, availableThemes } from '@/src/components/themes-content/theme-circle';
 import { useHeaderHeight } from '@react-navigation/elements';
-import React from 'react';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { availableThemes, ThemeCircle, type ThemeOption } from '@/src/components/themes-content/theme-circle';
 import { CardContent } from '../../../components/themes-content/card-content';
 import { CheckboxContent } from '../../../components/themes-content/checkbox-content';
 import { RadioGroupContent } from '../../../components/themes-content/radio-group-content';

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MMKV } from 'react-native-mmkv';
+import type { MMKV } from 'react-native-mmkv';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -30,7 +30,7 @@ const customStorage = {
 
 type NumberFormat = 'dot' | 'comma';
 type Language = 'en' | 'id';
-type ThemeName =
+export type ThemeName =
   | 'light'
   | 'dark'
   | 'system'
@@ -70,9 +70,9 @@ const _useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'settings-storage',
-      storage: createJSONStorage(() => mmkv ? customStorage : AsyncStorage),
-    }
-  )
+      storage: createJSONStorage(() => (mmkv ? customStorage : AsyncStorage)),
+    },
+  ),
 );
 
 export const useSettingsStore = () => {
@@ -80,7 +80,7 @@ export const useSettingsStore = () => {
   const { i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(store.language);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store.language])
-  return store
-}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [store.language, i18n.changeLanguage]);
+  return store;
+};

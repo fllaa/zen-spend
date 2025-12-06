@@ -2,21 +2,15 @@ import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { useToast } from 'heroui-native';
 import { memo, useCallback, useRef, useState } from 'react';
-import {
-  FlatList,
-  Platform,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { type FlatList, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
+  type SharedValue,
   useAnimatedProps,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
-  type SharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -42,50 +36,36 @@ type VariantItemProps = {
   height: number;
 };
 
-const VariantItem = memo(
-  ({ item, index, scrollY, itemHeight, width, height }: VariantItemProps) => {
-    const { reduceTransparencyEnabled } = useAccessibilityInfo();
+const VariantItem = memo(({ item, index, scrollY, itemHeight, width, height }: VariantItemProps) => {
+  const { reduceTransparencyEnabled } = useAccessibilityInfo();
 
-    const applyOpacity = reduceTransparencyEnabled || Platform.OS === 'android';
+  const applyOpacity = reduceTransparencyEnabled || Platform.OS === 'android';
 
-    const animatedStyle = useAnimatedStyle(() => {
-      return {
-        opacity: applyOpacity
-          ? interpolate(
-              scrollY.get() / itemHeight,
-              [index - 0.5, index, index + 0.5],
-              [0, 1, 0],
-              Extrapolation.CLAMP
-            )
-          : 1,
-        transform: [
-          {
-            scale: interpolate(
-              scrollY.get() / itemHeight,
-              [index - 0.5, index, index + 0.5],
-              [0.9, 1, 0.9],
-              Extrapolation.CLAMP
-            ),
-          },
-        ],
-      };
-    });
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: applyOpacity
+        ? interpolate(scrollY.get() / itemHeight, [index - 0.5, index, index + 0.5], [0, 1, 0], Extrapolation.CLAMP)
+        : 1,
+      transform: [
+        {
+          scale: interpolate(
+            scrollY.get() / itemHeight,
+            [index - 0.5, index, index + 0.5],
+            [0.9, 1, 0.9],
+            Extrapolation.CLAMP,
+          ),
+        },
+      ],
+    };
+  });
 
-    return (
-      <Animated.View style={[{ width, height }, animatedStyle]}>
-        {item.content}
-      </Animated.View>
-    );
-  }
-);
+  return <Animated.View style={[{ width, height }, animatedStyle]}>{item.content}</Animated.View>;
+});
 
 VariantItem.displayName = 'VariantItem';
 
-export const UsageVariantFlatList = ({
-  data,
-  scrollEnabled = true,
-}: UsageVariantFlatListProps) => {
-  const [currentVariant, setCurrentVariant] = useState<UsageVariant>(data[0]!);
+export const UsageVariantFlatList = ({ data, scrollEnabled = true }: UsageVariantFlatListProps) => {
+  const [currentVariant, setCurrentVariant] = useState<UsageVariant>(data?.[0]);
 
   const { isDark } = useAppTheme();
 
@@ -101,17 +81,14 @@ export const UsageVariantFlatList = ({
 
   const listRef = useRef<FlatList<UsageVariant>>(null);
 
-  const handleViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: Array<{ item: UsageVariant }> }) => {
-      if (viewableItems.length > 0 && viewableItems[0]) {
-        if (Platform.OS === 'ios') {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }
-        setCurrentVariant(viewableItems[0].item);
+  const handleViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: { item: UsageVariant }[] }) => {
+    if (viewableItems.length > 0 && viewableItems[0]) {
+      if (Platform.OS === 'ios') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }
-    },
-    []
-  );
+      setCurrentVariant(viewableItems[0].item);
+    }
+  }, []);
 
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
@@ -149,11 +126,7 @@ export const UsageVariantFlatList = ({
     }
 
     return {
-      intensity: interpolate(
-        scrollY.get() / itemHeight,
-        inputRange,
-        outputRange
-      ),
+      intensity: interpolate(scrollY.get() / itemHeight, inputRange, outputRange),
     };
   });
 
@@ -194,22 +167,14 @@ export const UsageVariantFlatList = ({
           pointerEvents="none"
           style={StyleSheet.absoluteFill}
           animatedProps={animatedProps}
-          tint={
-            isDark
-              ? 'systemUltraThinMaterialDark'
-              : 'systemUltraThinMaterialLight'
-          }
+          tint={isDark ? 'systemUltraThinMaterialDark' : 'systemUltraThinMaterialLight'}
         />
       )}
-      <View
-        className="absolute left-6"
-        style={{ bottom: insets.bottom + 34 }}
-        pointerEvents="none"
-      >
+      <View className="absolute left-6" style={{ bottom: insets.bottom + 34 }} pointerEvents="none">
         <View className="gap-1">
           {data.map((item, index) => (
             <PaginationIndicator
-              key={index}
+              key={item.label}
               index={index}
               label={item.label}
               scrollY={scrollY}
@@ -218,12 +183,7 @@ export const UsageVariantFlatList = ({
           ))}
         </View>
       </View>
-      <UsageVariantsSelect
-        data={data}
-        variant={currentVariant}
-        setVariant={setCurrentVariant}
-        listRef={listRef}
-      />
+      <UsageVariantsSelect data={data} variant={currentVariant} setVariant={setCurrentVariant} listRef={listRef} />
     </>
   );
 };

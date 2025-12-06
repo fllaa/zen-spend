@@ -11,7 +11,7 @@ export default function Layout() {
         headerShown: false,
         gestureEnabled: true,
         gestureDirection: 'horizontal',
-        fullScreenGestureEnabled: isLiquidGlassAvailable() ? false : true,
+        fullScreenGestureEnabled: !isLiquidGlassAvailable(),
         animation: 'none',
         contentStyle: {
           backgroundColor: themeColorBackground,

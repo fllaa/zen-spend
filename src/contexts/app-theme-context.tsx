@@ -1,4 +1,5 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import type React from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Appearance } from 'react-native';
 import { Uniwind } from 'uniwind';
 import { useSettingsStore } from '../store/settings';
@@ -23,25 +24,24 @@ interface AppThemeContextType {
   toggleTheme: () => void;
 }
 
-const AppThemeContext = createContext<AppThemeContextType | undefined>(
-  undefined
-);
+const AppThemeContext = createContext<AppThemeContextType | undefined>(undefined);
 
-export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme: selectedTheme, setTheme: setSelectedTheme } = useSettingsStore();
   const [systemColorScheme, setSystemColorScheme] = useState(Appearance.getColorScheme());
 
-  const setTheme = useCallback((newTheme: ThemeName) => {
-    setSelectedTheme(newTheme);
-    if (newTheme === 'system') {
-      Uniwind.setTheme(systemColorScheme === 'dark' ? 'dark' : 'light');
-    } else {
-      Uniwind.setTheme(newTheme);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [systemColorScheme]);
+  const setTheme = useCallback(
+    (newTheme: ThemeName) => {
+      setSelectedTheme(newTheme);
+      if (newTheme === 'system') {
+        Uniwind.setTheme(systemColorScheme === 'dark' ? 'dark' : 'light');
+      } else {
+        Uniwind.setTheme(newTheme);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [systemColorScheme, setSelectedTheme],
+  );
 
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
@@ -49,8 +49,8 @@ export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     });
     setTheme(selectedTheme);
     return () => subscription?.remove();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTheme, setTheme]);
 
   const currentTheme = useMemo(() => {
     if (selectedTheme === 'system') {
@@ -106,14 +106,10 @@ export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       setTheme,
       toggleTheme,
     }),
-    [selectedTheme, currentTheme, isLight, isDark, setTheme, toggleTheme]
+    [selectedTheme, currentTheme, isLight, isDark, setTheme, toggleTheme],
   );
 
-  return (
-    <AppThemeContext.Provider value={value}>
-      {children}
-    </AppThemeContext.Provider>
-  );
+  return <AppThemeContext.Provider value={value}>{children}</AppThemeContext.Provider>;
 };
 
 export const useAppTheme = () => {

@@ -47,12 +47,8 @@ export const TextInputContent = () => {
             if (emailError) setEmailError(false);
           }}
         />
-        <TextField.Description>
-          We'll never share your email with anyone else.
-        </TextField.Description>
-        <TextField.ErrorMessage>
-          Please enter a valid email address
-        </TextField.ErrorMessage>
+        <TextField.Description>We'll never share your email with anyone else.</TextField.Description>
+        <TextField.ErrorMessage>Please enter a valid email address</TextField.ErrorMessage>
       </TextField>
 
       {/* TextField with Icons */}
@@ -68,11 +64,7 @@ export const TextInputContent = () => {
           }}
         >
           <TextField.InputStartContent className="pointer-events-none">
-            <StyledIonicons
-              name="lock-closed-outline"
-              size={16}
-              className="text-muted"
-            />
+            <StyledIonicons name="lock-closed-outline" size={16} className="text-muted" />
           </TextField.InputStartContent>
           <TextField.InputEndContent>
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
@@ -84,12 +76,8 @@ export const TextInputContent = () => {
             </Pressable>
           </TextField.InputEndContent>
         </TextField.Input>
-        <TextField.Description>
-          Password must be at least 6 characters
-        </TextField.Description>
-        <TextField.ErrorMessage>
-          Password must be at least 6 characters long
-        </TextField.ErrorMessage>
+        <TextField.Description>Password must be at least 6 characters</TextField.Description>
+        <TextField.ErrorMessage>Password must be at least 6 characters long</TextField.ErrorMessage>
       </TextField>
 
       {/* Submit Button */}

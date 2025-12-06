@@ -20,8 +20,7 @@ export default function DialogNativeModalScreen() {
             <View className="mb-5 gap-1.5">
               <Dialog.Title>Confirm Action</Dialog.Title>
               <Dialog.Description>
-                Are you sure you want to proceed with this action? This cannot
-                be undone.
+                Are you sure you want to proceed with this action? This cannot be undone.
               </Dialog.Description>
             </View>
             <View className="flex-row justify-end gap-3">

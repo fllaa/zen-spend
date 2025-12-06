@@ -1,11 +1,8 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Divider, Select, useSelect } from 'heroui-native';
-import React, { useState, type FC } from 'react';
+import React, { type FC, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 
 const StyledFeather = withUniwind(Feather);
@@ -70,11 +67,7 @@ export function SelectButtonTrigger({ contentOffset }: Props) {
       </Select.Trigger>
       <Select.Portal>
         <Select.Overlay />
-        <Select.Content
-          width="trigger"
-          offset={contentOffset}
-          className="w-[256px]"
-        >
+        <Select.Content width="trigger" offset={contentOffset} className="w-[256px]">
           <Select.ListLabel className="mb-2">Choose a state</Select.ListLabel>
           {US_STATES.map((state, index) => (
             <React.Fragment key={state.value}>

@@ -234,10 +234,7 @@ const AvatarGroupContent = () => {
         ].map((user, index) => (
           <Avatar
             key={user.id}
-            className={cn(
-              'border-background border-[2px]',
-              index !== 0 && '-ml-3'
-            )}
+            className={cn('border-background border-[2px]', index !== 0 && '-ml-3')}
             alt={user.name}
           >
             <Avatar.Image source={{ uri: user.image }} />
@@ -304,10 +301,7 @@ const CustomStylesContent = () => {
               }}
               asChild
             >
-              <Image
-                style={{ width: '100%', height: '100%' }}
-                contentFit="cover"
-              />
+              <Image style={{ width: '100%', height: '100%' }} contentFit="cover" />
             </Avatar.Image>
             <Avatar.Fallback>ON</Avatar.Fallback>
           </Avatar>

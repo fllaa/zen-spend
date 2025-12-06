@@ -2,12 +2,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colorKit, useThemeColor } from 'heroui-native';
 import type { PropsWithChildren, ReactElement } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollOffset,
-} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollOffset } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = PropsWithChildren<{
@@ -15,11 +10,7 @@ type Props = PropsWithChildren<{
   scrollEnabled?: boolean;
 }>;
 
-export default function ParallaxScrollView({
-  children,
-  headerImage,
-  scrollEnabled,
-}: Props) {
+export default function ParallaxScrollView({ children, headerImage, scrollEnabled }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollOffset(scrollRef);
 
@@ -32,25 +23,17 @@ export default function ParallaxScrollView({
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(
-        scrollOffset.get(),
-        [-headerHeight, 0, headerHeight / 2],
-        [1, 1, 0]
-      ),
+      opacity: interpolate(scrollOffset.get(), [-headerHeight, 0, headerHeight / 2], [1, 1, 0]),
       transform: [
         {
           translateY: interpolate(
             scrollOffset.get(),
             [-headerHeight, 0, headerHeight],
-            [-headerHeight / 2, 0, headerHeight * 0.75]
+            [-headerHeight / 2, 0, headerHeight * 0.75],
           ),
         },
         {
-          scale: interpolate(
-            scrollOffset.get(),
-            [-headerHeight, 0, headerHeight],
-            [2, 1, 1]
-          ),
+          scale: interpolate(scrollOffset.get(), [-headerHeight, 0, headerHeight], [2, 1, 1]),
         },
       ],
     };
@@ -64,22 +47,14 @@ export default function ParallaxScrollView({
       contentContainerStyle={{ paddingBottom: insets.bottom + 12 }}
       scrollEnabled={scrollEnabled}
     >
-      <Animated.View
-        className="overflow-hidden"
-        style={[{ height: headerHeight }, headerAnimatedStyle]}
-      >
+      <Animated.View className="overflow-hidden" style={[{ height: headerHeight }, headerAnimatedStyle]}>
         {headerImage}
         <LinearGradient
-          colors={[
-            colorKit.setAlpha(themeColorBackground, 0).hex(),
-            themeColorBackground,
-          ]}
+          colors={[colorKit.setAlpha(themeColorBackground, 0).hex(), themeColorBackground]}
           style={styles.gradient}
         />
       </Animated.View>
-      <View className="flex-1 p-4 overflow-hidden -mt-[100px] z-50">
-        {children}
-      </View>
+      <View className="flex-1 p-4 overflow-hidden -mt-[100px] z-50">{children}</View>
     </Animated.ScrollView>
   );
 }

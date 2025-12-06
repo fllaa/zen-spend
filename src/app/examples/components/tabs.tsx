@@ -1,35 +1,15 @@
 import { useHeaderHeight } from '@react-navigation/elements';
-import {
-  Button,
-  Checkbox,
-  cn,
-  FormField,
-  RadioGroup,
-  Tabs,
-  TextField,
-} from 'heroui-native';
+import { Button, Checkbox, cn, FormField, RadioGroup, Tabs, TextField } from 'heroui-native';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeOut,
-  LinearTransition,
-} from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 
 const DURATION = 200;
 
-const AnimatedContentContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Animated.View
-    entering={FadeIn.duration(DURATION)}
-    exiting={FadeOut.duration(DURATION)}
-    className="gap-6"
-  >
+const AnimatedContentContainer = ({ children }: { children: React.ReactNode }) => (
+  <Animated.View entering={FadeIn.duration(DURATION)} exiting={FadeOut.duration(DURATION)} className="gap-6">
     {children}
   </Animated.View>
 );
@@ -72,8 +52,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
     if (!username.trim()) {
       newErrors.username = 'Username is required';
     } else if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
-      newErrors.username =
-        'Username must be 3-20 characters (letters, numbers, underscore only)';
+      newErrors.username = 'Username must be 3-20 characters (letters, numbers, underscore only)';
     }
 
     setErrors(newErrors);
@@ -112,10 +91,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
       </Tabs.List>
       <Animated.View
         layout={LinearTransition.duration(DURATION)}
-        className={cn(
-          'px-2 py-6',
-          variant === 'line' && 'px-5 border border-foreground/10 rounded-2xl'
-        )}
+        className={cn('px-2 py-6', variant === 'line' && 'px-5 border border-foreground/10 rounded-2xl')}
         style={styles.borderCurve}
       >
         <Tabs.Content value="general">
@@ -125,36 +101,24 @@ const TabsContent = ({ variant }: TabsContentProps) => {
               <TextField.Input value={homepage} />
             </TextField>
 
-            <FormField
-              isSelected={showSidebar}
-              onSelectedChange={setShowSidebar}
-              alignIndicator="start"
-            >
+            <FormField isSelected={showSidebar} onSelectedChange={setShowSidebar} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Show sidebar</FormField.Title>
-                <FormField.Description>
-                  Display the sidebar navigation panel
-                </FormField.Description>
+                <FormField.Description>Display the sidebar navigation panel</FormField.Description>
               </FormField.Content>
             </FormField>
 
             {/* Show Status Bar Checkbox */}
-            <FormField
-              isSelected={showStatusBar}
-              onSelectedChange={setShowStatusBar}
-              alignIndicator="start"
-            >
+            <FormField isSelected={showStatusBar} onSelectedChange={setShowStatusBar} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Show status bar</FormField.Title>
-                <FormField.Description>
-                  Display the status bar at the bottom
-                </FormField.Description>
+                <FormField.Description>Display the status bar at the bottom</FormField.Description>
               </FormField.Content>
             </FormField>
           </AnimatedContentContainer>
@@ -165,9 +129,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             <RadioGroup value={theme} onValueChange={setTheme} className="mb-6">
               <View className="mb-2">
                 <FormField.Title>Theme</FormField.Title>
-                <FormField.Description>
-                  Select your preferred color theme
-                </FormField.Description>
+                <FormField.Description>Select your preferred color theme</FormField.Description>
               </View>
               <View className="gap-3">
                 <RadioGroup.Item value="auto" className="self-start">
@@ -188,9 +150,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             <RadioGroup value={fontSize} onValueChange={setFontSize}>
               <View className="mb-2">
                 <FormField.Title>Font Size</FormField.Title>
-                <FormField.Description>
-                  Adjust the text size throughout the app
-                </FormField.Description>
+                <FormField.Description>Adjust the text size throughout the app</FormField.Description>
               </View>
               <View className="gap-3">
                 <RadioGroup.Item value="small" className="self-start">
@@ -212,67 +172,43 @@ const TabsContent = ({ variant }: TabsContentProps) => {
 
         <Tabs.Content value="notifications">
           <AnimatedContentContainer>
-            <FormField
-              isSelected={accountActivity}
-              onSelectedChange={setAccountActivity}
-              alignIndicator="start"
-            >
+            <FormField isSelected={accountActivity} onSelectedChange={setAccountActivity} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Account activity</FormField.Title>
-                <FormField.Description>
-                  Notifications about your account activity
-                </FormField.Description>
+                <FormField.Description>Notifications about your account activity</FormField.Description>
               </FormField.Content>
             </FormField>
 
-            <FormField
-              isSelected={mentions}
-              onSelectedChange={setMentions}
-              alignIndicator="start"
-            >
+            <FormField isSelected={mentions} onSelectedChange={setMentions} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Mentions</FormField.Title>
-                <FormField.Description>
-                  When someone mentions you in a comment
-                </FormField.Description>
+                <FormField.Description>When someone mentions you in a comment</FormField.Description>
               </FormField.Content>
             </FormField>
 
-            <FormField
-              isSelected={directMessages}
-              onSelectedChange={setDirectMessages}
-              alignIndicator="start"
-            >
+            <FormField isSelected={directMessages} onSelectedChange={setDirectMessages} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Direct messages</FormField.Title>
-                <FormField.Description>
-                  Notifications for new direct messages
-                </FormField.Description>
+                <FormField.Description>Notifications for new direct messages</FormField.Description>
               </FormField.Content>
             </FormField>
 
-            <FormField
-              isSelected={marketingEmail}
-              onSelectedChange={setMarketingEmail}
-              alignIndicator="start"
-            >
+            <FormField isSelected={marketingEmail} onSelectedChange={setMarketingEmail} alignIndicator="start">
               <FormField.Indicator>
                 <Checkbox />
               </FormField.Indicator>
               <FormField.Content>
                 <FormField.Title>Marketing email</FormField.Title>
-                <FormField.Description>
-                  Receive emails about new features and updates
-                </FormField.Description>
+                <FormField.Description>Receive emails about new features and updates</FormField.Description>
               </FormField.Content>
             </FormField>
           </AnimatedContentContainer>
@@ -308,18 +244,11 @@ const TabsContent = ({ variant }: TabsContentProps) => {
                 placeholder="Enter username"
                 autoCapitalize="none"
               />
-              <TextField.Description>
-                3-20 characters, letters, numbers, and underscore only
-              </TextField.Description>
+              <TextField.Description>3-20 characters, letters, numbers, and underscore only</TextField.Description>
               <TextField.ErrorMessage>{errors.username}</TextField.ErrorMessage>
             </TextField>
 
-            <Button
-              variant="secondary"
-              size="sm"
-              className="self-start px-6"
-              onPress={handleUpdateProfile}
-            >
+            <Button variant="secondary" size="sm" className="self-start px-6" onPress={handleUpdateProfile}>
               <Button.Label className="text-base">Update profile</Button.Label>
             </Button>
           </AnimatedContentContainer>

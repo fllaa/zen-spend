@@ -1,15 +1,10 @@
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
 import { Button, useSelect, useThemeColor } from 'heroui-native';
 import { Platform } from 'react-native';
-import Animated, {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 export const CloseButton = () => {
   const insets = useSafeAreaInsets();
@@ -25,18 +20,8 @@ export const CloseButton = () => {
   });
 
   const listIconAnimatedStyle = useAnimatedStyle(() => {
-    const rotate = interpolate(
-      progress.get(),
-      [0, 1, 2],
-      [0, 360],
-      Extrapolation.CLAMP
-    );
-    const opacity = interpolate(
-      progress.get(),
-      [0, 1, 2],
-      [1, 0],
-      Extrapolation.CLAMP
-    );
+    const rotate = interpolate(progress.get(), [0, 1, 2], [0, 360], Extrapolation.CLAMP);
+    const opacity = interpolate(progress.get(), [0, 1, 2], [1, 0], Extrapolation.CLAMP);
 
     return {
       opacity,
@@ -45,12 +30,7 @@ export const CloseButton = () => {
   });
 
   const closeIconAnimatedStyle = useAnimatedStyle(() => {
-    const rotate = interpolate(
-      progress.get(),
-      [0, 1, 2],
-      [0, -360],
-      Extrapolation.CLAMP
-    );
+    const rotate = interpolate(progress.get(), [0, 1, 2], [0, -360], Extrapolation.CLAMP);
     const opacity = interpolate(progress.get(), [0, 1, 2], [0, 1, 0]);
 
     return {
@@ -73,20 +53,10 @@ export const CloseButton = () => {
         onOpenChange(false);
       }}
     >
-      <Animated.View
-        className="absolute items-center justify-center"
-        style={listIconAnimatedStyle}
-      >
-        <FontAwesome6
-          name="list-ul"
-          size={20}
-          color={themeColorAccentForeground}
-        />
+      <Animated.View className="absolute items-center justify-center" style={listIconAnimatedStyle}>
+        <FontAwesome6 name="list-ul" size={20} color={themeColorAccentForeground} />
       </Animated.View>
-      <Animated.View
-        className="absolute items-center justify-center"
-        style={closeIconAnimatedStyle}
-      >
+      <Animated.View className="absolute items-center justify-center" style={closeIconAnimatedStyle}>
         <Ionicons name="close" size={24} color={themeColorAccentForeground} />
       </Animated.View>
     </Button>

@@ -5,9 +5,9 @@ import {
   Card,
   RadioGroup,
   Skeleton,
+  type SkeletonAnimation,
   SkeletonGroup,
   Surface,
-  type SkeletonAnimation,
 } from 'heroui-native';
 import { useState } from 'react';
 import { Image, Text, View } from 'react-native';
@@ -56,25 +56,18 @@ const SkeletonControls = ({
 
 const CardSkeletonContent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [animationType, setAnimationType] =
-    useState<SkeletonAnimation>('shimmer');
+  const [animationType, setAnimationType] = useState<SkeletonAnimation>('shimmer');
 
   return (
     <View className="flex-1 items-center justify-center px-5">
       <View className="w-full">
-        <SkeletonGroup
-          isLoading={isLoading}
-          animationType={animationType}
-          className="h-[360px]"
-        >
+        <SkeletonGroup isLoading={isLoading} animationType={animationType} className="h-[360px]">
           <Card className="p-4">
             <Card.Header>
               <View className="flex-row items-center gap-3 mb-4">
                 <SkeletonGroup.Item className="size-10 rounded-full">
                   <Avatar size="sm" alt="Avatar">
-                    <Avatar.Image
-                      source={{ uri: 'https://i.pravatar.cc/150?img=4' }}
-                    />
+                    <Avatar.Image source={{ uri: 'https://i.pravatar.cc/150?img=4' }} />
                     <Avatar.Fallback />
                   </Avatar>
                 </SkeletonGroup.Item>
@@ -88,9 +81,7 @@ const CardSkeletonContent = () => {
                   )}
                   {!isLoading && (
                     <View>
-                      <Text className="font-semibold text-foreground">
-                        Alex Mitchell
-                      </Text>
+                      <Text className="font-semibold text-foreground">Alex Mitchell</Text>
                       <Text className="text-sm text-muted">@alexmitchell</Text>
                     </View>
                   )}
@@ -106,8 +97,7 @@ const CardSkeletonContent = () => {
                 )}
                 {!isLoading && (
                   <Text className="text-base text-foreground">
-                    Finally picked up my dream car today! The sleek design and
-                    powerful engine.
+                    Finally picked up my dream car today! The sleek design and powerful engine.
                   </Text>
                 )}
               </View>
@@ -140,8 +130,7 @@ const CardSkeletonContent = () => {
 
 const ListSkeletonContent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [animationType, setAnimationType] =
-    useState<SkeletonAnimation>('shimmer');
+  const [animationType, setAnimationType] = useState<SkeletonAnimation>('shimmer');
 
   return (
     <View className="flex-1 items-center justify-center px-5 gap-12">
@@ -181,8 +170,7 @@ const ListSkeletonContent = () => {
 
 const TextSkeletonsContent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [animationType, setAnimationType] =
-    useState<SkeletonAnimation>('shimmer');
+  const [animationType, setAnimationType] = useState<SkeletonAnimation>('shimmer');
 
   return (
     <View className="flex-1 items-center justify-center px-5">
@@ -201,14 +189,10 @@ const TextSkeletonsContent = () => {
             <SkeletonGroup.Item className="h-4 w-1/2 rounded-md" />
           </SkeletonGroup>
         ) : (
-          <Animated.View
-            key="text"
-            entering={FadeInLeft.duration(200)}
-            exiting={FadeOutRight.duration(200)}
-          >
+          <Animated.View key="text" entering={FadeInLeft.duration(200)} exiting={FadeOutRight.duration(200)}>
             <AppText className="text-base text-foreground">
-              The new productivity dashboard makes it easy to track daily tasks
-              and goals. You can customize widgets and set smart reminders.
+              The new productivity dashboard makes it easy to track daily tasks and goals. You can customize widgets and
+              set smart reminders.
             </AppText>
           </Animated.View>
         )}
@@ -227,8 +211,7 @@ const TextSkeletonsContent = () => {
 
 const CircularSkeletonsContent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [animationType, setAnimationType] =
-    useState<SkeletonAnimation>('shimmer');
+  const [animationType, setAnimationType] = useState<SkeletonAnimation>('shimmer');
 
   return (
     <View className="flex-1 items-center justify-center gap-12 px-5">
@@ -327,11 +310,7 @@ const CustomShimmerConfigContent = () => {
           </Skeleton>
         </View>
         <View className="items-center">
-          <Button
-            variant="secondary"
-            onPress={() => setIsLoading(!isLoading)}
-            size="sm"
-          >
+          <Button variant="secondary" onPress={() => setIsLoading(!isLoading)} size="sm">
             {isLoading ? 'Loading...' : 'Loaded'}
           </Button>
         </View>
@@ -386,11 +365,7 @@ const CustomPulseConfigContent = () => {
           </Skeleton>
         </View>
         <View className="items-center">
-          <Button
-            variant="secondary"
-            onPress={() => setIsLoading(!isLoading)}
-            size="sm"
-          >
+          <Button variant="secondary" onPress={() => setIsLoading(!isLoading)} size="sm">
             {isLoading ? 'Loading...' : 'Loaded'}
           </Button>
         </View>

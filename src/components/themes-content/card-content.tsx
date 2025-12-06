@@ -33,15 +33,11 @@ export const CardContent = () => {
             </Card.Header>
             <Card.Body className="flex-1">
               <Card.Title>Indie Hackers</Card.Title>
-              <Card.Description className="text-sm">
-                148 members
-              </Card.Description>
+              <Card.Description className="text-sm">148 members</Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-warning" />
-              <AppText className="text-sm font-medium text-foreground">
-                @indiehackers
-              </AppText>
+              <AppText className="text-sm font-medium text-foreground">@indiehackers</AppText>
             </Card.Footer>
           </View>
         </Card>
@@ -71,15 +67,11 @@ export const CardContent = () => {
             </Card.Header>
             <Card.Body className="flex-1">
               <Card.Title>AI Builders</Card.Title>
-              <Card.Description className="text-sm">
-                362 members
-              </Card.Description>
+              <Card.Description className="text-sm">362 members</Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-success" />
-              <AppText className="text-sm font-medium text-foreground">
-                @aibuilders
-              </AppText>
+              <AppText className="text-sm font-medium text-foreground">@aibuilders</AppText>
             </Card.Footer>
           </View>
         </Card>

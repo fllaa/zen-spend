@@ -16,15 +16,10 @@ export default function ToastNativeModalScreen() {
           toast.show({
             variant: 'default',
             label: 'Join a team',
-            description:
-              'Junior Garcia sent you an invitation to join HeroUI team!',
+            description: 'Junior Garcia sent you an invitation to join HeroUI team!',
             icon: (
               <View className="mt-0.5">
-                <Logo
-                  themeColorForeground={themeColorForeground}
-                  width={15}
-                  height={20.77}
-                />
+                <Logo themeColorForeground={themeColorForeground} width={15} height={20.77} />
               </View>
             ),
             actionLabel: 'Close',

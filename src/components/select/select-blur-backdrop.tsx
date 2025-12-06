@@ -20,11 +20,7 @@ export const SelectBlurBackdrop = ({ maxIntensity }: Props) => {
       return computedMaxIntensityValue;
     }
 
-    return interpolate(
-      progress.get(),
-      [0, 1, 2],
-      [0, computedMaxIntensityValue, 0]
-    );
+    return interpolate(progress.get(), [0, 1, 2], [0, computedMaxIntensityValue, 0]);
   });
 
   return (

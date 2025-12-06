@@ -3,11 +3,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Divider, FormField, Surface, Switch } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
-import Animated, {
-  FadeInLeft,
-  FadeInRight,
-  ZoomIn,
-} from 'react-native-reanimated';
+import Animated, { FadeInLeft, FadeInRight, ZoomIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
@@ -23,12 +19,7 @@ interface SwitchFieldProps {
   description: string;
 }
 
-const SwitchField: React.FC<SwitchFieldProps> = ({
-  isSelected,
-  onSelectedChange,
-  title,
-  description,
-}) => (
+const SwitchField: React.FC<SwitchFieldProps> = ({ isSelected, onSelectedChange, title, description }) => (
   <FormField isSelected={isSelected} onSelectedChange={onSelectedChange}>
     <FormField.Content>
       <FormField.Title>{title}</FormField.Title>
@@ -47,10 +38,7 @@ export const DefaultContent = () => {
     autoUpdate: true,
   });
 
-  const fieldConfigs: Record<
-    keyof typeof fields,
-    { title: string; description: string }
-  > = {
+  const fieldConfigs: Record<keyof typeof fields, { title: string; description: string }> = {
     notifications: {
       title: 'Enable notifications',
       description: 'Receive push notifications about your account activity',
@@ -98,10 +86,7 @@ const StatesContent = () => {
     pushNotifications: false,
   });
 
-  const fieldConfigs: Record<
-    keyof typeof fields,
-    { title: string; description: string; disabled?: boolean }
-  > = {
+  const fieldConfigs: Record<keyof typeof fields, { title: string; description: string; disabled?: boolean }> = {
     emailNotifications: {
       title: 'Email notifications',
       description: 'Receive notifications via email',
@@ -132,9 +117,7 @@ const StatesContent = () => {
             >
               <FormField.Content>
                 <FormField.Title>{fieldConfigs[key].title}</FormField.Title>
-                <FormField.Description>
-                  {fieldConfigs[key].description}
-                </FormField.Description>
+                <FormField.Description>{fieldConfigs[key].description}</FormField.Description>
               </FormField.Content>
               <FormField.Indicator>
                 <Switch />
@@ -161,11 +144,7 @@ const CustomStylesContent = () => {
           <Switch.Thumb>
             {icon ? (
               <Animated.View key="check" entering={ZoomIn}>
-                <StyledFontAwesome6
-                  name="check"
-                  size={12}
-                  className="text-accent"
-                />
+                <StyledFontAwesome6 name="check" size={12} className="text-accent" />
               </Animated.View>
             ) : (
               <Animated.View key="x" entering={ZoomIn}>
@@ -201,22 +180,14 @@ const CustomStylesContent = () => {
           <Switch.StartContent className="left-2">
             {contentIcon && (
               <Animated.View key="sun" entering={ZoomIn.springify()}>
-                <StyledIonicons
-                  name="sunny"
-                  size={16}
-                  className="text-[#854d0e]"
-                />
+                <StyledIonicons name="sunny" size={16} className="text-[#854d0e]" />
               </Animated.View>
             )}
           </Switch.StartContent>
           <Switch.EndContent className="right-2">
             {!contentIcon && (
               <Animated.View key="moon" entering={ZoomIn.springify()}>
-                <StyledIonicons
-                  name="moon"
-                  size={16}
-                  className="text-[#dbeafe]"
-                />
+                <StyledIonicons name="moon" size={16} className="text-[#dbeafe]" />
               </Animated.View>
             )}
           </Switch.EndContent>
@@ -250,20 +221,14 @@ const CustomStylesContent = () => {
           />
           <Switch.StartContent className="left-3">
             {contentText && (
-              <Animated.View
-                key="sun"
-                entering={FadeInRight.springify().duration(100)}
-              >
+              <Animated.View key="sun" entering={FadeInRight.springify().duration(100)}>
                 <AppText className="text-xs font-bold text-white">ON</AppText>
               </Animated.View>
             )}
           </Switch.StartContent>
           <Switch.EndContent className="right-2">
             {!contentText && (
-              <Animated.View
-                key="moon"
-                entering={FadeInLeft.springify().duration(100)}
-              >
+              <Animated.View key="moon" entering={FadeInLeft.springify().duration(100)}>
                 <AppText className="text-xs font-bold text-white">OFF</AppText>
               </Animated.View>
             )}

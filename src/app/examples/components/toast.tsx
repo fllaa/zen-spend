@@ -2,12 +2,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
 import Octicons from '@expo/vector-icons/Octicons';
 import { useRouter } from 'expo-router';
-import {
-  Button,
-  useThemeColor,
-  useToast,
-  type ToastComponentProps,
-} from 'heroui-native';
+import { Button, type ToastComponentProps, useThemeColor, useToast } from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
 import { Platform, TextInput, View } from 'react-native';
 import { withUniwind } from 'uniwind';
@@ -15,14 +10,8 @@ import type { UsageVariant } from '../../../components/component-presentation/ty
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import { Logo } from '../../../components/logo';
 import { AchievementToast } from '../../../components/toast/achievement-toast';
-import {
-  LoadingToast,
-  useLoadingState,
-} from '../../../components/toast/loading-toast';
-import {
-  ProgressToast,
-  useProgressState,
-} from '../../../components/toast/progress-toast';
+import { LoadingToast, useLoadingState } from '../../../components/toast/loading-toast';
+import { ProgressToast, useProgressState } from '../../../components/toast/progress-toast';
 
 const StyledFeather = withUniwind(Feather);
 const StyledOcticons = withUniwind(Octicons);
@@ -42,15 +31,10 @@ const DefaultVariantsContent = () => {
           toast.show({
             variant: 'default',
             label: 'Join a team',
-            description:
-              'Junior Garcia sent you an invitation to join HeroUI team!',
+            description: 'Junior Garcia sent you an invitation to join HeroUI team!',
             icon: (
               <View className="mt-0.5">
-                <Logo
-                  themeColorForeground={themeColorForeground}
-                  width={15}
-                  height={20.77}
-                />
+                <Logo themeColorForeground={themeColorForeground} width={15} height={20.77} />
               </View>
             ),
             actionLabel: 'Close',
@@ -67,13 +51,7 @@ const DefaultVariantsContent = () => {
             variant: 'accent',
             label: 'You have 2 credits left',
             description: 'Get a paid plan for more credits',
-            icon: (
-              <StyledEntypo
-                name="info-with-circle"
-                size={18}
-                className="text-accent mt-0.5"
-              />
-            ),
+            icon: <StyledEntypo name="info-with-circle" size={18} className="text-accent mt-0.5" />,
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
           })
@@ -88,13 +66,7 @@ const DefaultVariantsContent = () => {
             variant: 'success',
             label: 'You have upgraded your plan',
             description: 'You can continue using HeroUI Chat',
-            icon: (
-              <StyledOcticons
-                name="shield-check"
-                size={16}
-                className="text-success mt-[3px]"
-              />
-            ),
+            icon: <StyledOcticons name="shield-check" size={16} className="text-success mt-[3px]" />,
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
           })
@@ -109,13 +81,7 @@ const DefaultVariantsContent = () => {
             variant: 'warning',
             label: 'You have no credits left',
             description: 'Upgrade to a paid plan to continue',
-            icon: (
-              <StyledOcticons
-                name="shield"
-                size={16}
-                className="text-warning mt-[3px]"
-              />
-            ),
+            icon: <StyledOcticons name="shield" size={16} className="text-warning mt-[3px]" />,
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
           })
@@ -131,13 +97,7 @@ const DefaultVariantsContent = () => {
             label: 'Storage is full',
             description:
               "Remove files to release space. I'm adding more text as usual but it's okay I guess I just want to see how it looks with a lot of information",
-            icon: (
-              <StyledFeather
-                name="hard-drive"
-                size={16}
-                className="text-danger mt-[3px]"
-              />
-            ),
+            icon: <StyledFeather name="hard-drive" size={16} className="text-danger mt-[3px]" />,
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
           })
@@ -166,13 +126,7 @@ const PlacementVariantsContent = () => {
       placement: 'top',
       label: 'You have upgraded your plan',
       description: 'You can continue using HeroUI Chat',
-      icon: (
-        <StyledOcticons
-          name="shield-check"
-          size={16}
-          className="text-success mt-[3px]"
-        />
-      ),
+      icon: <StyledOcticons name="shield-check" size={16} className="text-success mt-[3px]" />,
       actionLabel: 'Close',
       onActionPress: ({ hide }) => hide(),
     });
@@ -183,13 +137,7 @@ const PlacementVariantsContent = () => {
       placement: 'bottom',
       label: 'You have no credits left',
       description: 'Upgrade to a paid plan to continue',
-      icon: (
-        <StyledOcticons
-          name="shield"
-          size={16}
-          className="text-warning mt-[3px]"
-        />
-      ),
+      icon: <StyledOcticons name="shield" size={16} className="text-warning mt-[3px]" />,
       actionLabel: 'Close',
       onActionPress: ({ hide }) => hide(),
     });
@@ -319,15 +267,10 @@ const KeyboardAvoidingContent = () => {
             placement: 'bottom',
             duration: 'persistent',
             label: 'Join a team',
-            description:
-              'Junior Garcia sent you an invitation to join HeroUI team!',
+            description: 'Junior Garcia sent you an invitation to join HeroUI team!',
             icon: (
               <View className="mt-0.5">
-                <Logo
-                  themeColorForeground={themeColorForeground}
-                  width={15}
-                  height={20.77}
-                />
+                <Logo themeColorForeground={themeColorForeground} width={15} height={20.77} />
               </View>
             ),
             actionLabel: 'Close',
@@ -372,10 +315,7 @@ const FromNativeModalContent = () => {
 
   return (
     <View className="flex-1 items-center justify-center px-5 gap-5">
-      <Button
-        variant="secondary"
-        onPress={() => router.push('components/toast-native-modal')}
-      >
+      <Button variant="secondary" onPress={() => router.push('components/toast-native-modal')}>
         Open modal
       </Button>
     </View>
@@ -498,19 +438,11 @@ const CustomToastsContent = () => {
         Achievement toast
       </Button>
 
-      <Button
-        variant="secondary"
-        onPress={handleShowLoadingToast}
-        isDisabled={isToastVisible}
-      >
+      <Button variant="secondary" onPress={handleShowLoadingToast} isDisabled={isToastVisible}>
         Load data
       </Button>
 
-      <Button
-        variant="secondary"
-        onPress={handleShowProgressToast}
-        isDisabled={isToastVisible}
-      >
+      <Button variant="secondary" onPress={handleShowProgressToast} isDisabled={isToastVisible}>
         Start upload
       </Button>
 
@@ -585,9 +517,5 @@ const TOAST_VARIANTS_ANDROID: UsageVariant[] = [
 ];
 
 export default function ToastScreen() {
-  return (
-    <UsageVariantFlatList
-      data={Platform.OS === 'ios' ? TOAST_VARIANTS_IOS : TOAST_VARIANTS_ANDROID}
-    />
-  );
+  return <UsageVariantFlatList data={Platform.OS === 'ios' ? TOAST_VARIANTS_IOS : TOAST_VARIANTS_ANDROID} />;
 }

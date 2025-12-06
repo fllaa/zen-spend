@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Pressable, View } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { useUniwind } from 'uniwind';
@@ -22,11 +22,7 @@ interface ThemeSelectorProps {
   onPress: () => void;
 }
 
-const ThemeSelector: React.FC<ThemeSelectorProps> = ({
-  theme,
-  isActive,
-  onPress,
-}) => {
+const ThemeSelector: React.FC<ThemeSelectorProps> = ({ theme, isActive, onPress }) => {
   const { theme: currentTheme } = useUniwind();
 
   // Create pie chart paths
@@ -71,11 +67,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               cy={centerY}
               r={radius + 4}
               fill="none"
-              stroke={
-                currentTheme === 'dark' || currentTheme.endsWith('-dark')
-                  ? '#ffffff'
-                  : '#000000'
-              }
+              stroke={currentTheme === 'dark' || currentTheme.endsWith('-dark') ? '#ffffff' : '#000000'}
               strokeWidth={3}
               opacity={0.8}
             />

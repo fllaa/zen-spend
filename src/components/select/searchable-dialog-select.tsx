@@ -3,10 +3,7 @@ import { Button, cn, ScrollShadow, Select, useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { TextInput, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-  KeyboardAvoidingView,
-  KeyboardController,
-} from 'react-native-keyboard-controller';
+import { KeyboardAvoidingView, KeyboardController } from 'react-native-keyboard-controller';
 import { Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../../contexts/app-theme-context';
@@ -52,7 +49,7 @@ export function SearchableDialogSelect() {
   const maxDialogHeight = (height - insetTop) / 2;
 
   const filteredCountries = COUNTRIES.filter((country) =>
-    country.label.toLowerCase().includes(searchQuery.toLowerCase())
+    country.label.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -70,9 +67,7 @@ export function SearchableDialogSelect() {
           {value ? (
             <View className="flex-row items-center gap-2">
               <AppText className="text-base">{value.flag}</AppText>
-              <AppText className="text-sm text-accent font-medium">
-                {value.code}
-              </AppText>
+              <AppText className="text-sm text-accent font-medium">{value.code}</AppText>
             </View>
           ) : (
             <AppText className="text-accent">Dialog</AppText>
@@ -131,20 +126,14 @@ export function SearchableDialogSelect() {
                   >
                     <View className="flex-row items-center gap-3 flex-1">
                       <AppText className="text-2xl">{country.flag}</AppText>
-                      <AppText className="text-sm text-muted w-10">
-                        {country.code}
-                      </AppText>
-                      <AppText className="text-base text-foreground flex-1">
-                        {country.label}
-                      </AppText>
+                      <AppText className="text-sm text-muted w-10">{country.code}</AppText>
+                      <AppText className="text-base text-foreground flex-1">{country.label}</AppText>
                     </View>
                     <Select.ItemIndicator />
                   </Select.Item>
                 ))}
                 {filteredCountries.length === 0 && (
-                  <AppText className="text-muted text-center mt-8">
-                    No countries found
-                  </AppText>
+                  <AppText className="text-muted text-center mt-8">No countries found</AppText>
                 )}
               </ScrollView>
             </ScrollShadow>

@@ -12,14 +12,8 @@ import { useCallback } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {
-  KeyboardAvoidingView,
-  KeyboardProvider,
-} from 'react-native-keyboard-controller';
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from 'react-native-reanimated';
+import { KeyboardAvoidingView, KeyboardProvider } from 'react-native-keyboard-controller';
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 import '../../global.css';
 import { BottomSheetModalWrapper } from '../components/bottom-sheet-modal-wrapper';
 import { AppThemeProvider } from '../contexts/app-theme-context';
@@ -38,16 +32,11 @@ configureReanimatedLogger({
 function AppContent() {
   const contentWrapper = useCallback(
     (children: React.ReactNode) => (
-      <KeyboardAvoidingView
-        pointerEvents="box-none"
-        behavior="padding"
-        keyboardVerticalOffset={12}
-        className="flex-1"
-      >
+      <KeyboardAvoidingView pointerEvents="box-none" behavior="padding" keyboardVerticalOffset={12} className="flex-1">
         {children}
       </KeyboardAvoidingView>
     ),
-    []
+    [],
   );
 
   return (

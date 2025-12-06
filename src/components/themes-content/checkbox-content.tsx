@@ -9,18 +9,8 @@ interface CheckboxFieldProps {
   description: string;
 }
 
-const CheckboxField: React.FC<CheckboxFieldProps> = ({
-  isSelected,
-  onSelectedChange,
-  label,
-  description,
-}) => (
-  <FormField
-    isSelected={isSelected}
-    onSelectedChange={onSelectedChange}
-    alignIndicator="start"
-    className="gap-3"
-  >
+const CheckboxField: React.FC<CheckboxFieldProps> = ({ isSelected, onSelectedChange, label, description }) => (
+  <FormField isSelected={isSelected} onSelectedChange={onSelectedChange} alignIndicator="start" className="gap-3">
     <FormField.Indicator>
       <Checkbox />
     </FormField.Indicator>

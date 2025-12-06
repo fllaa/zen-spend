@@ -31,18 +31,9 @@ export default function LinearTaskScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View className="flex-row items-center gap-5 mb-4">
-        <Pressable
-          className="flex-row items-center gap-1"
-          onPress={router.back}
-        >
-          <StyledMaterialCommunityIcons
-            name="arrow-left"
-            size={16}
-            className="text-foreground"
-          />
-          <AppText className="text-lg font-medium text-foreground">
-            Back
-          </AppText>
+        <Pressable className="flex-row items-center gap-1" onPress={router.back}>
+          <StyledMaterialCommunityIcons name="arrow-left" size={16} className="text-foreground" />
+          <AppText className="text-lg font-medium text-foreground">Back</AppText>
         </Pressable>
         <AppText className="text-base font-medium text-muted">DEV-37</AppText>
       </View>
@@ -51,10 +42,7 @@ export default function LinearTaskScreen() {
         Modern Dialog Component with Adaptive Layouts and Accessibility
       </AppText>
 
-      <Card
-        variant="tertiary"
-        className="flex-row flex-wrap gap-x-2 gap-y-3 border-0 rounded-3xl mb-6 -mx-3"
-      >
+      <Card variant="tertiary" className="flex-row flex-wrap gap-x-2 gap-y-3 border-0 rounded-3xl mb-6 -mx-3">
         <Status />
         <Priority />
         <Assignee />
@@ -63,33 +51,22 @@ export default function LinearTaskScreen() {
       </Card>
 
       <AppText className="text-base text-foreground mb-6">
-        Build a best-in-class dialog component that sets new standards for
-        performance and user experience. The implementation should feature
-        smooth animations, keyboard-aware positioning, and adaptive layouts that
-        work seamlessly across all device sizes. Focus on creating an intuitive
-        API that makes complex interactions feel effortless.
+        Build a best-in-class dialog component that sets new standards for performance and user experience. The
+        implementation should feature smooth animations, keyboard-aware positioning, and adaptive layouts that work
+        seamlessly across all device sizes. Focus on creating an intuitive API that makes complex interactions feel
+        effortless.
       </AppText>
 
       <Pressable onPress={simulatePress}>
         <Card className="mb-6 border-0 bg-surface-tertiary rounded-2xl p-4">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-3">
-              <StyledMaterialCommunityIcons
-                name="github"
-                size={20}
-                className="text-foreground"
-              />
-              <AppText className="text-base font-semibold text-foreground">
-                feat/dialog-component
-              </AppText>
+              <StyledMaterialCommunityIcons name="github" size={20} className="text-foreground" />
+              <AppText className="text-base font-semibold text-foreground">feat/dialog-component</AppText>
             </View>
             <View className="flex-row items-center gap-2">
               <AppText className="text-base text-muted">#26</AppText>
-              <StyledMaterialCommunityIcons
-                name="source-branch"
-                size={20}
-                className="text-purple-400"
-              />
+              <StyledMaterialCommunityIcons name="source-branch" size={20} className="text-purple-400" />
             </View>
           </View>
         </Card>
@@ -99,9 +76,7 @@ export default function LinearTaskScreen() {
 
       <View className="mb-8">
         <View className="flex-row items-center justify-between mb-4">
-          <AppText className="text-lg font-semibold text-muted">
-            Activity
-          </AppText>
+          <AppText className="text-lg font-semibold text-muted">Activity</AppText>
           <View className="flex-row items-center">
             <View className="flex-row">
               <Avatar alt="volo" className="size-6 bg-purple-500">
@@ -111,9 +86,7 @@ export default function LinearTaskScreen() {
                   }}
                 />
                 <Avatar.Fallback>
-                  <AppText className="text-[10px] font-bold text-white">
-                    VS
-                  </AppText>
+                  <AppText className="text-[10px] font-bold text-white">VS</AppText>
                 </Avatar.Fallback>
               </Avatar>
               <Avatar alt="Junior" className="-ml-3 size-6 bg-sky-500">
@@ -123,9 +96,7 @@ export default function LinearTaskScreen() {
                   }}
                 />
                 <Avatar.Fallback>
-                  <AppText className="text-[10px] font-bold text-white">
-                    JG
-                  </AppText>
+                  <AppText className="text-[10px] font-bold text-white">JG</AppText>
                 </Avatar.Fallback>
               </Avatar>
             </View>
@@ -140,13 +111,22 @@ export default function LinearTaskScreen() {
             </View>
             <View className="flex-1">
               <AppText className="text-base text-foreground/60">
-                <AppText className="font-semibold text-foreground">
-                  Junior
-                </AppText>{' '}
-                created the issue
+                <AppText className="font-semibold text-foreground">Junior</AppText> created the issue
               </AppText>
-              <AppText className="text-sm text-foreground/35 mt-1">
-                18 September 2025 at 13:32
+              <AppText className="text-sm text-foreground/35 mt-1">18 September 2025 at 13:32</AppText>
+            </View>
+          </View>
+
+          <View className="flex-row gap-2 -mb-1.5">
+            <View className="items-center mt-1.5">
+              <View className="size-2.5 rounded-full border border-foreground/60" />
+              <View className="w-px h-12 bg-foreground/15" />
+            </View>
+            <View className="flex-1">
+              <AppText className="text-base text-foreground/60">
+                <AppText className="font-semibold text-foreground">volo</AppText> changed status from{' '}
+                <AppText className="font-semibold text-foreground">Todo</AppText> to{' '}
+                <AppText className="font-semibold text-foreground">In Progress</AppText>
               </AppText>
             </View>
           </View>
@@ -158,39 +138,9 @@ export default function LinearTaskScreen() {
             </View>
             <View className="flex-1">
               <AppText className="text-base text-foreground/60">
-                <AppText className="font-semibold text-foreground">
-                  volo
-                </AppText>{' '}
-                changed status from{' '}
-                <AppText className="font-semibold text-foreground">
-                  Todo
-                </AppText>{' '}
-                to{' '}
-                <AppText className="font-semibold text-foreground">
-                  In Progress
-                </AppText>
-              </AppText>
-            </View>
-          </View>
-
-          <View className="flex-row gap-2 -mb-1.5">
-            <View className="items-center mt-1.5">
-              <View className="size-2.5 rounded-full border border-foreground/60" />
-              <View className="w-px h-12 bg-foreground/15" />
-            </View>
-            <View className="flex-1">
-              <AppText className="text-base text-foreground/60">
-                <AppText className="font-semibold text-foreground">
-                  volo
-                </AppText>{' '}
-                changed status from{' '}
-                <AppText className="font-semibold text-foreground">
-                  In Progress
-                </AppText>{' '}
-                to{' '}
-                <AppText className="font-semibold text-foreground">
-                  In Review
-                </AppText>
+                <AppText className="font-semibold text-foreground">volo</AppText> changed status from{' '}
+                <AppText className="font-semibold text-foreground">In Progress</AppText> to{' '}
+                <AppText className="font-semibold text-foreground">In Review</AppText>
               </AppText>
             </View>
           </View>
@@ -201,21 +151,11 @@ export default function LinearTaskScreen() {
             </View>
             <View className="flex-1">
               <AppText className="text-base text-foreground/60">
-                <AppText className="font-semibold text-foreground">
-                  Junior
-                </AppText>{' '}
-                changed status from{' '}
-                <AppText className="font-semibold text-foreground">
-                  In Review
-                </AppText>{' '}
-                to{' '}
-                <AppText className="font-semibold text-foreground">
-                  Done
-                </AppText>
+                <AppText className="font-semibold text-foreground">Junior</AppText> changed status from{' '}
+                <AppText className="font-semibold text-foreground">In Review</AppText> to{' '}
+                <AppText className="font-semibold text-foreground">Done</AppText>
               </AppText>
-              <AppText className="text-sm text-foreground/35 mt-1">
-                20 September 2025 at 11:54
-              </AppText>
+              <AppText className="text-sm text-foreground/35 mt-1">20 September 2025 at 11:54</AppText>
             </View>
           </View>
         </View>

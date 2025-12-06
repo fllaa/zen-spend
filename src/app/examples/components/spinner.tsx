@@ -63,11 +63,7 @@ const CustomContentContent = () => {
       <View className="flex-row gap-4">
         <Spinner size="md" color="default">
           <Spinner.Indicator speed={0.7}>
-            <StyledIonicons
-              name="reload"
-              size={24}
-              className="text-foreground"
-            />
+            <StyledIonicons name="reload" size={24} className="text-foreground" />
           </Spinner.Indicator>
         </Spinner>
         <Spinner size="lg" color="default">
@@ -118,11 +114,7 @@ const StateAnimationContent = () => {
     <View className="flex-1 items-center justify-center">
       <View className="items-center gap-6">
         <Spinner size="lg" isLoading={isLoading} />
-        <Button
-          variant="secondary"
-          size="sm"
-          onPress={() => setIsLoading(!isLoading)}
-        >
+        <Button variant="secondary" size="sm" onPress={() => setIsLoading(!isLoading)}>
           {isLoading ? 'Tap to stop' : 'Tap to start'}
         </Button>
       </View>

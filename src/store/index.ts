@@ -1,15 +1,15 @@
 import { endOfMonth, getUnixTime, startOfMonth } from 'date-fns';
 import { create } from 'zustand';
 import {
-    addTransaction,
-    deleteTransaction,
-    getCategories,
-    getCategorySummary,
-    getMonthlySummary,
-    getTransactions,
-    initDatabase
+  addTransaction,
+  deleteTransaction,
+  getCategories,
+  getCategorySummary,
+  getMonthlySummary,
+  getTransactions,
+  initDatabase,
 } from '../db';
-import { Category, CategorySummary, MonthlySummary, TransactionWithCategory } from '../types';
+import type { Category, CategorySummary, MonthlySummary, TransactionWithCategory } from '../types';
 
 interface AppState {
   categories: Category[];
@@ -19,7 +19,7 @@ interface AppState {
   isLoading: boolean;
   error: string | null;
   lastUpdated: number;
-  
+
   // Actions
   initialize: () => Promise<void>;
   fetchDashboardData: () => Promise<void>;
@@ -42,7 +42,7 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       await initDatabase();
       // Add a small delay to ensure DB is ready
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       const categories = await getCategories();
       set({ categories });
       await get().fetchDashboardData();
@@ -63,12 +63,12 @@ export const useStore = create<AppState>((set, get) => ({
 
       const [transactions, summary] = await Promise.all([
         getTransactions(10, 0), // Get last 10 transactions
-        getMonthlySummary(start, end)
+        getMonthlySummary(start, end),
       ]);
 
-      set({ 
+      set({
         recentTransactions: transactions,
-        monthlySummary: summary
+        monthlySummary: summary,
       });
     } catch (error) {
       set({ error: 'Failed to fetch dashboard data' });
@@ -111,14 +111,14 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       const start = getUnixTime(monthStart);
       const end = getUnixTime(monthEnd);
-      
+
       const summary = await getCategorySummary(start, end);
-      
+
       // Calculate percentages
       const totalExpense = summary.reduce((acc: number, curr: any) => acc + curr.totalAmount, 0);
       const summaryWithPercentage = summary.map((item: any) => ({
         ...item,
-        percentage: totalExpense > 0 ? (item.totalAmount / totalExpense) * 100 : 0
+        percentage: totalExpense > 0 ? (item.totalAmount / totalExpense) * 100 : 0,
       }));
 
       set({ categorySummary: summaryWithPercentage });
@@ -128,5 +128,5 @@ export const useStore = create<AppState>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
-  }
+  },
 }));

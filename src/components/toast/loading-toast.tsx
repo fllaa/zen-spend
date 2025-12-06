@@ -1,11 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
-import {
-  cn,
-  Spinner,
-  Toast,
-  useThemeColor,
-  type ToastComponentProps,
-} from 'heroui-native';
+import { cn, Spinner, Toast, type ToastComponentProps, useThemeColor } from 'heroui-native';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { LinearTransition } from 'react-native-reanimated';
@@ -24,10 +18,7 @@ const LOADING_STATE_KEY = 'loading-toast-state';
  * with the new loading state, even if they're memoized or rendered separately
  */
 export const useLoadingState = () => {
-  const { state: isLoading, setState: setIsLoading } = useSharedState<boolean>(
-    LOADING_STATE_KEY,
-    false
-  );
+  const { state: isLoading, setState: setIsLoading } = useSharedState<boolean>(LOADING_STATE_KEY, false);
 
   return { isLoading, setIsLoading };
 };
@@ -53,21 +44,18 @@ export const LoadingToast = (props: ToastComponentProps) => {
 
   return (
     <Toast
-      // @ts-ignore
+      // @ts-expect-error
       layout={LinearTransition.springify().mass(2)}
       className={cn(
         'mx-auto flex-row items-center gap-3 rounded-full border-[4px]',
-        isLoading ? 'w-[115px]' : 'w-[185px]'
+        isLoading ? 'w-[115px]' : 'w-[185px]',
       )}
       isSwipeable={false}
       {...props}
     >
       <View className="flex-1 flex-row items-center gap-2">
         <View
-          className={cn(
-            'size-7 items-center justify-center rounded-full',
-            isLoading ? 'bg-muted/10' : 'bg-success/10'
-          )}
+          className={cn('size-7 items-center justify-center rounded-full', isLoading ? 'bg-muted/10' : 'bg-success/10')}
         >
           {isLoading ? (
             <Spinner size="sm" color={themeColorMuted} />
@@ -75,12 +63,7 @@ export const LoadingToast = (props: ToastComponentProps) => {
             <StyledFeather name="check" size={18} className="text-success" />
           )}
         </View>
-        <Toast.Label
-          className={cn(
-            'text-sm',
-            isLoading ? 'text-muted/75' : 'text-success'
-          )}
-        >
+        <Toast.Label className={cn('text-sm', isLoading ? 'text-muted/75' : 'text-success')}>
           {isLoading ? 'Loading...' : 'Loaded successfully'}
         </Toast.Label>
       </View>

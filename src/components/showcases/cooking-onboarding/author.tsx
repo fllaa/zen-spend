@@ -1,6 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Avatar } from 'heroui-native';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { Pressable, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
@@ -21,15 +21,9 @@ export const Author: FC = () => {
           <AppText className="text-[8px] font-bold text-white">JG</AppText>
         </Avatar.Fallback>
       </Avatar>
-      <AppText className="text-base text-foreground ml-2">
-        Junior Garcia
-      </AppText>
+      <AppText className="text-base text-foreground ml-2">Junior Garcia</AppText>
       <View className="mt-0.5">
-        <StyledFeather
-          name="chevron-right"
-          size={16}
-          className="text-foreground"
-        />
+        <StyledFeather name="chevron-right" size={16} className="text-foreground" />
       </View>
     </Pressable>
   );

@@ -18,35 +18,22 @@ const WithTitleDescriptionContent = () => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Overlay />
-          <Popover.Content
-            width={320}
-            placement="top"
-            className="gap-3 px-6 py-5"
-          >
+          <Popover.Content width={320} placement="top" className="gap-3 px-6 py-5">
             <Popover.Close className="absolute top-4 right-4 z-50" />
             <View className="flex-row items-center gap-3 mb-1">
               <View className="size-12 items-center justify-center rounded-full bg-warning/15">
-                <StyledIonicons
-                  name="rocket"
-                  size={26}
-                  className="text-warning"
-                />
+                <StyledIonicons name="rocket" size={26} className="text-warning" />
               </View>
               <View className="flex-1">
                 <Popover.Title>Fun Fact!</Popover.Title>
               </View>
             </View>
             <Popover.Description className="text-sm">
-              The first computer bug was an actual moth found trapped in a
-              Harvard Mark II computer in 1947. Grace Hopper taped it to the log
-              book with the note "First actual case of bug being found."
+              The first computer bug was an actual moth found trapped in a Harvard Mark II computer in 1947. Grace
+              Hopper taped it to the log book with the note "First actual case of bug being found."
             </Popover.Description>
             <View className="flex-row items-center gap-2 mt-2 pt-2 border-t border-border">
-              <StyledIonicons
-                name="sparkles"
-                size={14}
-                className="text-accent"
-              />
+              <StyledIonicons name="sparkles" size={14} className="text-accent" />
               <AppText className="text-xs text-muted">Tech History</AppText>
             </View>
           </Popover.Content>
@@ -67,31 +54,19 @@ const PresentationVariantsContent = () => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Overlay />
-          <Popover.Content
-            width={300}
-            className="gap-3"
-            presentation="popover"
-            placement="top"
-          >
+          <Popover.Content width={300} className="gap-3" presentation="popover" placement="top">
             <View className="items-start gap-2">
               <View className="flex-row items-center gap-3 self-stretch">
                 <View className="size-10 items-center justify-center rounded-full bg-success/15">
-                  <StyledIonicons
-                    name="checkmark-circle"
-                    size={24}
-                    className="text-success"
-                  />
+                  <StyledIonicons name="checkmark-circle" size={24} className="text-success" />
                 </View>
                 <View className="flex-1">
                   <Popover.Title>Payment Successful</Popover.Title>
-                  <AppText className="text-xs text-muted">
-                    2 minutes ago
-                  </AppText>
+                  <AppText className="text-xs text-muted">2 minutes ago</AppText>
                 </View>
               </View>
               <Popover.Description>
-                Your payment of $49.99 has been processed successfully. Receipt
-                sent to your email.
+                Your payment of $49.99 has been processed successfully. Receipt sent to your email.
               </Popover.Description>
             </View>
             <Popover.Close asChild>
@@ -109,9 +84,7 @@ const PresentationVariantsContent = () => {
           <Popover.Content presentation="bottom-sheet">
             <View className="gap-4">
               <View className="mb-2">
-                <Popover.Title className="text-center text-foreground">
-                  Share Options
-                </Popover.Title>
+                <Popover.Title className="text-center text-foreground">Share Options</Popover.Title>
                 <Popover.Description className="text-center text-muted">
                   Choose how you'd like to share this content
                 </Popover.Description>
@@ -119,62 +92,34 @@ const PresentationVariantsContent = () => {
               <View className="gap-2">
                 <View className="flex-row items-center gap-3 p-3 rounded-lg">
                   <View className="size-10 items-center justify-center rounded-full bg-accent/10">
-                    <StyledIonicons
-                      name="share-social"
-                      size={20}
-                      className="text-accent"
-                    />
+                    <StyledIonicons name="share-social" size={20} className="text-accent" />
                   </View>
                   <View className="flex-1">
-                    <AppText className="text-base font-medium text-foreground">
-                      Share Link
-                    </AppText>
-                    <AppText className="text-xs text-muted">
-                      Send via messaging app
-                    </AppText>
+                    <AppText className="text-base font-medium text-foreground">Share Link</AppText>
+                    <AppText className="text-xs text-muted">Send via messaging app</AppText>
                   </View>
                 </View>
                 <View className="flex-row items-center gap-3 p-3 rounded-lg">
                   <View className="size-10 items-center justify-center rounded-full bg-warning/10">
-                    <StyledIonicons
-                      name="copy-outline"
-                      size={20}
-                      className="text-warning"
-                    />
+                    <StyledIonicons name="copy-outline" size={20} className="text-warning" />
                   </View>
                   <View className="flex-1">
-                    <AppText className="text-base font-medium text-foreground">
-                      Copy Link
-                    </AppText>
-                    <AppText className="text-xs text-muted">
-                      Copy to clipboard
-                    </AppText>
+                    <AppText className="text-base font-medium text-foreground">Copy Link</AppText>
+                    <AppText className="text-xs text-muted">Copy to clipboard</AppText>
                   </View>
                 </View>
                 <View className="flex-row items-center gap-3 p-3 rounded-lg">
                   <View className="size-10 items-center justify-center rounded-full bg-success/10">
-                    <StyledIonicons
-                      name="download-outline"
-                      size={20}
-                      className="text-success"
-                    />
+                    <StyledIonicons name="download-outline" size={20} className="text-success" />
                   </View>
                   <View className="flex-1">
-                    <AppText className="text-base font-medium text-foreground">
-                      Save Offline
-                    </AppText>
-                    <AppText className="text-xs text-muted">
-                      Download for later
-                    </AppText>
+                    <AppText className="text-base font-medium text-foreground">Save Offline</AppText>
+                    <AppText className="text-xs text-muted">Download for later</AppText>
                   </View>
                 </View>
               </View>
               <Popover.Close asChild>
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="self-stretch mt-2"
-                >
+                <Button variant="secondary" size="lg" className="self-stretch mt-2">
                   Cancel
                 </Button>
               </Popover.Close>
@@ -188,11 +133,7 @@ const PresentationVariantsContent = () => {
 
 // ------------------------------------------------------------------------------
 
-const PlacementPopover = ({
-  placement,
-}: {
-  placement: 'top' | 'bottom' | 'left' | 'right';
-}) => {
+const PlacementPopover = ({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }) => {
   const label = placement.charAt(0).toUpperCase() + placement.slice(1);
 
   return (
@@ -207,15 +148,9 @@ const PlacementPopover = ({
         <Popover.Content placement={placement} width={220} className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="size-8 items-center justify-center rounded-full bg-accent/15">
-              <StyledIonicons
-                name="location"
-                size={16}
-                className="text-accent"
-              />
+              <StyledIonicons name="location" size={16} className="text-accent" />
             </View>
-            <AppText className="text-sm font-semibold text-foreground">
-              Quick Tip
-            </AppText>
+            <AppText className="text-sm font-semibold text-foreground">Quick Tip</AppText>
           </View>
           <AppText className="text-xs text-muted leading-4">
             This popover appears on the {placement} side of the trigger button
@@ -257,27 +192,14 @@ const AlignmentPopover = ({ align }: { align: 'start' | 'center' | 'end' }) => {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Overlay />
-        <Popover.Content
-          placement="top"
-          align={align}
-          width={200}
-          className="gap-2"
-        >
+        <Popover.Content placement="top" align={align} width={200} className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="size-8 items-center justify-center rounded-full bg-warning/15">
-              <StyledIonicons
-                name="git-compare-outline"
-                size={16}
-                className="text-warning"
-              />
+              <StyledIonicons name="git-compare-outline" size={16} className="text-warning" />
             </View>
-            <AppText className="text-sm font-semibold text-foreground">
-              Alignment
-            </AppText>
+            <AppText className="text-sm font-semibold text-foreground">Alignment</AppText>
           </View>
-          <AppText className="text-xs text-muted">
-            Aligned to the {align} of the trigger
-          </AppText>
+          <AppText className="text-xs text-muted">Aligned to the {align} of the trigger</AppText>
         </Popover.Content>
       </Popover.Portal>
     </Popover>
@@ -303,10 +225,7 @@ const NativeModalTestContent = () => {
 
   return (
     <View className="flex-1 px-5 items-center justify-center">
-      <Button
-        variant="secondary"
-        onPress={() => router.push('components/popover-native-modal')}
-      >
+      <Button variant="secondary" onPress={() => router.push('components/popover-native-modal')}>
         Popover from native modal
       </Button>
     </View>

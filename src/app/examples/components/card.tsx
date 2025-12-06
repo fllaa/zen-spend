@@ -21,19 +21,14 @@ const BasicCardContent = () => {
               <Card.Title>Living room Sofa</Card.Title>
             </View>
             <Card.Description>
-              This sofa is perfect for modern tropical spaces, baroque inspired
-              spaces.
+              This sofa is perfect for modern tropical spaces, baroque inspired spaces.
             </Card.Description>
           </Card.Body>
           <Card.Footer className="gap-3">
             <Button variant="primary">Buy now</Button>
             <Button variant="ghost">
               <Button.Label>Add to cart</Button.Label>
-              <StyledIonicons
-                name="basket-outline"
-                size={16}
-                className="text-muted"
-              />
+              <StyledIonicons name="basket-outline" size={16} className="text-muted" />
             </Button>
           </Card.Footer>
         </View>
@@ -64,15 +59,11 @@ const CardWithImageContent = () => {
             </Card.Header>
             <Card.Body className="flex-1">
               <Card.Title>Indie Hackers</Card.Title>
-              <Card.Description className="text-sm">
-                148 members
-              </Card.Description>
+              <Card.Description className="text-sm">148 members</Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-rose-400" />
-              <AppText className="text-sm font-medium text-foreground">
-                @indiehackers
-              </AppText>
+              <AppText className="text-sm font-medium text-foreground">@indiehackers</AppText>
             </Card.Footer>
           </View>
         </Card>
@@ -92,15 +83,11 @@ const CardWithImageContent = () => {
             </Card.Header>
             <Card.Body className="flex-1">
               <Card.Title>AI Builders</Card.Title>
-              <Card.Description className="text-sm">
-                362 members
-              </Card.Description>
+              <Card.Description className="text-sm">362 members</Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-emerald-400" />
-              <AppText className="text-sm font-medium text-foreground">
-                @aibuilders
-              </AppText>
+              <AppText className="text-sm font-medium text-foreground">@aibuilders</AppText>
             </Card.Footer>
           </View>
         </Card>
@@ -136,14 +123,8 @@ const HorizontalCardWithImageContent = () => {
             </Card.Body>
             <Card.Footer>
               <Pressable className="flex-row items-center gap-1">
-                <AppText className="text-sm font-medium text-accent">
-                  View Details
-                </AppText>
-                <StyledIonicons
-                  name="open-outline"
-                  size={12}
-                  className="text-accent"
-                />
+                <AppText className="text-sm font-medium text-accent">View Details</AppText>
+                <StyledIonicons name="open-outline" size={12} className="text-accent" />
               </Pressable>
             </Card.Footer>
           </View>
@@ -169,14 +150,8 @@ const HorizontalCardWithImageContent = () => {
             </Card.Body>
             <Card.Footer>
               <Pressable className="flex-row items-center gap-1">
-                <AppText className="text-sm font-medium text-accent">
-                  View Details
-                </AppText>
-                <StyledIonicons
-                  name="open-outline"
-                  size={12}
-                  className="text-accent"
-                />
+                <AppText className="text-sm font-medium text-accent">View Details</AppText>
+                <StyledIonicons name="open-outline" size={12} className="text-accent" />
               </Pressable>
             </Card.Footer>
           </View>
@@ -199,34 +174,19 @@ const BackgroundImageCardContent = () => {
           className="absolute inset-0"
           resizeMode="cover"
         />
-        <LinearGradient
-          colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.5)']}
-          style={StyleSheet.absoluteFill}
-        />
+        <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.5)']} style={StyleSheet.absoluteFill} />
         <View className="flex-1 gap-4">
           <Card.Body className="flex-1">
-            <Card.Title className="text-base text-zinc-50 uppercase mb-0.5">
-              Neo
-            </Card.Title>
-            <Card.Description className="text-zinc-50 font-medium text-base">
-              Home robot
-            </Card.Description>
+            <Card.Title className="text-base text-zinc-50 uppercase mb-0.5">Neo</Card.Title>
+            <Card.Description className="text-zinc-50 font-medium text-base">Home robot</Card.Description>
           </Card.Body>
           <Card.Footer className="gap-3">
             <View className="flex-row items-center justify-between">
               <View>
-                <AppText className="text-base text-white">
-                  Available soon
-                </AppText>
-                <AppText className="text-base text-zinc-300">
-                  Get notified
-                </AppText>
+                <AppText className="text-base text-white">Available soon</AppText>
+                <AppText className="text-base text-zinc-300">Get notified</AppText>
               </View>
-              <Button
-                size="sm"
-                className="bg-white"
-                animation={{ highlight: 'disabled' }}
-              >
+              <Button size="sm" className="bg-white" animation={{ highlight: 'disabled' }}>
                 <Button.Label className="text-black">Notify me</Button.Label>
               </Button>
             </View>

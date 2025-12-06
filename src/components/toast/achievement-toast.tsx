@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Toast, useThemeColor, type ToastComponentProps } from 'heroui-native';
+import { Toast, type ToastComponentProps, useThemeColor } from 'heroui-native';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -48,36 +48,24 @@ export const AchievementToast = (props: ToastComponentProps) => {
    */
   useEffect(() => {
     confetti1.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 800 }),
-        withTiming(0, { duration: 800 })
-      ),
+      withSequence(withTiming(1, { duration: 800 }), withTiming(0, { duration: 800 })),
       -1,
-      false
+      false,
     );
     confetti2.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 1000 }),
-        withTiming(0, { duration: 1000 })
-      ),
+      withSequence(withTiming(1, { duration: 1000 }), withTiming(0, { duration: 1000 })),
       -1,
-      false
+      false,
     );
     confetti3.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 1200 }),
-        withTiming(0, { duration: 1200 })
-      ),
+      withSequence(withTiming(1, { duration: 1200 }), withTiming(0, { duration: 1200 })),
       -1,
-      false
+      false,
     );
     confetti4.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 900 }),
-        withTiming(0, { duration: 900 })
-      ),
+      withSequence(withTiming(1, { duration: 900 }), withTiming(0, { duration: 900 })),
       -1,
-      false
+      false,
     );
   }, [confetti1, confetti2, confetti3, confetti4]);
 
@@ -136,10 +124,7 @@ export const AchievementToast = (props: ToastComponentProps) => {
     <Toast className="bg-[#F5F1E8] border-[2px] border-orange-200" {...props}>
       <View className="relative flex-row items-center gap-4 px-4 py-3">
         {/* Confetti decorative elements */}
-        <Animated.View
-          className="absolute right-8 top-2 size-2 rounded-full bg-orange-600/60"
-          style={confetti1Style}
-        />
+        <Animated.View className="absolute right-8 top-2 size-2 rounded-full bg-orange-600/60" style={confetti1Style} />
         <Animated.View
           className="absolute right-12 top-4 size-1.5 rounded-full bg-orange-700/50"
           style={confetti2Style}
@@ -158,33 +143,20 @@ export const AchievementToast = (props: ToastComponentProps) => {
           <StyledIonicons name="flame" size={48} className="text-orange-500" />
           <View className="absolute -right-1 -top-1 size-6 items-center justify-center rounded-full bg-yellow-400">
             <View className="size-5 items-center justify-center">
-              <StyledIonicons
-                name="star"
-                size={16}
-                className="text-yellow-600"
-              />
+              <StyledIonicons name="star" size={16} className="text-yellow-600" />
             </View>
           </View>
         </View>
 
         {/* Text content */}
         <View className="flex-1 flex-col gap-1">
-          <Toast.Label className="text-xs font-medium text-[#2D3748]">
-            New achievement!
-          </Toast.Label>
-          <Toast.Label className="text-base font-bold text-[#2D3748]">
-            You're on a 1-day
-          </Toast.Label>
-          <Toast.Label className="text-base font-bold text-[#2D3748]">
-            study streak
-          </Toast.Label>
+          <Toast.Label className="text-xs font-medium text-[#2D3748]">New achievement!</Toast.Label>
+          <Toast.Label className="text-base font-bold text-[#2D3748]">You're on a 1-day</Toast.Label>
+          <Toast.Label className="text-base font-bold text-[#2D3748]">study streak</Toast.Label>
         </View>
 
         {/* Close button */}
-        <Toast.Close
-          className="absolute right-2 top-2"
-          iconProps={{ color: themeColorWarning }}
-        />
+        <Toast.Close className="absolute right-2 top-2" iconProps={{ color: themeColorWarning }} />
       </View>
     </Toast>
   );

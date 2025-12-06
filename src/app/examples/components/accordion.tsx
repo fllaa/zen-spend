@@ -1,13 +1,7 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Accordion, useAccordionItem } from 'heroui-native';
 import { View } from 'react-native';
-import Animated, {
-  Easing,
-  FadeInLeft,
-  FadeInRight,
-  ZoomIn,
-  ZoomOut,
-} from 'react-native-reanimated';
+import Animated, { Easing, FadeInLeft, FadeInRight, ZoomIn, ZoomOut } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { AccordionWithDepthEffect } from '../../../components/accordion/accordion-with-depth-effect';
 import { AppText } from '../../../components/app-text';
@@ -19,12 +13,8 @@ const StyledMaterialIcons = withUniwind(MaterialIcons);
 
 const ICON_SIZE = 16;
 
-const CUSTOM_INDICATOR_ENTERING = ZoomIn.duration(200).easing(
-  Easing.inOut(Easing.ease)
-);
-const CUSTOM_INDICATOR_EXITING = ZoomOut.duration(200).easing(
-  Easing.inOut(Easing.ease)
-);
+const CUSTOM_INDICATOR_ENTERING = ZoomIn.duration(200).easing(Easing.inOut(Easing.ease));
+const CUSTOM_INDICATOR_EXITING = ZoomOut.duration(200).easing(Easing.inOut(Easing.ease));
 
 const CustomIndicator = () => {
   const { isExpanded } = useAccordionItem();
@@ -32,19 +22,11 @@ const CustomIndicator = () => {
   return (
     <View className="size-5 items-center justify-center">
       {isExpanded ? (
-        <Animated.View
-          key="minus"
-          entering={CUSTOM_INDICATOR_ENTERING}
-          exiting={CUSTOM_INDICATOR_EXITING}
-        >
+        <Animated.View key="minus" entering={CUSTOM_INDICATOR_ENTERING} exiting={CUSTOM_INDICATOR_EXITING}>
           <StyledIonicons name="remove" size={18} className="text-muted" />
         </Animated.View>
       ) : (
-        <Animated.View
-          key="plus"
-          entering={CUSTOM_INDICATOR_ENTERING}
-          exiting={CUSTOM_INDICATOR_EXITING}
-        >
+        <Animated.View key="plus" entering={CUSTOM_INDICATOR_ENTERING} exiting={CUSTOM_INDICATOR_EXITING}>
           <StyledIonicons name="add" size={18} className="text-muted" />
         </Animated.View>
       )}
@@ -58,52 +40,27 @@ const accordionData = [
   {
     id: '1',
     title: 'How do I place an order?',
-    icon: (
-      <StyledIonicons
-        name="bag-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledIonicons name="bag-outline" size={ICON_SIZE} className="text-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl.',
   },
   {
     id: '2',
     title: 'Can I modify or cancel my order?',
-    icon: (
-      <StyledIonicons
-        name="receipt-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledIonicons name="receipt-outline" size={ICON_SIZE} className="text-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl. Ornare imperdiet amet lorem adipiscing.',
   },
   {
     id: '3',
     title: 'How much does shipping cost?',
-    icon: (
-      <StyledMaterialIcons
-        name="inventory-2"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
-    content:
-      'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat.',
+    icon: <StyledMaterialIcons name="inventory-2" size={ICON_SIZE} className="text-muted" />,
+    content: 'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat.',
   },
   {
     id: '4',
     title: 'Do you ship internationally?',
-    icon: (
-      <StyledIonicons
-        name="globe-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <StyledIonicons name="globe-outline" size={ICON_SIZE} className="text-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl. Ornare imperdiet amet lorem adipiscing.',
   },
@@ -128,16 +85,12 @@ const DefaultVariantContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -157,16 +110,12 @@ const SurfaceVariantContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -180,27 +129,18 @@ const SurfaceVariantContent = () => {
 const MultipleSelectionContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
-      <Accordion
-        selectionMode="multiple"
-        variant="surface"
-        defaultValue={['1', '3']}
-        className="w-full"
-      >
+      <Accordion selectionMode="multiple" variant="surface" defaultValue={['1', '3']} className="w-full">
         {accordionData.slice(0, 3).map((item) => (
           <Accordion.Item key={item.id} value={item.id}>
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -220,16 +160,12 @@ const WithoutDividersContent = () => {
             <Accordion.Trigger className="rounded-lg">
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -249,18 +185,14 @@ const CustomIndicatorContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator>
                 <CustomIndicator />
               </Accordion.Indicator>
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -280,9 +212,7 @@ const CustomEnteringAnimationContent = () => {
             <Accordion.Trigger isHighlightVisible={false}>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <AppText className={classNames.triggerTitle}>{item.title}</AppText>
               </View>
               <Accordion.Indicator
                 springConfig={
@@ -303,9 +233,7 @@ const CustomEnteringAnimationContent = () => {
                     : ZoomIn.delay(50).easing(Easing.out(Easing.exp))
               }
             >
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <AppText className={classNames.contentText}>{item.content}</AppText>
             </Accordion.Content>
           </Accordion.Item>
         ))}

@@ -8,12 +8,7 @@ interface SwitchFieldProps {
   description: string;
 }
 
-const SwitchField: React.FC<SwitchFieldProps> = ({
-  isSelected,
-  onSelectedChange,
-  title,
-  description,
-}) => (
+const SwitchField: React.FC<SwitchFieldProps> = ({ isSelected, onSelectedChange, title, description }) => (
   <FormField isSelected={isSelected} onSelectedChange={onSelectedChange}>
     <FormField.Content>
       <FormField.Title>{title}</FormField.Title>

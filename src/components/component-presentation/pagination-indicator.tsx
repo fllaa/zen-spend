@@ -1,10 +1,5 @@
 import { View } from 'react-native';
-import Animated, {
-  Extrapolation,
-  interpolate,
-  type SharedValue,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import Animated, { Extrapolation, interpolate, type SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { AppText } from '../app-text';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -16,19 +11,14 @@ export type PaginationIndicatorProps = {
   itemSize: number;
 };
 
-export function PaginationIndicator({
-  index,
-  scrollY,
-  itemSize,
-  label,
-}: PaginationIndicatorProps) {
+export function PaginationIndicator({ index, scrollY, itemSize, label }: PaginationIndicatorProps) {
   const rBarStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
         scrollY.get() / itemSize,
         [index - 2, index - 1, index, index + 1, index + 2],
         [0.2, 0.5, 1, 0.5, 0.2],
-        Extrapolation.CLAMP
+        Extrapolation.CLAMP,
       ),
       transform: [
         {
@@ -36,7 +26,7 @@ export function PaginationIndicator({
             scrollY.get() / itemSize,
             [index - 2, index - 1, index, index + 1, index + 2],
             [1, 1.4, 2, 1.4, 1],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
           ),
         },
       ],
@@ -45,19 +35,14 @@ export function PaginationIndicator({
 
   const rLabelStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(
-        scrollY.get() / itemSize,
-        [index - 0.5, index, index + 0.5],
-        [0, 1, 0],
-        Extrapolation.CLAMP
-      ),
+      opacity: interpolate(scrollY.get() / itemSize, [index - 0.5, index, index + 0.5], [0, 1, 0], Extrapolation.CLAMP),
       transform: [
         {
           translateX: interpolate(
             scrollY.get() / itemSize,
             [index - 2, index - 1, index, index + 1, index + 2],
             [1, 1.4, 2, 1.4, 1],
-            Extrapolation.CLAMP
+            Extrapolation.CLAMP,
           ),
         },
       ],
@@ -76,9 +61,7 @@ export function PaginationIndicator({
         ]}
       />
       <Animated.View className="absolute left-8" style={rLabelStyle}>
-        <AppText className="text-foreground text-lg font-normal">
-          {label}
-        </AppText>
+        <AppText className="text-foreground text-lg font-normal">{label}</AppText>
       </Animated.View>
     </View>
   );

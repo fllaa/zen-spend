@@ -1,5 +1,5 @@
 import { useThemeColor } from 'heroui-native';
-import React from 'react';
+import type React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 export type ThemeOption = {
@@ -126,9 +126,7 @@ export const ThemeCircle: React.FC<{
           />
         </View>
       </View>
-      <Text className="text-xs mt-2 text-foreground font-medium">
-        {theme.name}
-      </Text>
+      <Text className="text-xs mt-2 text-foreground font-medium">{theme.name}</Text>
     </Pressable>
   );
 };

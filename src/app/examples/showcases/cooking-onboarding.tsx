@@ -2,20 +2,8 @@ import Feather from '@expo/vector-icons/Feather';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import {
-  colorKit,
-  Divider,
-  useThemeColor,
-  type PopoverTriggerRef,
-} from 'heroui-native';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  type RefObject,
-} from 'react';
+import { colorKit, Divider, type PopoverTriggerRef, useThemeColor } from 'heroui-native';
+import { type RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -53,10 +41,7 @@ type OnboardingAction =
   | { type: 'COMPLETE_ONBOARDING' }
   | { type: 'RESET_ONBOARDING' };
 
-function onboardingReducer(
-  state: OnboardingState,
-  action: OnboardingAction
-): OnboardingState {
+function onboardingReducer(state: OnboardingState, action: OnboardingAction): OnboardingState {
   switch (action.type) {
     case 'START_ONBOARDING':
       return { ...state, isActive: true, currentStepIndex: 0 };
@@ -98,7 +83,7 @@ export default function CookingOnboardingScreen() {
       { ref: planTriggerRef, delay: 400 },
       { ref: askTriggerRef, delay: 400 },
     ],
-    []
+    [],
   );
 
   useEffect(() => {
@@ -127,11 +112,7 @@ export default function CookingOnboardingScreen() {
     }, currentStep.delay ?? 0);
 
     return () => clearTimeout(timer);
-  }, [
-    onboardingState.currentStepIndex,
-    onboardingState.isActive,
-    onboardingSteps,
-  ]);
+  }, [onboardingState.currentStepIndex, onboardingState.isActive, onboardingSteps]);
 
   const handleOverlayPress = useCallback(() => {
     if (onboardingState.isActive) {
@@ -140,39 +121,24 @@ export default function CookingOnboardingScreen() {
   }, [onboardingState.isActive]);
 
   return (
-    <Animated.View
-      entering={FadeIn.delay(300)}
-      className="flex-1 bg-background"
-    >
+    <Animated.View entering={FadeIn.delay(300)} className="flex-1 bg-background">
       <View
         className="flex-row items-center justify-between absolute left-5 right-5 z-50"
         style={{ top: insets.top + 8 }}
       >
         <Pressable onPress={router.back}>
-          <StyledFeather
-            name="chevron-left"
-            size={26}
-            className="text-foreground"
-          />
+          <StyledFeather name="chevron-left" size={26} className="text-foreground" />
         </Pressable>
         <View className="flex-row gap-2">
-          <Share
-            isOnboardingDone={onboardingState.isComplete}
-            triggerRef={shareTriggerRef}
-          />
-          <Save
-            isOnboardingDone={onboardingState.isComplete}
-            triggerRef={saveTriggerRef}
-          />
+          <Share isOnboardingDone={onboardingState.isComplete} triggerRef={shareTriggerRef} />
+          <Save isOnboardingDone={onboardingState.isComplete} triggerRef={saveTriggerRef} />
         </View>
       </View>
       <ParallaxScrollView
         headerImage={<Image source={BgImage} style={styles.image} />}
         scrollEnabled={onboardingState.isComplete}
       >
-        <AppText className="text-foreground text-4xl font-semibold mb-2">
-          Blueberry Pancakes
-        </AppText>
+        <AppText className="text-foreground text-4xl font-semibold mb-2">Blueberry Pancakes</AppText>
         <Author />
         <ScrollView
           horizontal
@@ -180,34 +146,21 @@ export default function CookingOnboardingScreen() {
           className="-mx-4 mb-6"
           contentContainerClassName="px-4 gap-2"
         >
-          <Cook
-            isOnboardingDone={onboardingState.isComplete}
-            triggerRef={cookTriggerRef}
-          />
-          <Plan
-            isOnboardingDone={onboardingState.isComplete}
-            triggerRef={planTriggerRef}
-          />
-          <Ask
-            isOnboardingDone={onboardingState.isComplete}
-            triggerRef={askTriggerRef}
-          />
+          <Cook isOnboardingDone={onboardingState.isComplete} triggerRef={cookTriggerRef} />
+          <Plan isOnboardingDone={onboardingState.isComplete} triggerRef={planTriggerRef} />
+          <Ask isOnboardingDone={onboardingState.isComplete} triggerRef={askTriggerRef} />
         </ScrollView>
         <AppText className="text-foreground text-base">
-          Blueberry pancakes are a delicious and healthy breakfast option. They
-          are made with blueberries, flour, butter, and eggs. Blueberries are a
-          great source of antioxidants and fiber, making them a healthy choice
-          for breakfast.
+          Blueberry pancakes are a delicious and healthy breakfast option. They are made with blueberries, flour,
+          butter, and eggs. Blueberries are a great source of antioxidants and fiber, making them a healthy choice for
+          breakfast.
         </AppText>
         <Divider className="my-5" />
         <Highlights />
         <Ingridients />
       </ParallaxScrollView>
       <LinearGradient
-        colors={[
-          themeColorBackground,
-          colorKit.setAlpha(themeColorBackground, 0).hex(),
-        ]}
+        colors={[themeColorBackground, colorKit.setAlpha(themeColorBackground, 0).hex()]}
         style={styles.topGradient}
       />
       {onboardingState.isActive && (

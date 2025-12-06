@@ -63,9 +63,7 @@ const BasicUsageWithButtonTriggerContent = () => {
 
 const PresentationContent = () => {
   const [popoverValue, setPopoverValue] = useState<CountryOption | undefined>();
-  const [bottomSheetValue, setBottomSheetValue] = useState<
-    CountryOption | undefined
-  >();
+  const [bottomSheetValue, setBottomSheetValue] = useState<CountryOption | undefined>();
 
   const insets = useSafeAreaInsets();
   const themeColorMuted = useThemeColor('muted');
@@ -85,9 +83,7 @@ const PresentationContent = () => {
               {popoverValue ? (
                 <View className="flex-row items-center gap-2">
                   <AppText className="text-base">{popoverValue.flag}</AppText>
-                  <AppText className="text-sm text-accent font-medium">
-                    {popoverValue.code}
-                  </AppText>
+                  <AppText className="text-sm text-accent font-medium">{popoverValue.code}</AppText>
                 </View>
               ) : (
                 <AppText className="text-accent">Popover</AppText>
@@ -106,19 +102,11 @@ const PresentationContent = () => {
             >
               <ScrollView>
                 {COUNTRIES.map((country) => (
-                  <Select.Item
-                    key={country.value}
-                    value={country.value}
-                    label={country.label}
-                  >
+                  <Select.Item key={country.value} value={country.value} label={country.label}>
                     <View className="flex-row items-center gap-3">
                       <AppText className="text-2xl">{country.flag}</AppText>
-                      <AppText className="text-sm text-muted w-10">
-                        {country.code}
-                      </AppText>
-                      <AppText className="text-base text-foreground flex-1">
-                        {country.label}
-                      </AppText>
+                      <AppText className="text-sm text-muted w-10">{country.code}</AppText>
+                      <AppText className="text-base text-foreground flex-1">{country.label}</AppText>
                     </View>
                     <Select.ItemIndicator />
                   </Select.Item>
@@ -141,12 +129,8 @@ const PresentationContent = () => {
             <Button variant="secondary">
               {bottomSheetValue ? (
                 <View className="flex-row items-center gap-2">
-                  <AppText className="text-base">
-                    {bottomSheetValue.flag}
-                  </AppText>
-                  <AppText className="text-sm text-accent font-medium">
-                    {bottomSheetValue.code}
-                  </AppText>
+                  <AppText className="text-base">{bottomSheetValue.flag}</AppText>
+                  <AppText className="text-sm text-accent font-medium">{bottomSheetValue.code}</AppText>
                 </View>
               ) : (
                 <AppText className="text-accent">Sheet</AppText>
@@ -179,25 +163,14 @@ const PresentationContent = () => {
               }}
               bottomInset={insets.bottom + 4}
             >
-              <BottomSheetScrollView
-                contentContainerClassName="p-4"
-                showsVerticalScrollIndicator={false}
-              >
+              <BottomSheetScrollView contentContainerClassName="p-4" showsVerticalScrollIndicator={false}>
                 {COUNTRIES.map((country, index) => (
                   <React.Fragment key={country.value}>
-                    <Select.Item
-                      value={country.value}
-                      label={country.label}
-                      className="py-5 px-3"
-                    >
+                    <Select.Item value={country.value} label={country.label} className="py-5 px-3">
                       <View className="flex-row items-center gap-3 flex-1">
                         <AppText className="text-2xl">{country.flag}</AppText>
-                        <AppText className="text-sm text-muted font-medium w-10">
-                          {country.code}
-                        </AppText>
-                        <AppText className="text-base text-foreground flex-1">
-                          {country.label}
-                        </AppText>
+                        <AppText className="text-sm text-muted font-medium w-10">{country.code}</AppText>
+                        <AppText className="text-base text-foreground flex-1">{country.label}</AppText>
                       </View>
                       <Select.ItemIndicator />
                     </Select.Item>
@@ -242,22 +215,14 @@ const AlignmentOptionsContent = () => {
         <Select>
           <Select.Trigger asChild>
             <Button variant="secondary" className="w-24">
-              <Select.Value
-                placeholder="Start"
-                numberOfLines={1}
-                className="text-accent"
-              />
+              <Select.Value placeholder="Start" numberOfLines={1} className="text-accent" />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
             <Select.Content width={200} placement="top" align="start">
               {US_STATES.slice(0, 3).map((state) => (
-                <Select.Item
-                  key={state.value}
-                  value={state.value}
-                  label={state.label}
-                />
+                <Select.Item key={state.value} value={state.value} label={state.label} />
               ))}
             </Select.Content>
           </Select.Portal>
@@ -266,22 +231,14 @@ const AlignmentOptionsContent = () => {
         <Select>
           <Select.Trigger asChild>
             <Button variant="secondary" className="w-24">
-              <Select.Value
-                placeholder="Center"
-                numberOfLines={1}
-                className="text-accent"
-              />
+              <Select.Value placeholder="Center" numberOfLines={1} className="text-accent" />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
             <Select.Content width={200} placement="top" align="center">
               {US_STATES.slice(0, 3).map((state) => (
-                <Select.Item
-                  key={state.value}
-                  value={state.value}
-                  label={state.label}
-                />
+                <Select.Item key={state.value} value={state.value} label={state.label} />
               ))}
             </Select.Content>
           </Select.Portal>
@@ -290,22 +247,14 @@ const AlignmentOptionsContent = () => {
         <Select>
           <Select.Trigger asChild>
             <Button variant="secondary" className="w-24">
-              <Select.Value
-                placeholder="End"
-                numberOfLines={1}
-                className="text-accent"
-              />
+              <Select.Value placeholder="End" numberOfLines={1} className="text-accent" />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
             <Select.Content width={200} placement="top" align="end">
               {US_STATES.slice(0, 3).map((state) => (
-                <Select.Item
-                  key={state.value}
-                  value={state.value}
-                  label={state.label}
-                />
+                <Select.Item key={state.value} value={state.value} label={state.label} />
               ))}
             </Select.Content>
           </Select.Portal>
@@ -322,10 +271,7 @@ const NativeModalTestContent = () => {
 
   return (
     <View className="flex-1 px-5 items-center justify-center">
-      <Button
-        variant="secondary"
-        onPress={() => router.push('components/select-native-modal')}
-      >
+      <Button variant="secondary" onPress={() => router.push('components/select-native-modal')}>
         Select from Native Modal
       </Button>
     </View>

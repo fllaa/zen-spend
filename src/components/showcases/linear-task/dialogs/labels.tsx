@@ -1,7 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { Checkbox, Chip, Dialog, FormField } from 'heroui-native';
-import { useMemo, useState, type FC } from 'react';
+import { type FC, useMemo, useState } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -22,9 +22,7 @@ type LabelItem = {
 };
 
 export const Labels: FC = () => {
-  const [selectedValues, setSelectedValues] = useState<Set<string>>(
-    new Set(['feature'])
-  );
+  const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set(['feature']));
   const [searchQuery, setSearchQuery] = useState('');
 
   const { height } = useWindowDimensions();
@@ -61,14 +59,12 @@ export const Labels: FC = () => {
         indicator: <View className="size-2.5 rounded-full bg-cyan-400" />,
       },
     ],
-    []
+    [],
   );
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return items;
-    return items.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return items.filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [searchQuery, items]);
 
   const selectedItems = useMemo(() => {
@@ -138,9 +134,7 @@ export const Labels: FC = () => {
           }}
         >
           {renderStackedIndicators()}
-          <Chip.Label className="text-foreground font-medium">
-            {getChipLabel()}
-          </Chip.Label>
+          <Chip.Label className="text-foreground font-medium">{getChipLabel()}</Chip.Label>
         </Chip>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -148,20 +142,12 @@ export const Labels: FC = () => {
           <DialogBlurBackdrop />
         </Dialog.Overlay>
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={24}>
-          <Dialog.Content
-            style={{ marginTop: insetTop, height: dialogContentHeight }}
-          >
+          <Dialog.Content style={{ marginTop: insetTop, height: dialogContentHeight }}>
             <DialogHeader>Labels</DialogHeader>
-            <SearchBar
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholder="Add labels..."
-            />
+            <SearchBar value={searchQuery} onChangeText={setSearchQuery} placeholder="Add labels..." />
             {filteredItems.length === 0 && (
               <View className="flex-1 items-center justify-center">
-                <AppText className="text-base font-medium text-muted">
-                  No results
-                </AppText>
+                <AppText className="text-base font-medium text-muted">No results</AppText>
               </View>
             )}
             {filteredItems.length > 0 && (
@@ -178,9 +164,7 @@ export const Labels: FC = () => {
                       <FormField
                         key={item.value}
                         isSelected={isSelected}
-                        onSelectedChange={(selected) =>
-                          handleSelectionChange(item.value, selected)
-                        }
+                        onSelectedChange={(selected) => handleSelectionChange(item.value, selected)}
                         className="self-stretch"
                       >
                         <FormField.Content className="flex-row items-center gap-2">
@@ -190,21 +174,11 @@ export const Labels: FC = () => {
                           <FormField.Title>{item.label}</FormField.Title>
                         </FormField.Content>
                         <FormField.Indicator>
-                          <Checkbox
-                            isSelected={isSelected}
-                            className="bg-transparent"
-                          >
+                          <Checkbox isSelected={isSelected} className="bg-transparent">
                             <Checkbox.Indicator className="bg-transparent">
                               {isSelected && (
-                                <Animated.View
-                                  key={`${item.value}-check`}
-                                  entering={FadeIn.duration(200)}
-                                >
-                                  <StyledFeather
-                                    name="check"
-                                    size={18}
-                                    className="text-foreground"
-                                  />
+                                <Animated.View key={`${item.value}-check`} entering={FadeIn.duration(200)}>
+                                  <StyledFeather name="check" size={18} className="text-foreground" />
                                 </Animated.View>
                               )}
                             </Checkbox.Indicator>

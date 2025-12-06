@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { cn, useThemeColor } from 'heroui-native';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAppTheme } from '../contexts/app-theme-context';
 import { AppText } from './app-text';
@@ -25,20 +25,15 @@ export const SectionTitle: FC<Props> = ({ title, className }) => {
         style={styles.gradient}
       >
         <View
-          className={cn(
-            'absolute left-0 top-0 h-hairline w-full bg-background-quaternary',
-            isDark && 'bg-neutral-800'
-          )}
+          className={cn('absolute left-0 top-0 h-hairline w-full bg-background-quaternary', isDark && 'bg-neutral-800')}
         />
 
-        <AppText className="text-sm font-medium tracking-wide uppercase text-muted">
-          {title}
-        </AppText>
+        <AppText className="text-sm font-medium tracking-wide uppercase text-muted">{title}</AppText>
 
         <View
           className={cn(
             'absolute left-0 bottom-0 h-hairline w-full bg-background-quaternary',
-            isDark && 'bg-neutral-800'
+            isDark && 'bg-neutral-800',
           )}
         />
       </LinearGradient>

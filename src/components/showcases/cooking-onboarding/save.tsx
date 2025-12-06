@@ -1,12 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
-import {
-  Button,
-  cn,
-  Popover,
-  useThemeColor,
-  type PopoverTriggerRef,
-} from 'heroui-native';
-import { type FC, type RefObject } from 'react';
+import { Button, cn, Popover, type PopoverTriggerRef, useThemeColor } from 'heroui-native';
+import type { FC, RefObject } from 'react';
 import { withUniwind } from 'uniwind';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
 import { AppText } from '../../app-text';
@@ -28,10 +22,7 @@ export const Save: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
       <Popover.Trigger ref={triggerRef}>
         <Button
           variant="secondary"
-          className={cn(
-            className.buttonSecondarySquare,
-            className.buttonSecondaryColors
-          )}
+          className={cn(className.buttonSecondarySquare, className.buttonSecondaryColors)}
           onPress={isOnboardingDone ? simulatePress : undefined}
           isIconOnly
         >
@@ -40,13 +31,8 @@ export const Save: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
       </Popover.Trigger>
       <Popover.Portal progressAnimationConfigs={progressAnimationConfigs}>
         <Popover.Content className={className.popoverContent}>
-          <Popover.Arrow
-            stroke={themeColorForeground}
-            fill={themeColorForeground}
-          />
-          <AppText className={className.popoverText}>
-            Save your favorite recipes to your collection
-          </AppText>
+          <Popover.Arrow stroke={themeColorForeground} fill={themeColorForeground} />
+          <AppText className={className.popoverText}>Save your favorite recipes to your collection</AppText>
         </Popover.Content>
       </Popover.Portal>
     </Popover>

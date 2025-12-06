@@ -6,11 +6,11 @@ import { View } from 'react-native';
 import Animated, {
   FadeInLeft,
   FadeInRight,
+  type SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
   ZoomIn,
-  type SharedValue,
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
@@ -28,12 +28,7 @@ interface CheckboxFieldProps {
   description: string;
 }
 
-const CheckboxField: React.FC<CheckboxFieldProps> = ({
-  isSelected,
-  onSelectedChange,
-  title,
-  description,
-}) => {
+const CheckboxField: React.FC<CheckboxFieldProps> = ({ isSelected, onSelectedChange, title, description }) => {
   return (
     <FormField
       isSelected={isSelected}
@@ -46,9 +41,7 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
       </FormField.Indicator>
       <FormField.Content>
         <FormField.Title className="text-lg">{title}</FormField.Title>
-        <FormField.Description className="text-base">
-          {description}
-        </FormField.Description>
+        <FormField.Description className="text-base">{description}</FormField.Description>
       </FormField.Content>
     </FormField>
   );
@@ -61,10 +54,7 @@ const BasicUsage = () => {
     terms: false,
   });
 
-  const fieldConfigs: Record<
-    keyof typeof fields,
-    { title: string; description: string }
-  > = {
+  const fieldConfigs: Record<keyof typeof fields, { title: string; description: string }> = {
     newsletter: {
       title: 'Subscribe to newsletter',
       description: 'Get weekly updates about new features and tips',
@@ -115,26 +105,15 @@ const StatesContent = () => {
     <View className="flex-1 px-5 items-center justify-center">
       <View className="flex-row gap-8">
         <View className="items-center gap-2">
-          <Checkbox
-            isSelected={defaultState}
-            onSelectedChange={setDefaultState}
-          />
+          <Checkbox isSelected={defaultState} onSelectedChange={setDefaultState} />
           <AppText className="text-xs text-muted">Default</AppText>
         </View>
         <View className="items-center gap-2">
-          <Checkbox
-            isSelected={invalid}
-            onSelectedChange={setInvalid}
-            isInvalid
-          />
+          <Checkbox isSelected={invalid} onSelectedChange={setInvalid} isInvalid />
           <AppText className="text-xs text-muted">Invalid</AppText>
         </View>
         <View className="items-center gap-2">
-          <Checkbox
-            isSelected={disabled}
-            onSelectedChange={setDisabled}
-            isDisabled
-          />
+          <Checkbox isSelected={disabled} onSelectedChange={setDisabled} isDisabled />
           <AppText className="text-xs text-muted">Disabled</AppText>
         </View>
       </View>
@@ -161,31 +140,14 @@ const AnimatedCustomIndicator = ({
   });
 
   return (
-    <Animated.View
-      className="aspect-square items-center justify-center bg-pink-400 rounded-sm"
-      style={animatedStyle}
-    >
+    <Animated.View className="aspect-square items-center justify-center bg-pink-400 rounded-sm" style={animatedStyle}>
       {isSelected ? (
-        <Animated.View
-          key="selected"
-          entering={ZoomIn.withInitialValues({ scale: 0.5 })}
-        >
-          <StyledFontAwesome
-            name="check"
-            size={14}
-            className="text-white mb-[1px]"
-          />
+        <Animated.View key="selected" entering={ZoomIn.withInitialValues({ scale: 0.5 })}>
+          <StyledFontAwesome name="check" size={14} className="text-white mb-[1px]" />
         </Animated.View>
       ) : (
-        <Animated.View
-          key="unselected"
-          entering={ZoomIn.withInitialValues({ scale: 0.5 })}
-        >
-          <StyledFontAwesome
-            name="times"
-            size={16}
-            className="text-white mb-0.5"
-          />
+        <Animated.View key="unselected" entering={ZoomIn.withInitialValues({ scale: 0.5 })}>
+          <StyledFontAwesome name="times" size={16} className="text-white mb-0.5" />
         </Animated.View>
       )}
     </Animated.View>
@@ -238,19 +200,10 @@ const CustomStylesContent = () => {
         onPressOut={handlePressOut}
         animation="disabled"
       >
-        {({ isSelected }) => (
-          <AnimatedCustomIndicator
-            isSelected={isSelected}
-            isPressed={isPressed}
-          />
-        )}
+        {({ isSelected }) => <AnimatedCustomIndicator isSelected={isSelected} isPressed={isPressed} />}
       </Checkbox>
 
-      <Checkbox
-        isSelected={customBoth}
-        onSelectedChange={setCustomBoth}
-        className="size-12 rounded-full bg-slate-200"
-      >
+      <Checkbox isSelected={customBoth} onSelectedChange={setCustomBoth} className="size-12 rounded-full bg-slate-200">
         {({ isSelected }) => {
           return isSelected ? (
             <AnimatedView
@@ -259,11 +212,7 @@ const CustomStylesContent = () => {
               className="absolute inset-0 items-center justify-center rounded-full bg-slate-200"
             >
               <Animated.View entering={ZoomIn.springify()}>
-                <StyledIonicons
-                  name="sunny"
-                  size={24}
-                  className="text-slate-800"
-                />
+                <StyledIonicons name="sunny" size={24} className="text-slate-800" />
               </Animated.View>
             </AnimatedView>
           ) : (
@@ -273,11 +222,7 @@ const CustomStylesContent = () => {
               className="absolute inset-0 items-center justify-center rounded-full bg-slate-800"
             >
               <Animated.View entering={ZoomIn.springify()}>
-                <StyledIonicons
-                  name="moon"
-                  size={20}
-                  className="text-slate-200"
-                />
+                <StyledIonicons name="moon" size={20} className="text-slate-200" />
               </Animated.View>
             </AnimatedView>
           );

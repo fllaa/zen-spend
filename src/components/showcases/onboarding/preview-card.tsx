@@ -1,10 +1,7 @@
 import { Card, Chip, cn, DropShadowView } from 'heroui-native';
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { Image, useWindowDimensions, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  type SharedValue,
-} from 'react-native-reanimated';
+import Animated, { type SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { AppText } from '../../app-text';
 
@@ -40,8 +37,7 @@ export const PreviewCard: FC<PreviewCardProps> = ({
   const initialLeft = index * itemWidth - shift;
 
   const rContainerStyle = useAnimatedStyle(() => {
-    const normalizedOffset =
-      ((scrollOffsetX.value % allItemsWidth) + allItemsWidth) % allItemsWidth;
+    const normalizedOffset = ((scrollOffsetX.value % allItemsWidth) + allItemsWidth) % allItemsWidth;
     const left = ((initialLeft - normalizedOffset) % allItemsWidth) + shift;
 
     return {
@@ -52,41 +48,23 @@ export const PreviewCard: FC<PreviewCardProps> = ({
   return (
     <AnimatedView
       className="absolute"
-      style={[
-        { width: itemWidth, paddingHorizontal: itemWidth * 0.05 },
-        rContainerStyle,
-      ]}
+      style={[{ width: itemWidth, paddingHorizontal: itemWidth * 0.05 }, rContainerStyle]}
     >
-      <DropShadowView
-        shadowSize="xl"
-        className="aspect-[3/5] rounded-2xl"
-        shadowColor={isDark ? '#00000000' : 'black'}
-      >
+      <DropShadowView shadowSize="xl" className="aspect-[3/5] rounded-2xl" shadowColor={isDark ? '#00000000' : 'black'}>
         <Card
-          className={cn(
-            'flex-1 border-0 rounded-3xl',
-            isDark && 'border border-border/70'
-          )}
+          className={cn('flex-1 border-0 rounded-3xl', isDark && 'border border-border/70')}
           variant={isDark ? 'default' : 'transparent'}
         >
           <Card.Body className="flex-1 p-2 mb-4">
-            <Image
-              source={{ uri: image }}
-              className="absolute inset-0 rounded-xl"
-            />
+            <Image source={{ uri: image }} className="absolute inset-0 rounded-xl" />
             <Chip className="bg-danger rounded-md">
-              <Chip.Label className="text-white font-semibold">
-                Live • {liveCount}
-              </Chip.Label>
+              <Chip.Label className="text-white font-semibold">Live • {liveCount}</Chip.Label>
             </Chip>
           </Card.Body>
           <Card.Footer>
             <Card.Title className="font-semibold">{title}</Card.Title>
             <Card.Description>
-              <AppText className="text-blue-500 font-medium">
-                {category}
-              </AppText>{' '}
-              • {brands}
+              <AppText className="text-blue-500 font-medium">{category}</AppText> • {brands}
             </Card.Description>
           </Card.Footer>
         </Card>

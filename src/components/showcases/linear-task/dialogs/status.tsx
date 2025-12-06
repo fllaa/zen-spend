@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as Haptics from 'expo-haptics';
 import { Chip, Dialog, RadioGroup } from 'heroui-native';
-import { useState, type FC } from 'react';
+import { type FC, useState } from 'react';
 import { Platform, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
@@ -25,79 +25,37 @@ export const Status: FC = () => {
     {
       value: 'backlog',
       label: 'Backlog',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="circle-opacity"
-          size={13}
-          className="text-muted"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="circle-opacity" size={13} className="text-muted" />,
     },
     {
       value: 'todo',
       label: 'Todo',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="circle-outline"
-          size={13}
-          className="text-foreground"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="circle-outline" size={13} className="text-foreground" />,
     },
     {
       value: 'in-progress',
       label: 'In Progress',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="circle-slice-4"
-          size={13}
-          className="text-warning"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="circle-slice-4" size={13} className="text-warning" />,
     },
     {
       value: 'in-review',
       label: 'In Review',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="circle-slice-6"
-          size={13}
-          className="text-success"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="circle-slice-6" size={13} className="text-success" />,
     },
     {
       value: 'done',
       label: 'Done',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="checkbox-marked-circle"
-          size={14}
-          className="text-[#4f46e5]"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="checkbox-marked-circle" size={14} className="text-[#4f46e5]" />,
     },
     {
       value: 'cancelled',
       label: 'Cancelled',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="close-circle"
-          size={13}
-          className="text-muted"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="close-circle" size={13} className="text-muted" />,
     },
     {
       value: 'duplicate',
       label: 'Duplicate',
-      indicator: (
-        <StyledMaterialCommunityIcons
-          name="close-circle"
-          size={13}
-          className="text-muted"
-        />
-      ),
+      indicator: <StyledMaterialCommunityIcons name="close-circle" size={13} className="text-muted" />,
     },
   ];
 
@@ -143,15 +101,8 @@ export const Status: FC = () => {
                   </View>
                   <RadioGroup.Indicator className="border-0 bg-transparent">
                     {value === item.value && (
-                      <Animated.View
-                        key={item.value}
-                        entering={FadeIn.duration(200)}
-                      >
-                        <StyledFeather
-                          name="check"
-                          size={18}
-                          className="text-foreground"
-                        />
+                      <Animated.View key={item.value} entering={FadeIn.duration(200)}>
+                        <StyledFeather name="check" size={18} className="text-foreground" />
                       </Animated.View>
                     )}
                   </RadioGroup.Indicator>

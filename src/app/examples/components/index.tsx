@@ -116,7 +116,7 @@ export default function App() {
       toast.hide('all');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isToastVisible, pathname]);
+  }, [isToastVisible, pathname, toast.hide]);
 
   return (
     <ScreenScrollView contentContainerClassName="px-4">
@@ -124,19 +124,10 @@ export default function App() {
       <Accordion isCollapsible={false} variant="surface">
         {components.map((item) => (
           <Accordion.Item key={item.title} value={item.title}>
-            <Accordion.Trigger
-              highlightOpacity={0.25}
-              onPress={() => router.push(`/components/${item.path}`)}
-            >
-              <AppText className="text-foreground text-base ml-1">
-                {item.title}
-              </AppText>
+            <Accordion.Trigger highlightOpacity={0.25} onPress={() => router.push(`/components/${item.path}`)}>
+              <AppText className="text-foreground text-base ml-1">{item.title}</AppText>
               <Accordion.Indicator>
-                <StyledIonicons
-                  name="chevron-forward"
-                  size={16}
-                  className="text-muted"
-                />
+                <StyledIonicons name="chevron-forward" size={16} className="text-muted" />
               </Accordion.Indicator>
             </Accordion.Trigger>
           </Accordion.Item>

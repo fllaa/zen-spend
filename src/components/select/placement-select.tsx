@@ -1,11 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-  Button,
-  ScrollShadow,
-  Select,
-  useSelect,
-  useThemeColor,
-} from 'heroui-native';
+import { Button, ScrollShadow, Select, useSelect, useThemeColor } from 'heroui-native';
 import { type FC, memo, useEffect, useMemo, useRef } from 'react';
 import { FlatList } from 'react-native';
 
@@ -31,63 +25,58 @@ type PlacementContentListProps = {
   valueIndex: number;
 };
 
-const PlacementContentList: FC<PlacementContentListProps> = memo(
-  ({ valueIndex }) => {
-    const themeColorOverlay = useThemeColor('overlay');
+const PlacementContentList: FC<PlacementContentListProps> = memo(({ valueIndex }) => {
+  const themeColorOverlay = useThemeColor('overlay');
 
-    const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList>(null);
 
-    useEffect(() => {
-      if (valueIndex === 0) {
-        setTimeout(() => {
-          listRef.current?.scrollToIndex({
-            index: 1,
-            animated: true,
-            viewPosition: 0.5,
-          });
-        }, 0);
-        return;
-      }
+  useEffect(() => {
+    if (valueIndex === 0) {
       setTimeout(() => {
         listRef.current?.scrollToIndex({
-          index: valueIndex,
+          index: 1,
           animated: true,
           viewPosition: 0.5,
         });
       }, 0);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+      return;
+    }
+    setTimeout(() => {
+      listRef.current?.scrollToIndex({
+        index: valueIndex,
+        animated: true,
+        viewPosition: 0.5,
+      });
+    }, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valueIndex]);
 
-    return (
-      <ScrollShadow
-        LinearGradientComponent={LinearGradient}
-        color={themeColorOverlay}
-      >
-        <FlatList
-          ref={listRef}
-          data={US_STATES}
-          getItemLayout={(_, index) => ({
-            length: ITEM_HEIGHT,
-            offset: ITEM_HEIGHT * index,
-            index,
-          })}
-          initialScrollIndex={valueIndex}
-          renderItem={({ item }) => (
-            <Select.Item
-              key={item.value}
-              value={item.value}
-              label={item.label}
-              className="py-0"
-              style={{
-                height: ITEM_HEIGHT,
-              }}
-            />
-          )}
-        />
-      </ScrollShadow>
-    );
-  }
-);
+  return (
+    <ScrollShadow LinearGradientComponent={LinearGradient} color={themeColorOverlay}>
+      <FlatList
+        ref={listRef}
+        data={US_STATES}
+        getItemLayout={(_, index) => ({
+          length: ITEM_HEIGHT,
+          offset: ITEM_HEIGHT * index,
+          index,
+        })}
+        initialScrollIndex={valueIndex}
+        renderItem={({ item }) => (
+          <Select.Item
+            key={item.value}
+            value={item.value}
+            label={item.label}
+            className="py-0"
+            style={{
+              height: ITEM_HEIGHT,
+            }}
+          />
+        )}
+      />
+    </ScrollShadow>
+  );
+});
 
 const PlacementContent = () => {
   const { value } = useSelect();
@@ -95,7 +84,7 @@ const PlacementContent = () => {
   const valueIndex = useMemo(
     () => US_STATES.findIndex((item) => item.value === (value?.value ?? 'CA')),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [value?.value],
   );
 
   return <PlacementContentList valueIndex={valueIndex} />;
@@ -111,11 +100,7 @@ export const PlacementSelect: FC<Props> = ({ placeholder, placement }) => {
     <Select>
       <Select.Trigger asChild>
         <Button variant="secondary" className="w-32">
-          <Select.Value
-            placeholder={placeholder}
-            numberOfLines={1}
-            className="text-accent"
-          />
+          <Select.Value placeholder={placeholder} numberOfLines={1} className="text-accent" />
         </Button>
       </Select.Trigger>
       <Select.Portal>

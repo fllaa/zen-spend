@@ -3,30 +3,32 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { MMKV } from 'react-native-mmkv';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
 
 let mmkv: MMKV | null = null;
 
 try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { createMMKV } = require('react-native-mmkv');
-  mmkv = createMMKV();
+  mmkv = createMMKV({
+    id: 'settings',
+  });
 } catch (e) {
   console.log(e);
 }
 
-const customStorage = {
-  getItem: (name: string) => {
-    const value = mmkv?.getString(name);
-    return value ? JSON.parse(value) : null;
+const MMKVStorage: StateStorage = {
+  setItem: (name, value) => {
+    return mmkv?.set(name, value)
   },
-  setItem: (name: string, value: string) => {
-    mmkv?.set(name, value);
+  getItem: (name) => {
+    const value = mmkv?.getString(name)
+    return value ?? null
   },
-  removeItem: (name: string) => {
-    mmkv?.remove(name);
+  removeItem: (name) => {
+    return mmkv?.remove(name)
   },
-};
+}
 
 type NumberFormat = 'dot' | 'comma';
 type Language = 'en' | 'id';
@@ -70,7 +72,7 @@ const _useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'settings-storage',
-      storage: createJSONStorage(() => (mmkv ? customStorage : AsyncStorage)),
+      storage: createJSONStorage(() => (mmkv ? MMKVStorage : AsyncStorage)),
     },
   ),
 );

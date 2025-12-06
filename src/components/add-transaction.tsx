@@ -9,6 +9,8 @@ import { useStore } from '../store';
 import { useSettingsStore } from '../store/settings';
 import { AppText } from './app-text';
 
+import { DatePicker } from './date-picker';
+
 export const AddTransaction: React.FC<{ close: () => void }> = (props) => {
   const { t } = useTranslation();
   const { categories, addNewTransaction, isLoading } = useStore();
@@ -18,7 +20,7 @@ export const AddTransaction: React.FC<{ close: () => void }> = (props) => {
   const [note, setNote] = useState('');
   const [type, setType] = useState('expense');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [date] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   const filteredCategories = categories.filter((c) => c.type === type);
 
@@ -111,12 +113,10 @@ export const AddTransaction: React.FC<{ close: () => void }> = (props) => {
           </TextField>
         </View>
 
-        {/* Date Input (Simplified for MVP) */}
+        {/* Date Input */}
         <View>
           <AppText className="text-sm font-medium mb-2 text-muted">{t('date')}</AppText>
-          <View className="p-3 bg-background rounded-xl border border-border">
-            <AppText className="text-foreground">{date.toLocaleDateString()}</AppText>
-          </View>
+          <DatePicker value={date} onChange={setDate} />
         </View>
       </View>
 

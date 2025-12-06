@@ -1,13 +1,13 @@
 import { endOfMonth, getUnixTime, startOfMonth } from 'date-fns';
 import { create } from 'zustand';
 import {
-  addTransaction,
-  deleteTransaction,
-  getCategories,
-  getCategorySummary,
-  getMonthlySummary,
-  getTransactions,
-  initDatabase
+    addTransaction,
+    deleteTransaction,
+    getCategories,
+    getCategorySummary,
+    getMonthlySummary,
+    getTransactions,
+    initDatabase
 } from '../db';
 import { Category, CategorySummary, MonthlySummary, TransactionWithCategory } from '../types';
 
@@ -18,6 +18,7 @@ interface AppState {
   categorySummary: CategorySummary[];
   isLoading: boolean;
   error: string | null;
+  lastUpdated: number;
   
   // Actions
   initialize: () => Promise<void>;
@@ -34,6 +35,7 @@ export const useStore = create<AppState>((set, get) => ({
   categorySummary: [],
   isLoading: false,
   error: null,
+  lastUpdated: 0,
 
   initialize: async () => {
     set({ isLoading: true, error: null });
@@ -81,6 +83,7 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       await addTransaction(amount, categoryId, getUnixTime(date), note, type);
       await get().fetchDashboardData(); // Refresh data
+      set({ lastUpdated: Date.now() }); // Trigger updates in other components
     } catch (error) {
       set({ error: 'Failed to add transaction' });
       console.error(error);
@@ -94,6 +97,7 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       await deleteTransaction(id);
       await get().fetchDashboardData(); // Refresh data
+      set({ lastUpdated: Date.now() }); // Trigger updates in other components
     } catch (error) {
       set({ error: 'Failed to delete transaction' });
       console.error(error);

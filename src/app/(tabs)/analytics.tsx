@@ -15,14 +15,14 @@ const { width } = Dimensions.get('window');
 
 export default function Analytics() {
   const { t } = useTranslation();
-  const { categorySummary, fetchAnalytics, isLoading } = useStore();
+  const { categorySummary, fetchAnalytics, isLoading, lastUpdated } = useStore();
   const { currency, numberFormat, style } = useSettingsStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const textColor = useThemeColor('foreground');
 
   useEffect(() => {
     loadData();
-  }, [currentDate]);
+  }, [currentDate, lastUpdated]);
 
   const loadData = () => {
     const start = startOfMonth(currentDate);

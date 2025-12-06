@@ -12,7 +12,7 @@ import { TransactionWithCategory } from '../../types';
 
 export default function History() {
   const { t } = useTranslation();
-  const { removeTransaction } = useStore();
+  const { removeTransaction, lastUpdated } = useStore();
   const [transactions, setTransactions] = useState<TransactionWithCategory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState<TransactionWithCategory[]>([]);
@@ -33,12 +33,12 @@ export default function History() {
 
   const handleDelete = async (id: number) => {
     await removeTransaction(id);
-    loadTransactions(); // Reload after delete
+    // loadTransactions() is now triggered by useEffect listening to lastUpdated
   };
 
   useEffect(() => {
     loadTransactions();
-  }, []);
+  }, [lastUpdated]);
 
   useEffect(() => {
     if (searchQuery) {

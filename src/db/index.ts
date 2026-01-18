@@ -43,7 +43,12 @@ const seedCategories = async () => {
     { name: 'Transport', icon: 'truck', color: '#4ECDC4', type: 'expense' },
     { name: 'Bills', icon: 'file-text', color: '#45B7D1', type: 'expense' },
     { name: 'Entertainment', icon: 'film', color: '#96CEB4', type: 'expense' },
-    { name: 'Shopping', icon: 'shopping-bag', color: '#FFEEAD', type: 'expense' },
+    {
+      name: 'Shopping',
+      icon: 'shopping-bag',
+      color: '#FFEEAD',
+      type: 'expense',
+    },
     { name: 'Salary', icon: 'dollar-sign', color: '#A8E6CF', type: 'income' },
     { name: 'Others', icon: 'box', color: '#D4A5A5', type: 'expense' },
   ];
@@ -126,10 +131,14 @@ export const getMonthlySummary = async (monthStart: number, monthEnd: number) =>
     monthEnd,
   );
 
+  const totalBalanceResult = await db.getFirstAsync<{ total: number }>(
+    "SELECT SUM(CASE WHEN type = 'income' THEN amount WHEN type = 'expense' THEN -amount ELSE 0 END) as total FROM transactions",
+  );
+
   return {
     income: incomeResult?.total || 0,
     expense: expenseResult?.total || 0,
-    balance: (incomeResult?.total || 0) - (expenseResult?.total || 0),
+    balance: totalBalanceResult?.total || 0,
   };
 };
 

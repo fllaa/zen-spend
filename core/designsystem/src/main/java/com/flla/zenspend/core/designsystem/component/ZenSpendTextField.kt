@@ -15,6 +15,8 @@ fun ZenSpendTextField(
     label: String,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
@@ -24,8 +26,10 @@ fun ZenSpendTextField(
         modifier = modifier,
         label = { Text(label) },
         isError = isError,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         singleLine = true,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.small,
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
     )

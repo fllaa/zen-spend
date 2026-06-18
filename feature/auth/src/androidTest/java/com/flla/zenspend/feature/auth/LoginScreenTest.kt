@@ -33,7 +33,7 @@ class LoginScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Welcome back").assertIsDisplayed()
+        composeRule.onNodeWithText("Masuk ke Akun").assertIsDisplayed()
         composeRule.onNodeWithTag("login_email").assertIsDisplayed()
         composeRule.onNodeWithTag("login_password").assertIsDisplayed()
         composeRule.onNodeWithTag("login_submit").performClick()

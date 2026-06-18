@@ -9,7 +9,7 @@ internal val Project.libs: VersionCatalog
 internal fun VersionCatalog.library(alias: String) = findLibrary(alias).get()
 
 internal fun Project.defaultNamespace(): String =
-    "com.flla.example." + path
+    "com.flla.zenspend." + path
         .removePrefix(":")
         .replace(":", ".")
         .replace("-", "")

@@ -4,7 +4,7 @@ Guidance for future AI agents working in this repository.
 
 ## Project Shape
 
-This is a Kotlin-first, Compose-only Android boilerplate for package `com.flla.example`.
+This is a Kotlin-first, Compose-only Android boilerplate for package `com.flla.zenspend`.
 
 The repository is intentionally multi-module:
 
@@ -68,10 +68,10 @@ If a Gradle command needs network/dependency access and fails due to sandboxing,
 1. Create `feature:<name>`.
 2. Add it to `settings.gradle.kts`.
 3. Apply the existing convention plugins:
-   - `com.flla.example.android.library`
-   - `com.flla.example.android.compose`
-   - `com.flla.example.android.hilt`
-   - `com.flla.example.quality`
+   - `com.flla.zenspend.android.library`
+   - `com.flla.zenspend.android.compose`
+   - `com.flla.zenspend.android.hilt`
+   - `com.flla.zenspend.quality`
 4. Depend only on the core modules the feature needs.
 5. Add route constants, navigation extension, ViewModel, UI state, and screen composables.
 6. Wire the feature graph from `app` only.

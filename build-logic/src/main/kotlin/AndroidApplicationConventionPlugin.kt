@@ -15,7 +15,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         }
 
         extensions.configure<ApplicationExtension> {
-            namespace = "com.flla.example"
+            namespace = "com.flla.zenspend"
             compileSdk = 35
 
             defaultConfig {

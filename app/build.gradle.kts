@@ -1,15 +1,15 @@
 plugins {
-    id("com.flla.example.android.application")
-    id("com.flla.example.android.compose")
-    id("com.flla.example.android.hilt")
-    id("com.flla.example.quality")
+    id("com.flla.zenspend.android.application")
+    id("com.flla.zenspend.android.compose")
+    id("com.flla.zenspend.android.hilt")
+    id("com.flla.zenspend.quality")
 }
 
 android {
-    namespace = "com.flla.example"
+    namespace = "com.flla.zenspend"
 
     defaultConfig {
-        applicationId = "com.flla.example"
+        applicationId = "com.flla.zenspend"
     }
 }
 

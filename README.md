@@ -4,7 +4,7 @@ Reusable Kotlin-first Android boilerplate for a medium-scale production app.
 
 ## Stack
 
-- Package: `com.flla.example`
+- Package: `com.flla.zenspend`
 - UI: Jetpack Compose only, Material 3
 - Architecture: MVVM, local-first repositories, feature navigation graphs
 - DI: Hilt
@@ -91,9 +91,9 @@ Included examples:
 
 1. Create `feature/<name>`.
 2. Add `include(":feature:<name>")` to `settings.gradle.kts`.
-3. Apply `com.flla.example.android.library`, `com.flla.example.android.compose`, `com.flla.example.android.hilt`, and `com.flla.example.quality`.
+3. Apply `com.flla.zenspend.android.library`, `com.flla.zenspend.android.compose`, `com.flla.zenspend.android.hilt`, and `com.flla.zenspend.quality`.
 4. Depend on `core:domain`, `core:model`, `core:designsystem`, and `core:ui` as needed.
 5. Add `<Name>Routes`, `<Name>Navigation`, screens, UI state, and ViewModels.
-6. Wire the feature graph from `ExampleApp`.
+6. Wire the feature graph from `ZenSpendApp`.
 
 Keep shared contracts in `core:domain` and shared models in `core:model`. Keep feature-only presentation state inside the feature module.

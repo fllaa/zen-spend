@@ -1,7 +1,7 @@
 plugins {
-    id("com.flla.example.android.library")
-    id("com.flla.example.android.hilt")
-    id("com.flla.example.quality")
+    id("com.flla.zenspend.android.library")
+    id("com.flla.zenspend.android.hilt")
+    id("com.flla.zenspend.quality")
     alias(libs.plugins.ksp)
 }
 

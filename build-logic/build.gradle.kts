@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.flla.example.buildlogic"
+group = "com.flla.zenspend.buildlogic"
 
 java {
     toolchain {
@@ -23,27 +23,27 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "com.flla.example.android.application"
+            id = "com.flla.zenspend.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = "com.flla.example.android.library"
+            id = "com.flla.zenspend.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidCompose") {
-            id = "com.flla.example.android.compose"
+            id = "com.flla.zenspend.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
         register("androidHilt") {
-            id = "com.flla.example.android.hilt"
+            id = "com.flla.zenspend.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
         register("kotlinLibrary") {
-            id = "com.flla.example.kotlin.library"
+            id = "com.flla.zenspend.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
         }
         register("quality") {
-            id = "com.flla.example.quality"
+            id = "com.flla.zenspend.quality"
             implementationClass = "QualityConventionPlugin"
         }
     }

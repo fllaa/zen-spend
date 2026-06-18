@@ -1,3 +1,3 @@
 <resources>
-    <style name="Theme.Example" parent="android:style/Theme.Material.Light.NoActionBar" />
+    <style name="Theme.ZenSpend" parent="android:style/Theme.Material.Light.NoActionBar" />
 </resources>

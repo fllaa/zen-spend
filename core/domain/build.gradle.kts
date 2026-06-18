@@ -1,6 +1,6 @@
 plugins {
-    id("com.flla.example.kotlin.library")
-    id("com.flla.example.quality")
+    id("com.flla.zenspend.kotlin.library")
+    id("com.flla.zenspend.quality")
 }
 
 dependencies {

@@ -21,4 +21,8 @@ class DefaultUserPreferencesRepository
         override suspend fun setOnboardingCompleted(completed: Boolean) {
             dataSource.setOnboardingCompleted(completed)
         }
+
+        override suspend fun setSetupCompleted(completed: Boolean) {
+            dataSource.setSetupCompleted(completed)
+        }
     }

@@ -32,6 +32,8 @@ import com.flla.zenspend.feature.profile.ProfileRoutes
 import com.flla.zenspend.feature.profile.profileScreen
 import com.flla.zenspend.feature.settings.SettingsRoutes
 import com.flla.zenspend.feature.settings.settingsScreen
+import com.flla.zenspend.feature.setup.SetupRoutes
+import com.flla.zenspend.feature.setup.setupGraph
 import com.flla.zenspend.navigation.SplashScreen
 import com.flla.zenspend.navigation.ZenSpendRoutes
 
@@ -61,6 +63,7 @@ private val mainDestinations =
 fun ZenSpendApp(
     sessionState: SessionState,
     hasCompletedOnboarding: Boolean,
+    hasCompletedSetup: Boolean,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
@@ -71,6 +74,7 @@ fun ZenSpendApp(
         navController = navController,
         sessionState = sessionState,
         hasCompletedOnboarding = hasCompletedOnboarding,
+        hasCompletedSetup = hasCompletedSetup,
     )
 
     Scaffold(
@@ -89,6 +93,7 @@ fun ZenSpendApp(
             startDestination = ZenSpendRoutes.SPLASH,
             modifier = Modifier.padding(padding),
             sessionState = sessionState,
+            hasCompletedSetup = hasCompletedSetup,
         )
     }
 }
@@ -98,10 +103,11 @@ private fun SessionNavigationEffect(
     navController: NavHostController,
     sessionState: SessionState,
     hasCompletedOnboarding: Boolean,
+    hasCompletedSetup: Boolean,
 ) {
     val minSplashDuration = 2000L
     val startTime = remember { System.currentTimeMillis() }
-    LaunchedEffect(sessionState, hasCompletedOnboarding) {
+    LaunchedEffect(sessionState, hasCompletedOnboarding, hasCompletedSetup) {
         if (sessionState == SessionState.Loading) return@LaunchedEffect
 
         val elapsed = System.currentTimeMillis() - startTime
@@ -113,7 +119,9 @@ private fun SessionNavigationEffect(
         val target =
             when (sessionState) {
                 SessionState.Loading -> return@LaunchedEffect
-                SessionState.Authenticated -> HomeRoutes.GRAPH
+                SessionState.Authenticated -> {
+                    if (hasCompletedSetup) HomeRoutes.GRAPH else SetupRoutes.GRAPH
+                }
                 SessionState.Unauthenticated,
                 SessionState.Expired,
                 -> {
@@ -135,6 +143,7 @@ private fun AppNavHost(
     startDestination: String,
     modifier: Modifier = Modifier,
     sessionState: SessionState,
+    hasCompletedSetup: Boolean,
 ) {
     NavHost(
         navController = navController,
@@ -156,8 +165,18 @@ private fun AppNavHost(
         authGraph(
             navController = navController,
             onAuthenticated = {
-                navController.navigate(HomeRoutes.GRAPH) {
+                val target = if (hasCompletedSetup) HomeRoutes.GRAPH else SetupRoutes.GRAPH
+                navController.navigate(target) {
                     popUpTo(AuthRoutes.GRAPH) { inclusive = true }
+                    launchSingleTop = true
+                }
+            },
+        )
+        setupGraph(
+            navController = navController,
+            onCompleted = {
+                navController.navigate(HomeRoutes.GRAPH) {
+                    popUpTo(SetupRoutes.GRAPH) { inclusive = true }
                     launchSingleTop = true
                 }
             },

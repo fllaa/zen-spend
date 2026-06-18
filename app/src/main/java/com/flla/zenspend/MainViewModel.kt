@@ -17,6 +17,7 @@ data class MainUiState(
     val sessionState: SessionState = SessionState.Loading,
     val themeMode: ThemeMode = ThemeMode.System,
     val hasCompletedOnboarding: Boolean = false,
+    val hasCompletedSetup: Boolean = false,
 )
 
 @HiltViewModel
@@ -35,6 +36,7 @@ class MainViewModel
                     sessionState = session,
                     themeMode = preferences.themeMode,
                     hasCompletedOnboarding = preferences.hasCompletedOnboarding,
+                    hasCompletedSetup = preferences.hasCompletedSetup,
                 )
             }.stateIn(
                 scope = viewModelScope,

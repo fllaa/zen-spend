@@ -38,4 +38,8 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     override suspend fun setOnboardingCompleted(completed: Boolean) {
         _preferences.value = _preferences.value.copy(hasCompletedOnboarding = completed)
     }
+
+    override suspend fun setSetupCompleted(completed: Boolean) {
+        _preferences.value = _preferences.value.copy(hasCompletedSetup = completed)
+    }
 }

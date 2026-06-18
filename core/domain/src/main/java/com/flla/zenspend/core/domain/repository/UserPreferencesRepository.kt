@@ -10,4 +10,6 @@ interface UserPreferencesRepository {
     suspend fun setThemeMode(themeMode: ThemeMode)
 
     suspend fun setOnboardingCompleted(completed: Boolean)
+
+    suspend fun setSetupCompleted(completed: Boolean)
 }

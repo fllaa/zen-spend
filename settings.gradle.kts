@@ -35,4 +35,5 @@ include(":feature:home")
 include(":feature:settings")
 include(":feature:profile")
 include(":feature:onboarding")
+include(":feature:setup")
 

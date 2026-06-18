@@ -23,6 +23,7 @@ class UserPreferencesDataSource
                 UserPreferences(
                     themeMode = preferences[THEME_MODE]?.let(ThemeMode::valueOf) ?: ThemeMode.System,
                     hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED] ?: false,
+                    hasCompletedSetup = preferences[SETUP_COMPLETED] ?: false,
                 )
             }
 
@@ -38,8 +39,15 @@ class UserPreferencesDataSource
             }
         }
 
+        suspend fun setSetupCompleted(completed: Boolean) {
+            dataStore.edit { preferences ->
+                preferences[SETUP_COMPLETED] = completed
+            }
+        }
+
         private companion object {
             val THEME_MODE = stringPreferencesKey("theme_mode")
             val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+            val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
         }
     }

@@ -104,102 +104,111 @@ fun RegisterScreen(
     val secondaryColor = MaterialTheme.colorScheme.secondary
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .drawBehind {
-                // Soft background glowing elements
-                drawRect(
-                    brush = Brush.radialGradient(
-                        colors = listOf(primaryColor.copy(alpha = 0.08f), Color.Transparent),
-                        center = Offset(size.width * 0.8f, size.height * 0.15f),
-                        radius = size.minDimension * 0.8f,
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .drawBehind {
+                    // Soft background glowing elements
+                    drawRect(
+                        brush =
+                            Brush.radialGradient(
+                                colors = listOf(primaryColor.copy(alpha = 0.08f), Color.Transparent),
+                                center = Offset(size.width * 0.8f, size.height * 0.15f),
+                                radius = size.minDimension * 0.8f,
+                            ),
                     )
-                )
-                drawRect(
-                    brush = Brush.radialGradient(
-                        colors = listOf(secondaryColor.copy(alpha = 0.05f), Color.Transparent),
-                        center = Offset(size.width * 0.2f, size.height * 0.85f),
-                        radius = size.minDimension * 0.8f,
+                    drawRect(
+                        brush =
+                            Brush.radialGradient(
+                                colors = listOf(secondaryColor.copy(alpha = 0.05f), Color.Transparent),
+                                center = Offset(size.width * 0.2f, size.height * 0.85f),
+                                radius = size.minDimension * 0.8f,
+                            ),
                     )
-                )
-            }
+                },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(spacing.lg),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(spacing.lg),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Spacer(modifier = Modifier.height(spacing.xl))
-            
+
             // Brand Identity
             Box(
-                modifier = Modifier
-                    .size(96.dp)
-                    .drawBehind {
-                        // Ambient shadow for the icon circle
-                        drawCircle(
-                            color = primaryColor.copy(alpha = 0.05f),
-                            radius = size.minDimension / 2f + 4.dp.toPx()
-                        )
-                    }
-                    .background(MaterialTheme.colorScheme.surface, CircleShape)
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(96.dp)
+                        .drawBehind {
+                            // Ambient shadow for the icon circle
+                            drawCircle(
+                                color = primaryColor.copy(alpha = 0.05f),
+                                radius = size.minDimension / 2f + 4.dp.toPx(),
+                            )
+                        }
+                        .background(MaterialTheme.colorScheme.surface, CircleShape)
+                        .padding(24.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Eco,
                     contentDescription = null,
                     tint = primaryColor,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(48.dp),
                 )
             }
             Spacer(modifier = Modifier.height(spacing.md))
             Text(
                 text = "ZenSpend",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = (-0.5).sp
-                ),
-                color = primaryColor
+                style =
+                    MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.5).sp,
+                    ),
+                color = primaryColor,
             )
             Text(
                 text = "Kelola keuangan dengan tenang.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = spacing.xs)
+                modifier = Modifier.padding(top = spacing.xs),
             )
 
             Spacer(modifier = Modifier.height(spacing.xl))
 
             // Sign Up Glass Card
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(
-                        elevation = 16.dp,
-                        shape = RoundedCornerShape(16.dp),
-                        ambientColor = Color(0xFF2D7D9A).copy(alpha = 0.1f),
-                        spotColor = Color(0xFF2D7D9A).copy(alpha = 0.1f)
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 16.dp,
+                            shape = RoundedCornerShape(16.dp),
+                            ambientColor = Color(0xFF2D7D9A).copy(alpha = 0.1f),
+                            spotColor = Color(0xFF2D7D9A).copy(alpha = 0.1f),
+                        ),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
-                ),
-                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.4f))
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                    ),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.4f)),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(spacing.lg),
-                    verticalArrangement = Arrangement.spacedBy(spacing.md)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(spacing.lg),
+                    verticalArrangement = Arrangement.spacedBy(spacing.md),
                 ) {
                     Text(
                         text = "Buat Akun Baru",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     // Name Field
@@ -208,22 +217,23 @@ fun RegisterScreen(
                             text = "Nama Lengkap",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp),
                         )
                         ZenSpendTextField(
                             value = state.name,
                             onValueChange = actions.onNameChanged,
                             label = "Nama Anda",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("register_name"),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .testTag("register_name"),
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Person,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 )
-                            }
+                            },
                         )
                     }
 
@@ -233,23 +243,24 @@ fun RegisterScreen(
                             text = "Email",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp),
                         )
                         ZenSpendTextField(
                             value = state.email,
                             onValueChange = actions.onEmailChanged,
                             label = "nama@email.com",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("register_email"),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .testTag("register_email"),
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Email,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 )
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         )
                     }
 
@@ -260,20 +271,21 @@ fun RegisterScreen(
                             text = "Kata Sandi",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
+                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp),
                         )
                         ZenSpendTextField(
                             value = state.password,
                             onValueChange = actions.onPasswordChanged,
                             label = "••••••••",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("register_password"),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .testTag("register_password"),
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Rounded.Lock,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 )
                             },
                             trailingIcon = {
@@ -283,12 +295,12 @@ fun RegisterScreen(
                                     Icon(
                                         imageVector = image,
                                         contentDescription = description,
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                     )
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         )
                     }
 
@@ -298,33 +310,35 @@ fun RegisterScreen(
                             text = state.errorMessage,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp),
                         )
                     }
 
                     // Sign Up Submit Button
                     Button(
                         onClick = actions.onSubmit,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .testTag("register_submit"),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .testTag("register_submit"),
                         enabled = !state.isLoading,
                         shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = primaryColor
-                        )
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                containerColor = primaryColor,
+                            ),
                     ) {
                         if (state.isLoading) {
                             CircularProgressIndicator(
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier.size(24.dp),
-                                strokeWidth = 2.dp
+                                strokeWidth = 2.dp,
                             )
                         } else {
                             Text(
                                 text = "Daftar",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                             )
                         }
                     }
@@ -333,51 +347,55 @@ fun RegisterScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = spacing.xs),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         HorizontalDivider(
                             modifier = Modifier.weight(1f),
-                            color = MaterialTheme.colorScheme.outlineVariant
+                            color = MaterialTheme.colorScheme.outlineVariant,
                         )
                         Text(
                             text = "ATAU",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                letterSpacing = 2.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
+                            style =
+                                MaterialTheme.typography.labelSmall.copy(
+                                    letterSpacing = 2.sp,
+                                    fontWeight = FontWeight.Bold,
+                                ),
                             color = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier.padding(horizontal = spacing.md)
+                            modifier = Modifier.padding(horizontal = spacing.md),
                         )
                         HorizontalDivider(
                             modifier = Modifier.weight(1f),
-                            color = MaterialTheme.colorScheme.outlineVariant
+                            color = MaterialTheme.colorScheme.outlineVariant,
                         )
                     }
 
                     // Social Auth Button
                     OutlinedButton(
                         onClick = { /* No-op */ },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(56.dp),
                         shape = CircleShape,
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        )
+                        colors =
+                            ButtonDefaults.outlinedButtonColors(
+                                containerColor = MaterialTheme.colorScheme.surface,
+                            ),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                            horizontalArrangement = Arrangement.Center,
                         ) {
                             GoogleLogoIcon(modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
                                 text = "Lanjutkan dengan Google",
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontWeight = FontWeight.Medium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
+                                style =
+                                    MaterialTheme.typography.bodyLarge.copy(
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    ),
                             )
                         }
                     }
@@ -386,20 +404,21 @@ fun RegisterScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(top = spacing.xs),
                         horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = "Sudah punya akun? ",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
                             text = "Masuk",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                color = primaryColor
-                            ),
-                            modifier = Modifier.clickable { actions.onLoginClick() }
+                            style =
+                                MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = primaryColor,
+                                ),
+                            modifier = Modifier.clickable { actions.onLoginClick() },
                         )
                     }
                 }
@@ -411,7 +430,7 @@ fun RegisterScreen(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(start = spacing.md, end = spacing.md, top = spacing.xl)
+                modifier = Modifier.padding(start = spacing.md, end = spacing.md, top = spacing.xl),
             )
 
             Spacer(modifier = Modifier.height(spacing.xl))

@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
                 ZenSpendApp(
                     sessionState = state.sessionState,
                     hasCompletedOnboarding = state.hasCompletedOnboarding,
+                    hasCompletedSetup = state.hasCompletedSetup,
                 )
             }
         }

@@ -83,6 +83,7 @@ fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 fun ProfileScreen(
     state: ProfileUiState,
@@ -282,6 +283,7 @@ fun ProfileScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun ProfileCard(
     user: User?,
@@ -445,6 +447,7 @@ fun SettingsGroup(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun SettingsItem(
     icon: ImageVector,

@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -173,7 +175,6 @@ private fun AppNavHost(
             SplashScreen(sessionExpired = sessionState == SessionState.Expired)
         }
         onboardingGraph(
-            navController = navController,
             onCompleted = {
                 navController.navigate(AuthRoutes.GRAPH) {
                     popUpTo(OnboardingRoutes.GRAPH) { inclusive = true }
@@ -192,7 +193,6 @@ private fun AppNavHost(
             },
         )
         setupGraph(
-            navController = navController,
             onCompleted = {
                 navController.navigate(HomeRoutes.GRAPH) {
                     popUpTo(SetupRoutes.GRAPH) { inclusive = true }
@@ -261,7 +261,7 @@ private fun MainBottomBar(
 }
 
 @Composable
-private fun MainNavigationTabs(
+private fun RowScope.MainNavigationTabs(
     currentRoute: String?,
     homeDestination: MainDestination?,
     profileDestination: MainDestination?,
@@ -308,7 +308,7 @@ private fun MainNavigationTabs(
 }
 
 @Composable
-private fun MainTabItem(
+private fun RowScope.MainTabItem(
     spec: MainTabSpec,
     onDestinationClick: (MainDestination) -> Unit,
 ) {

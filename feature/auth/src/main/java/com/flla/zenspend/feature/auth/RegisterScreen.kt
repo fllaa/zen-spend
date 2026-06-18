@@ -94,6 +94,7 @@ data class RegisterActions(
     val onLoginClick: () -> Unit,
 )
 
+@Suppress("LongMethod")
 @Composable
 fun RegisterScreen(
     state: RegisterUiState,
@@ -289,8 +290,18 @@ fun RegisterScreen(
                                 )
                             },
                             trailingIcon = {
-                                val image = if (passwordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
-                                val description = if (passwordVisible) "Sembunyikan sandi" else "Tampilkan sandi"
+                                val image =
+                                    if (passwordVisible) {
+                                        Icons.Rounded.Visibility
+                                    } else {
+                                        Icons.Rounded.VisibilityOff
+                                    }
+                                val description =
+                                    if (passwordVisible) {
+                                        "Sembunyikan sandi"
+                                    } else {
+                                        "Tampilkan sandi"
+                                    }
                                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                     Icon(
                                         imageVector = image,
@@ -300,7 +311,12 @@ fun RegisterScreen(
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            visualTransformation =
+                                if (passwordVisible) {
+                                    VisualTransformation.None
+                                } else {
+                                    PasswordVisualTransformation()
+                                },
                         )
                     }
 
@@ -426,7 +442,9 @@ fun RegisterScreen(
 
             // Disclaimer Footer
             Text(
-                text = "Dengan mendaftar, Anda menyetujui Ketentuan Layanan dan Kebijakan Privasi kami yang mengutamakan keamanan data finansial Anda.",
+                text =
+                    "Dengan mendaftar, Anda menyetujui Ketentuan Layanan dan " +
+                        "Kebijakan Privasi kami yang mengutamakan keamanan data finansial Anda.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline,
                 textAlign = TextAlign.Center,

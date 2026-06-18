@@ -122,6 +122,7 @@ fun SetupRoute(
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun SetupScreen(
     state: SetupUiState,
@@ -309,6 +310,7 @@ fun SetupScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun CurrencyStepContent(
     selectedCurrency: String,
@@ -502,6 +504,7 @@ private data class CurrencyOption(
     val symbol: String,
 )
 
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 private fun AccountStepContent(
     selectedCurrency: String,
@@ -827,6 +830,7 @@ private data class AccountTypeOption(
     val icon: ImageVector,
 )
 
+@Suppress("LongMethod")
 @Composable
 private fun CategoriesStepContent(
     selectedCategories: Set<String>,

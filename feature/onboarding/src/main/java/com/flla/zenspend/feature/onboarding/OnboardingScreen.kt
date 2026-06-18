@@ -91,6 +91,7 @@ fun OnboardingRoute(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
+@Suppress("LongMethod")
 @Composable
 fun OnboardingScreen(onCompleted: () -> Unit) {
     val spacing = LocalZenSpendSpacing.current
@@ -315,6 +316,7 @@ fun OnboardingScreen(onCompleted: () -> Unit) {
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun SlideOneIllustration() {
     val infiniteTransition = rememberInfiniteTransition(label = "slide_1_float")
@@ -581,6 +583,7 @@ private fun SlideOneIllustration() {
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun SlideTwoIllustration() {
     val infiniteTransition = rememberInfiniteTransition(label = "slide_2_float")
@@ -747,6 +750,7 @@ private fun CategoryProgressRow(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun SlideThreeIllustration() {
     val infiniteTransition = rememberInfiniteTransition(label = "slide_3_float")

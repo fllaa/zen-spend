@@ -94,6 +94,7 @@ data class LoginActions(
     val onRegisterClick: () -> Unit,
 )
 
+@Suppress("LongMethod")
 @Composable
 fun LoginScreen(
     state: LoginUiState,
@@ -274,8 +275,18 @@ fun LoginScreen(
                                 )
                             },
                             trailingIcon = {
-                                val image = if (passwordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
-                                val description = if (passwordVisible) "Sembunyikan sandi" else "Tampilkan sandi"
+                                val image =
+                                    if (passwordVisible) {
+                                        Icons.Rounded.Visibility
+                                    } else {
+                                        Icons.Rounded.VisibilityOff
+                                    }
+                                val description =
+                                    if (passwordVisible) {
+                                        "Sembunyikan sandi"
+                                    } else {
+                                        "Tampilkan sandi"
+                                    }
                                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                     Icon(
                                         imageVector = image,
@@ -285,7 +296,12 @@ fun LoginScreen(
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                            visualTransformation =
+                                if (passwordVisible) {
+                                    VisualTransformation.None
+                                } else {
+                                    PasswordVisualTransformation()
+                                },
                         )
                     }
 
@@ -411,7 +427,9 @@ fun LoginScreen(
 
             // Disclaimer Footer
             Text(
-                text = "Dengan masuk, Anda menyetujui Ketentuan Layanan dan Kebijakan Privasi kami yang mengutamakan keamanan data finansial Anda.",
+                text =
+                    "Dengan masuk, Anda menyetujui Ketentuan Layanan dan " +
+                        "Kebijakan Privasi kami yang mengutamakan keamanan data finansial Anda.",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline,
                 textAlign = TextAlign.Center,
@@ -423,6 +441,7 @@ fun LoginScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun GoogleLogoIcon(modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {

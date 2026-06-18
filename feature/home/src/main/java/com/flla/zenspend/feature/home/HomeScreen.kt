@@ -82,6 +82,7 @@ fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun HomeScreen(state: HomeUiState) {
     val spacing = LocalZenSpendSpacing.current
@@ -117,7 +118,8 @@ fun HomeScreen(state: HomeUiState) {
             TopCategoryItem(
                 name = "Tagihan",
                 amount = "Rp450rb",
-                icon = Icons.Rounded.ShoppingCart, // Indomaret or bill representation
+                // Shopping cart stands in for a bill/payment category here.
+                icon = Icons.Rounded.ShoppingCart,
                 iconColor = MaterialTheme.colorScheme.secondary,
                 containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
             ),
@@ -223,6 +225,7 @@ fun HomeScreen(state: HomeUiState) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun HomeTopBar(
     currentMonth: String,
@@ -340,6 +343,7 @@ fun WelcomeGreeting(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun BalanceCard(
     balance: String,
@@ -516,6 +520,7 @@ fun BalanceCard(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun BudgetProgressCard(modifier: Modifier = Modifier) {
     val spacing = LocalZenSpendSpacing.current
@@ -600,6 +605,7 @@ fun BudgetProgressCard(modifier: Modifier = Modifier) {
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 fun StatisticsPreviewCard(modifier: Modifier = Modifier) {
     val spacing = LocalZenSpendSpacing.current
@@ -679,6 +685,7 @@ data class TopCategoryItem(
     val containerColor: Color,
 )
 
+@Suppress("LongMethod")
 @Composable
 fun TopCategoriesSection(
     categories: List<TopCategoryItem>,
@@ -791,6 +798,7 @@ data class TransactionItem(
     val icon: ImageVector,
 )
 
+@Suppress("LongMethod")
 @Composable
 fun RecentTransactionsSection(
     transactions: List<TransactionItem>,
@@ -899,7 +907,12 @@ fun RecentTransactionsSection(
                             text = (if (transaction.isIncome) "+" else "-") + "Rp " + transaction.amount,
                             style =
                                 NumericDataTextStyle.copy(
-                                    color = if (transaction.isIncome) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error,
+                                    color =
+                                        if (transaction.isIncome) {
+                                            MaterialTheme.colorScheme.tertiary
+                                        } else {
+                                            MaterialTheme.colorScheme.error
+                                        },
                                     fontWeight = FontWeight.SemiBold,
                                 ),
                         )

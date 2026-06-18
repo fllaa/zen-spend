@@ -213,6 +213,8 @@ private fun MainBottomBar(
     onDestinationClick: (MainDestination) -> Unit,
 ) {
     val context = LocalContext.current
+    val homeDestination = destinations.find { it.selectedRoute == HomeRoutes.HOME }
+    val profileDestination = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
 
     Box(
         modifier =
@@ -239,83 +241,108 @@ private fun MainBottomBar(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Tab 1: Home
-                val isHomeSelected = currentRoute == HomeRoutes.HOME
-                BottomTabItem(
-                    label = "Home",
-                    icon = if (isHomeSelected) Icons.Rounded.Home else Icons.Outlined.Home,
-                    selected = isHomeSelected,
-                    onClick = {
-                        val homeDest = destinations.find { it.selectedRoute == HomeRoutes.HOME }
-                        if (homeDest != null) onDestinationClick(homeDest)
+                MainNavigationTabs(
+                    currentRoute = currentRoute,
+                    homeDestination = homeDestination,
+                    profileDestination = profileDestination,
+                    onDestinationClick = onDestinationClick,
+                    onPlaceholderClick = { message ->
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     },
-                    modifier = Modifier.weight(1f),
-                )
-
-                // Tab 2: History
-                BottomTabItem(
-                    label = "History",
-                    icon = Icons.AutoMirrored.Rounded.ReceiptLong,
-                    selected = false,
-                    onClick = {
-                        Toast.makeText(context, "History screen coming soon!", Toast.LENGTH_SHORT).show()
-                    },
-                    modifier = Modifier.weight(1f),
-                )
-
-                // Tab 3: Spacer for FAB
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Tab 4: Data
-                BottomTabItem(
-                    label = "Data",
-                    icon = Icons.Rounded.Analytics,
-                    selected = false,
-                    onClick = {
-                        Toast.makeText(context, "Analytics screen coming soon!", Toast.LENGTH_SHORT).show()
-                    },
-                    modifier = Modifier.weight(1f),
-                )
-
-                // Tab 5: Profile
-                val isProfileSelected = currentRoute == ProfileRoutes.PROFILE
-                BottomTabItem(
-                    label = "Profile",
-                    icon = if (isProfileSelected) Icons.Rounded.Person else Icons.Outlined.Person,
-                    selected = isProfileSelected,
-                    onClick = {
-                        val profileDest = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
-                        if (profileDest != null) onDestinationClick(profileDest)
-                    },
-                    modifier = Modifier.weight(1f),
                 )
             }
         }
+        AddTransactionFab(
+            onClick = {
+                Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
+            },
+        )
+    }
+}
 
-        // Center Offset FAB
-        Box(
-            modifier =
-                Modifier
-                    .align(Alignment.TopCenter)
-                    .offset(y = (-16).dp) // Offset upwards to float
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.background) // Match background for outer border look
-                    .padding(4.dp) // Border thickness simulation
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest) // Inner white container
-                    .clickable {
-                        Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
-                    },
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.AddCircle,
-                contentDescription = "Add Transaction",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp),
-            )
-        }
+@Composable
+private fun MainNavigationTabs(
+    currentRoute: String?,
+    homeDestination: MainDestination?,
+    profileDestination: MainDestination?,
+    onDestinationClick: (MainDestination) -> Unit,
+    onPlaceholderClick: (String) -> Unit,
+) {
+    MainTabItem(
+        spec =
+            MainTabSpec(
+                label = "Home",
+                selected = currentRoute == HomeRoutes.HOME,
+                selectedIcon = Icons.Rounded.Home,
+                unselectedIcon = Icons.Outlined.Home,
+                destination = homeDestination,
+            ),
+        onDestinationClick = onDestinationClick,
+    )
+    BottomTabItem(
+        label = "History",
+        icon = Icons.AutoMirrored.Rounded.ReceiptLong,
+        selected = false,
+        onClick = { onPlaceholderClick("History screen coming soon!") },
+        modifier = Modifier.weight(1f),
+    )
+    Spacer(modifier = Modifier.weight(1f))
+    BottomTabItem(
+        label = "Data",
+        icon = Icons.Rounded.Analytics,
+        selected = false,
+        onClick = { onPlaceholderClick("Analytics screen coming soon!") },
+        modifier = Modifier.weight(1f),
+    )
+    MainTabItem(
+        spec =
+            MainTabSpec(
+                label = "Profile",
+                selected = currentRoute == ProfileRoutes.PROFILE,
+                selectedIcon = Icons.Rounded.Person,
+                unselectedIcon = Icons.Outlined.Person,
+                destination = profileDestination,
+            ),
+        onDestinationClick = onDestinationClick,
+    )
+}
+
+@Composable
+private fun MainTabItem(
+    spec: MainTabSpec,
+    onDestinationClick: (MainDestination) -> Unit,
+) {
+    BottomTabItem(
+        label = spec.label,
+        icon = if (spec.selected) spec.selectedIcon else spec.unselectedIcon,
+        selected = spec.selected,
+        onClick = { spec.destination?.let(onDestinationClick) },
+        modifier = Modifier.weight(1f),
+    )
+}
+
+@Composable
+private fun BoxScope.AddTransactionFab(onClick: () -> Unit) {
+    Box(
+        modifier =
+            Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-16).dp)
+                .size(64.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.background)
+                .padding(4.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.AddCircle,
+            contentDescription = "Add Transaction",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(48.dp),
+        )
     }
 }
 
@@ -399,4 +426,12 @@ private data class MainDestination(
     val selectedRoute: String,
     val label: String,
     val icon: ImageVector,
+)
+
+private data class MainTabSpec(
+    val label: String,
+    val selected: Boolean,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val destination: MainDestination?,
 )

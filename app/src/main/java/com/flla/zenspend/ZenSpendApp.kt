@@ -52,6 +52,8 @@ import androidx.navigation.compose.rememberNavController
 import com.flla.zenspend.core.model.SessionState
 import com.flla.zenspend.feature.auth.AuthRoutes
 import com.flla.zenspend.feature.auth.authGraph
+import com.flla.zenspend.feature.history.HistoryRoutes
+import com.flla.zenspend.feature.history.historyGraph
 import com.flla.zenspend.feature.home.HomeRoutes
 import com.flla.zenspend.feature.home.homeGraph
 import com.flla.zenspend.feature.onboarding.OnboardingRoutes
@@ -71,6 +73,12 @@ private val mainDestinations =
             selectedRoute = HomeRoutes.HOME,
             label = "Home",
             icon = Icons.Rounded.Home,
+        ),
+        MainDestination(
+            route = HistoryRoutes.GRAPH,
+            selectedRoute = HistoryRoutes.HISTORY,
+            label = "History",
+            icon = Icons.AutoMirrored.Rounded.ReceiptLong,
         ),
         MainDestination(
             route = ProfileRoutes.PROFILE,
@@ -201,6 +209,7 @@ private fun AppNavHost(
             },
         )
         homeGraph()
+        historyGraph()
         profileScreen()
         settingsScreen()
     }
@@ -214,6 +223,7 @@ private fun MainBottomBar(
 ) {
     val context = LocalContext.current
     val homeDestination = destinations.find { it.selectedRoute == HomeRoutes.HOME }
+    val historyDestination = destinations.find { it.selectedRoute == HistoryRoutes.HISTORY }
     val profileDestination = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
 
     Box(
@@ -244,6 +254,7 @@ private fun MainBottomBar(
                 MainNavigationTabs(
                     currentRoute = currentRoute,
                     homeDestination = homeDestination,
+                    historyDestination = historyDestination,
                     profileDestination = profileDestination,
                     onDestinationClick = onDestinationClick,
                     onPlaceholderClick = { message ->
@@ -260,10 +271,12 @@ private fun MainBottomBar(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun RowScope.MainNavigationTabs(
     currentRoute: String?,
     homeDestination: MainDestination?,
+    historyDestination: MainDestination?,
     profileDestination: MainDestination?,
     onDestinationClick: (MainDestination) -> Unit,
     onPlaceholderClick: (String) -> Unit,
@@ -279,12 +292,16 @@ private fun RowScope.MainNavigationTabs(
             ),
         onDestinationClick = onDestinationClick,
     )
-    BottomTabItem(
-        label = "History",
-        icon = Icons.AutoMirrored.Rounded.ReceiptLong,
-        selected = false,
-        onClick = { onPlaceholderClick("History screen coming soon!") },
-        modifier = Modifier.weight(1f),
+    MainTabItem(
+        spec =
+            MainTabSpec(
+                label = "History",
+                selected = currentRoute == HistoryRoutes.HISTORY,
+                selectedIcon = Icons.AutoMirrored.Rounded.ReceiptLong,
+                unselectedIcon = Icons.AutoMirrored.Rounded.ReceiptLong,
+                destination = historyDestination,
+            ),
+        onDestinationClick = onDestinationClick,
     )
     Spacer(modifier = Modifier.weight(1f))
     BottomTabItem(

@@ -74,6 +74,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
@@ -359,23 +360,22 @@ private fun CurrencyStepContent(
                     }
                 val containerColor =
                     if (active) {
-                        MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.04f,
-                        )
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                            .compositeOver(MaterialTheme.colorScheme.surface)
                     } else {
                         MaterialTheme.colorScheme.surface
                     }
 
                 Card(
+                    onClick = { onSelectCurrency(option.code) },
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .clickable { onSelectCurrency(option.code) }
                             .testTag("currency_option_${option.code}"),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = containerColor),
                     border = BorderStroke(1.dp, strokeColor),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 ) {
                     Row(
                         modifier =
@@ -647,11 +647,16 @@ private fun AccountStepContent(
                 else -> "Rp"
             }
 
+        val containerColor =
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
+                .compositeOver(MaterialTheme.colorScheme.surface)
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)),
+            colors = CardDefaults.cardColors(containerColor = containerColor),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         ) {
             Row(
                 modifier =
@@ -885,15 +890,15 @@ private fun CategoriesStepContent(
                     }
 
                 Card(
+                    onClick = { onToggleCategory(category.name) },
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .clickable { onToggleCategory(category.name) }
                             .testTag("category_option_${category.name}"),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = containerColor),
                     border = BorderStroke(2.dp, borderStrokeColor),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 ) {
                     Column(
                         modifier =

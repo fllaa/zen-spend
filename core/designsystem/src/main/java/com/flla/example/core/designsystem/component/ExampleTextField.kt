@@ -1,0 +1,32 @@
+package com.flla.example.core.designsystem.component
+
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
+
+@Composable
+fun ExampleTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        label = { Text(label) },
+        isError = isError,
+        singleLine = true,
+        shape = MaterialTheme.shapes.small,
+        keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
+    )
+}

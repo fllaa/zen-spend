@@ -3,6 +3,7 @@ package com.flla.zenspend
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.flla.zenspend.core.designsystem.theme.ZenSpendTheme
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             val state = viewModel.uiState.collectAsStateWithLifecycle().value
             ZenSpendTheme(themeMode = state.themeMode) {

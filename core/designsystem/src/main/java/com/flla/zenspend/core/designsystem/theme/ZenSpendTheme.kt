@@ -8,10 +8,13 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.flla.zenspend.core.model.ThemeMode
 
 private val LightColors =
@@ -132,6 +135,20 @@ fun ZenSpendTheme(
             ThemeMode.Light -> false
             ThemeMode.Dark -> true
         }
+
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as? android.app.Activity)?.window
+            if (window != null) {
+                WindowCompat.getInsetsController(window, view).apply {
+                    isAppearanceLightStatusBars = !darkTheme
+                    isAppearanceLightNavigationBars = !darkTheme
+                }
+            }
+        }
+    }
+
     CompositionLocalProvider(LocalZenSpendSpacing provides ZenSpendSpacing()) {
         MaterialTheme(
             colorScheme = if (darkTheme) DarkColors else LightColors,

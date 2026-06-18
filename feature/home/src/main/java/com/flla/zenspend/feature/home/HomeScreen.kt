@@ -91,102 +91,106 @@ fun HomeScreen(state: HomeUiState) {
     var balanceVisible by rememberSaveable { mutableStateOf(true) }
 
     // Mock data based on Stitch screen spec
-    val categoryItems = listOf(
-        TopCategoryItem(
-            name = "Makanan",
-            amount = "Rp1.2M",
-            icon = Icons.Rounded.Restaurant,
-            iconColor = MaterialTheme.colorScheme.error,
-            containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f)
-        ),
-        TopCategoryItem(
-            name = "Transport",
-            amount = "Rp850rb",
-            icon = Icons.Rounded.DirectionsCar,
-            iconColor = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-        ),
-        TopCategoryItem(
-            name = "Belanja",
-            amount = "Rp620rb",
-            icon = Icons.Rounded.ShoppingBag,
-            iconColor = MaterialTheme.colorScheme.tertiary,
-            containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f)
-        ),
-        TopCategoryItem(
-            name = "Tagihan",
-            amount = "Rp450rb",
-            icon = Icons.Rounded.ShoppingCart, // Indomaret or bill representation
-            iconColor = MaterialTheme.colorScheme.secondary,
-            containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
+    val categoryItems =
+        listOf(
+            TopCategoryItem(
+                name = "Makanan",
+                amount = "Rp1.2M",
+                icon = Icons.Rounded.Restaurant,
+                iconColor = MaterialTheme.colorScheme.error,
+                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+            ),
+            TopCategoryItem(
+                name = "Transport",
+                amount = "Rp850rb",
+                icon = Icons.Rounded.DirectionsCar,
+                iconColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            ),
+            TopCategoryItem(
+                name = "Belanja",
+                amount = "Rp620rb",
+                icon = Icons.Rounded.ShoppingBag,
+                iconColor = MaterialTheme.colorScheme.tertiary,
+                containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
+            ),
+            TopCategoryItem(
+                name = "Tagihan",
+                amount = "Rp450rb",
+                icon = Icons.Rounded.ShoppingCart, // Indomaret or bill representation
+                iconColor = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
+            ),
         )
-    )
 
-    val transactionItems = listOf(
-        TransactionItem(
-            title = "Indomaret Point",
-            timestamp = "Hari ini, 10:24",
-            amount = "45.000",
-            isIncome = false,
-            icon = Icons.Rounded.ShoppingCart
-        ),
-        TransactionItem(
-            title = "Gojek - Perjalanan",
-            timestamp = "Kemarin, 18:30",
-            amount = "18.000",
-            isIncome = false,
-            icon = Icons.Rounded.DirectionsCar
-        ),
-        TransactionItem(
-            title = "Gaji Bulanan",
-            timestamp = "25 Okt, 08:00",
-            amount = "12.000.000",
-            isIncome = true,
-            icon = Icons.Rounded.Payments
-        ),
-        TransactionItem(
-            title = "Starbucks Coffee",
-            timestamp = "24 Okt, 14:15",
-            amount = "55.000",
-            isIncome = false,
-            icon = Icons.Rounded.Coffee
-        ),
-        TransactionItem(
-            title = "Listrik & Air",
-            timestamp = "20 Okt, 09:10",
-            amount = "450.000",
-            isIncome = false,
-            icon = Icons.Rounded.Home
+    val transactionItems =
+        listOf(
+            TransactionItem(
+                title = "Indomaret Point",
+                timestamp = "Hari ini, 10:24",
+                amount = "45.000",
+                isIncome = false,
+                icon = Icons.Rounded.ShoppingCart,
+            ),
+            TransactionItem(
+                title = "Gojek - Perjalanan",
+                timestamp = "Kemarin, 18:30",
+                amount = "18.000",
+                isIncome = false,
+                icon = Icons.Rounded.DirectionsCar,
+            ),
+            TransactionItem(
+                title = "Gaji Bulanan",
+                timestamp = "25 Okt, 08:00",
+                amount = "12.000.000",
+                isIncome = true,
+                icon = Icons.Rounded.Payments,
+            ),
+            TransactionItem(
+                title = "Starbucks Coffee",
+                timestamp = "24 Okt, 14:15",
+                amount = "55.000",
+                isIncome = false,
+                icon = Icons.Rounded.Coffee,
+            ),
+            TransactionItem(
+                title = "Listrik & Air",
+                timestamp = "20 Okt, 09:10",
+                amount = "450.000",
+                isIncome = false,
+                icon = Icons.Rounded.Home,
+            ),
         )
-    )
 
     Scaffold(
         topBar = {
             HomeTopBar(
                 currentMonth = "Oktober",
                 onMonthClick = {},
-                onProfileClick = {}
+                onProfileClick = {},
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .drawBehind {
-                    // Soft glowing Japanese minimalism gradient blob in top right
-                    drawRect(
-                        brush = Brush.radialGradient(
-                            colors = listOf(primaryColor.copy(alpha = 0.05f), Color.Transparent),
-                            center = Offset(size.width * 0.8f, size.height * 0.15f),
-                            radius = size.minDimension * 0.8f
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .drawBehind {
+                        // Soft glowing Japanese minimalism gradient blob in top right
+                        drawRect(
+                            brush =
+                                Brush.radialGradient(
+                                    colors = listOf(primaryColor.copy(alpha = 0.05f), Color.Transparent),
+                                    center = Offset(size.width * 0.8f, size.height * 0.15f),
+                                    radius = size.minDimension * 0.8f,
+                                ),
                         )
-                    )
-                }
-                .verticalScroll(scrollState)
-                .padding(horizontal = spacing.containerPadding, vertical = spacing.md),
-            verticalArrangement = Arrangement.spacedBy(spacing.lg)
+                    }
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = spacing.containerPadding, vertical = spacing.md),
+            verticalArrangement = Arrangement.spacedBy(spacing.lg),
         ) {
             // Welcome Greeting
             WelcomeGreeting(userName = state.user?.name ?: "Avall")
@@ -197,13 +201,13 @@ fun HomeScreen(state: HomeUiState) {
                 income = "Rp 12.4M",
                 expense = "Rp 4.1M",
                 balanceVisible = balanceVisible,
-                onToggleBalanceVisibility = { balanceVisible = !balanceVisible }
+                onToggleBalanceVisibility = { balanceVisible = !balanceVisible },
             )
 
             // Budget Bento cards
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(spacing.md)
+                verticalArrangement = Arrangement.spacedBy(spacing.md),
             ) {
                 BudgetProgressCard()
                 StatisticsPreviewCard()
@@ -224,105 +228,114 @@ fun HomeTopBar(
     currentMonth: String,
     onMonthClick: () -> Unit,
     onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     TopAppBar(
         title = {
             Text(
                 text = "ZenSpend",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = (-0.5).sp
-                )
+                style =
+                    MaterialTheme.typography.headlineMedium.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.5).sp,
+                    ),
             )
         },
         actions = {
             // Month selector pill
             Surface(
-                modifier = Modifier
-                    .padding(end = spacing.md)
-                    .clickable { onMonthClick() },
+                modifier =
+                    Modifier
+                        .padding(end = spacing.md)
+                        .clickable { onMonthClick() },
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = RoundedCornerShape(32.dp),
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
                         text = currentMonth.uppercase(),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                     Icon(
                         imageVector = Icons.Rounded.KeyboardArrowDown,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
 
             // Profile avatar
             Box(
-                modifier = Modifier
-                    .padding(end = spacing.containerPadding)
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .border(2.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
-                    .clickable { onProfileClick() }
+                modifier =
+                    Modifier
+                        .padding(end = spacing.containerPadding)
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .border(2.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                        .clickable { onProfileClick() },
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = "A",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontWeight = FontWeight.Bold
-                        )
+                        style =
+                            MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontWeight = FontWeight.Bold,
+                            ),
                     )
                 }
             }
         },
         windowInsets = WindowInsets(0.dp),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        modifier = modifier
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+            ),
+        modifier = modifier,
     )
 }
 
 @Composable
 fun WelcomeGreeting(
     userName: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(spacing.xs)
+        verticalArrangement = Arrangement.spacedBy(spacing.xs),
     ) {
         Text(
             text = "Selamat pagi, $userName",
-            style = MaterialTheme.typography.bodyLarge.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            style =
+                MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
         )
         Text(
             text = "Kelola keuanganmu hari ini",
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            style =
+                MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
         )
     }
 }
@@ -334,119 +347,128 @@ fun BalanceCard(
     expense: String,
     balanceVisible: Boolean,
     onToggleBalanceVisibility: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .zenSpendShadowLevel2(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .zenSpendShadowLevel2(),
         shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(spacing.lg)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(spacing.lg),
         ) {
             Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(128.dp)
-                    .drawBehind {
-                        drawCircle(
-                            color = Color.White.copy(alpha = 0.1f),
-                            radius = size.width / 2f,
-                            center = Offset(size.width, -size.height / 3f)
-                        )
-                    }
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .size(128.dp)
+                        .drawBehind {
+                            drawCircle(
+                                color = Color.White.copy(alpha = 0.1f),
+                                radius = size.width / 2f,
+                                center = Offset(size.width, -size.height / 3f),
+                            )
+                        },
             )
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(spacing.md)
+                verticalArrangement = Arrangement.spacedBy(spacing.md),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "Saldo Total",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f),
-                            letterSpacing = (0.15 * 12).sp
-                        )
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f),
+                                letterSpacing = (0.15 * 12).sp,
+                            ),
                     )
                     IconButton(
                         onClick = onToggleBalanceVisibility,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     ) {
                         Icon(
                             imageVector = if (balanceVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
                             contentDescription = if (balanceVisible) "Sembunyikan Saldo" else "Tampilkan Saldo",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                         )
                     }
                 }
 
                 Row(
                     verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
                         text = "Rp",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
-                        ),
-                        modifier = Modifier.padding(bottom = 6.dp)
+                        style =
+                            MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
+                            ),
+                        modifier = Modifier.padding(bottom = 6.dp),
                     )
                     Text(
                         text = if (balanceVisible) balance else "••••••••",
-                        style = MaterialTheme.typography.displayLarge.copy(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
+                        style =
+                            MaterialTheme.typography.displayLarge.copy(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            ),
                     )
                 }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(spacing.md)
+                    horizontalArrangement = Arrangement.spacedBy(spacing.md),
                 ) {
                     Surface(
                         modifier = Modifier.weight(1f),
                         color = Color.White.copy(alpha = 0.1f),
-                        shape = MaterialTheme.shapes.medium
+                        shape = MaterialTheme.shapes.medium,
                     ) {
                         Column(
                             modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             Text(
                                 text = "Pemasukan",
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
-                                )
+                                style =
+                                    MaterialTheme.typography.labelSmall.copy(
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                                    ),
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                horizontalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowDownward,
                                     contentDescription = null,
                                     tint = if (darkTheme) Color(0xFF78DC77) else Color(0xFF94F990),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                                 Text(
                                     text = income,
-                                    style = NumericDataTextStyle.copy(
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                                    )
+                                    style =
+                                        NumericDataTextStyle.copy(
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        ),
                                 )
                             }
                         }
@@ -455,33 +477,35 @@ fun BalanceCard(
                     Surface(
                         modifier = Modifier.weight(1f),
                         color = Color.White.copy(alpha = 0.1f),
-                        shape = MaterialTheme.shapes.medium
+                        shape = MaterialTheme.shapes.medium,
                     ) {
                         Column(
                             modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             Text(
                                 text = "Pengeluaran",
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
-                                )
+                                style =
+                                    MaterialTheme.typography.labelSmall.copy(
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                                    ),
                             )
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                horizontalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.ArrowUpward,
                                     contentDescription = null,
                                     tint = if (darkTheme) Color(0xFFFFB4AB) else Color(0xFFFFDAD6),
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(16.dp),
                                 )
                                 Text(
                                     text = expense,
-                                    style = NumericDataTextStyle.copy(
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                                    )
+                                    style =
+                                        NumericDataTextStyle.copy(
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        ),
                                 )
                             }
                         }
@@ -493,40 +517,40 @@ fun BalanceCard(
 }
 
 @Composable
-fun BudgetProgressCard(
-    modifier: Modifier = Modifier
-) {
+fun BudgetProgressCard(modifier: Modifier = Modifier) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
     Card(
         modifier = modifier.zenSpendShadowLevel1(darkTheme),
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            ),
     ) {
         Column(
             modifier = Modifier.padding(spacing.md),
-            verticalArrangement = Arrangement.spacedBy(spacing.md)
+            verticalArrangement = Arrangement.spacedBy(spacing.md),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Anggaran Bulan Ini",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                 )
                 Icon(
                     imageVector = Icons.Rounded.DonutLarge,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
                 )
             }
 
@@ -534,38 +558,42 @@ fun BudgetProgressCard(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "75% Terpakai",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            ),
                     )
                     Text(
                         text = "Sisa Rp1.250.000",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            ),
                     )
                 }
 
                 LinearProgressIndicator(
                     progress = { 0.75f },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(12.dp)
-                        .clip(RoundedCornerShape(32.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(12.dp)
+                            .clip(RoundedCornerShape(32.dp)),
                     color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                 )
 
                 Text(
                     text = "Rp3.750.000 dari Rp5.000.000",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    ),
-                    modifier = Modifier.padding(top = 4.dp)
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                    modifier = Modifier.padding(top = 4.dp),
                 )
             }
         }
@@ -573,63 +601,69 @@ fun BudgetProgressCard(
 }
 
 @Composable
-fun StatisticsPreviewCard(
-    modifier: Modifier = Modifier
-) {
+fun StatisticsPreviewCard(modifier: Modifier = Modifier) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
     Card(
         modifier = modifier.zenSpendShadowLevel1(darkTheme),
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            ),
     ) {
         Column(
             modifier = Modifier.padding(spacing.md),
-            verticalArrangement = Arrangement.spacedBy(spacing.md)
+            verticalArrangement = Arrangement.spacedBy(spacing.md),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Statistik",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                 )
                 Text(
                     text = "7 Hari Terakhir",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    style =
+                        MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
                 )
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(96.dp)
-                    .padding(horizontal = 8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(96.dp)
+                        .padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
             ) {
                 val barHeights = listOf(0.4f, 0.65f, 0.9f, 0.3f, 0.55f, 0.45f, 0.7f)
                 barHeights.forEachIndexed { index, height ->
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 4.dp)
-                            .fillMaxHeight(height)
-                            .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
-                            .background(
-                                if (index == 2) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.surfaceContainerHighest
-                            )
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(horizontal = 4.dp)
+                                .fillMaxHeight(height)
+                                .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                                .background(
+                                    if (index == 2) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.surfaceContainerHighest
+                                    },
+                                ),
                     )
                 }
             }
@@ -642,44 +676,46 @@ data class TopCategoryItem(
     val amount: String,
     val icon: ImageVector,
     val iconColor: Color,
-    val containerColor: Color
+    val containerColor: Color,
 )
 
 @Composable
 fun TopCategoriesSection(
     categories: List<TopCategoryItem>,
     onSeeAllClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(spacing.md)
+        verticalArrangement = Arrangement.spacedBy(spacing.md),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Kategori Teratas",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                style =
+                    MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
             TextButton(
                 onClick = onSeeAllClick,
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(0.dp),
             ) {
                 Text(
                     text = "Lihat Semua",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
             }
         }
@@ -687,52 +723,58 @@ fun TopCategoriesSection(
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(spacing.md),
-            contentPadding = PaddingValues(bottom = 8.dp)
+            contentPadding = PaddingValues(bottom = 8.dp),
         ) {
             items(categories) { item ->
                 Card(
-                    modifier = Modifier
-                        .width(128.dp)
-                        .zenSpendShadowLevel1(darkTheme),
+                    modifier =
+                        Modifier
+                            .width(128.dp)
+                            .zenSpendShadowLevel1(darkTheme),
                     shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-                    )
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                        ),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(item.containerColor),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape)
+                                    .background(item.containerColor),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = item.icon,
                                 contentDescription = null,
                                 tint = item.iconColor,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
                             )
                         }
                         Text(
                             text = item.name,
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            ),
-                            textAlign = TextAlign.Center
+                            style =
+                                MaterialTheme.typography.labelSmall.copy(
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                ),
+                            textAlign = TextAlign.Center,
                         )
                         Text(
                             text = item.amount,
-                            style = NumericDataTextStyle.copy(
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontSize = 14.sp
-                            )
+                            style =
+                                NumericDataTextStyle.copy(
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontSize = 14.sp,
+                                ),
                         )
                     }
                 }
@@ -746,111 +788,120 @@ data class TransactionItem(
     val timestamp: String,
     val amount: String,
     val isIncome: Boolean,
-    val icon: ImageVector
+    val icon: ImageVector,
 )
 
 @Composable
 fun RecentTransactionsSection(
     transactions: List<TransactionItem>,
     onHistoryClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(spacing.md)
+        verticalArrangement = Arrangement.spacedBy(spacing.md),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Transaksi Terakhir",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                style =
+                    MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
             TextButton(
                 onClick = onHistoryClick,
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(0.dp),
             ) {
                 Text(
                     text = "Riwayat",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Medium
-                    )
+                    style =
+                        MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Medium,
+                        ),
                 )
             }
         }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(spacing.sm)
+            verticalArrangement = Arrangement.spacedBy(spacing.sm),
         ) {
             transactions.forEach { transaction ->
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .zenSpendShadowLevel1(darkTheme),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .zenSpendShadowLevel1(darkTheme),
                     shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
-                    )
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                        ),
                 ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(spacing.md)
+                        horizontalArrangement = Arrangement.spacedBy(spacing.md),
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = transaction.icon,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
                             )
                         }
 
                         Column(
                             modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
                         ) {
                             Text(
                                 text = transaction.title,
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                ),
+                                style =
+                                    MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    ),
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = transaction.timestamp,
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                                style =
+                                    MaterialTheme.typography.labelSmall.copy(
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    ),
                             )
                         }
 
                         Text(
                             text = (if (transaction.isIncome) "+" else "-") + "Rp " + transaction.amount,
-                            style = NumericDataTextStyle.copy(
-                                color = if (transaction.isIncome) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            style =
+                                NumericDataTextStyle.copy(
+                                    color = if (transaction.isIncome) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error,
+                                    fontWeight = FontWeight.SemiBold,
+                                ),
                         )
                     }
                 }
@@ -858,4 +909,3 @@ fun RecentTransactionsSection(
         }
     }
 }
-

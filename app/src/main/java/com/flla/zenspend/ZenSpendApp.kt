@@ -56,7 +56,6 @@ import com.flla.zenspend.feature.onboarding.OnboardingRoutes
 import com.flla.zenspend.feature.onboarding.onboardingGraph
 import com.flla.zenspend.feature.profile.ProfileRoutes
 import com.flla.zenspend.feature.profile.profileScreen
-import com.flla.zenspend.feature.settings.SettingsRoutes
 import com.flla.zenspend.feature.settings.settingsScreen
 import com.flla.zenspend.feature.setup.SetupRoutes
 import com.flla.zenspend.feature.setup.setupGraph
@@ -216,26 +215,29 @@ private fun MainBottomBar(
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
     ) {
         // Main bottom bar surface
         Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .align(Alignment.BottomCenter),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
             color = MaterialTheme.colorScheme.surfaceContainerLowest,
-            tonalElevation = 8.dp
+            tonalElevation = 8.dp,
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Tab 1: Home
                 val isHomeSelected = currentRoute == HomeRoutes.HOME
@@ -247,7 +249,7 @@ private fun MainBottomBar(
                         val homeDest = destinations.find { it.selectedRoute == HomeRoutes.HOME }
                         if (homeDest != null) onDestinationClick(homeDest)
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 // Tab 2: History
@@ -258,7 +260,7 @@ private fun MainBottomBar(
                     onClick = {
                         Toast.makeText(context, "History screen coming soon!", Toast.LENGTH_SHORT).show()
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 // Tab 3: Spacer for FAB
@@ -272,7 +274,7 @@ private fun MainBottomBar(
                     onClick = {
                         Toast.makeText(context, "Analytics screen coming soon!", Toast.LENGTH_SHORT).show()
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 // Tab 5: Profile
@@ -285,32 +287,33 @@ private fun MainBottomBar(
                         val profileDest = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
                         if (profileDest != null) onDestinationClick(profileDest)
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
 
         // Center Offset FAB
         Box(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .offset(y = (-16).dp) // Offset upwards to float
-                .size(64.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.background) // Match background for outer border look
-                .padding(4.dp) // Border thickness simulation
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest) // Inner white container
-                .clickable {
-                    Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
-                },
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .offset(y = (-16).dp) // Offset upwards to float
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.background) // Match background for outer border look
+                    .padding(4.dp) // Border thickness simulation
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest) // Inner white container
+                    .clickable {
+                        Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
+                    },
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = Icons.Rounded.AddCircle,
                 contentDescription = "Add Transaction",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(48.dp),
             )
         }
     }
@@ -322,41 +325,44 @@ private fun BottomTabItem(
     icon: ImageVector,
     selected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxHeight()
-            .clickable(
-                onClick = onClick,
-                interactionSource = null,
-                indication = null // Simple clean click
-            ),
+        modifier =
+            modifier
+                .fillMaxHeight()
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = null,
+                    indication = null, // Simple clean click
+                ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         if (selected) {
             // Pill background active state
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = icon,
                         contentDescription = label,
                         tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     )
                     Text(
                         text = label,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                            fontWeight = FontWeight.Medium
-                        )
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                fontWeight = FontWeight.Medium,
+                            ),
                     )
                 }
             }
@@ -365,13 +371,14 @@ private fun BottomTabItem(
                 imageVector = icon,
                 contentDescription = label,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                style =
+                    MaterialTheme.typography.labelSmall.copy(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
             )
         }
     }

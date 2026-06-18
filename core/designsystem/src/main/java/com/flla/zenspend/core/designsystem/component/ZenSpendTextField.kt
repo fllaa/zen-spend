@@ -25,7 +25,7 @@ fun ZenSpendTextField(
         label = { Text(label) },
         isError = isError,
         singleLine = true,
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.large,
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
     )

@@ -1,20 +1,46 @@
 package com.flla.zenspend
 
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Analytics
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -43,19 +69,13 @@ private val mainDestinations =
             route = HomeRoutes.GRAPH,
             selectedRoute = HomeRoutes.HOME,
             label = "Home",
-            icon = Icons.Filled.Home,
+            icon = Icons.Rounded.Home,
         ),
         MainDestination(
             route = ProfileRoutes.PROFILE,
             selectedRoute = ProfileRoutes.PROFILE,
             label = "Profile",
-            icon = Icons.Filled.Person,
-        ),
-        MainDestination(
-            route = SettingsRoutes.SETTINGS,
-            selectedRoute = SettingsRoutes.SETTINGS,
-            label = "Settings",
-            icon = Icons.Filled.Settings,
+            icon = Icons.Rounded.Person,
         ),
     )
 
@@ -193,23 +213,165 @@ private fun MainBottomBar(
     currentRoute: String?,
     onDestinationClick: (MainDestination) -> Unit,
 ) {
-    NavigationBar {
-        destinations.forEach { destination ->
-            val selected = currentRoute == destination.selectedRoute
-            NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    if (!selected) {
-                        onDestinationClick(destination)
-                    }
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        // Main bottom bar surface
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .align(Alignment.BottomCenter),
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            color = MaterialTheme.colorScheme.surfaceContainerLowest,
+            tonalElevation = 8.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Tab 1: Home
+                val isHomeSelected = currentRoute == HomeRoutes.HOME
+                BottomTabItem(
+                    label = "Home",
+                    icon = if (isHomeSelected) Icons.Rounded.Home else Icons.Outlined.Home,
+                    selected = isHomeSelected,
+                    onClick = {
+                        val homeDest = destinations.find { it.selectedRoute == HomeRoutes.HOME }
+                        if (homeDest != null) onDestinationClick(homeDest)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Tab 2: History
+                BottomTabItem(
+                    label = "History",
+                    icon = Icons.AutoMirrored.Rounded.ReceiptLong,
+                    selected = false,
+                    onClick = {
+                        Toast.makeText(context, "History screen coming soon!", Toast.LENGTH_SHORT).show()
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Tab 3: Spacer for FAB
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Tab 4: Data
+                BottomTabItem(
+                    label = "Data",
+                    icon = Icons.Rounded.Analytics,
+                    selected = false,
+                    onClick = {
+                        Toast.makeText(context, "Analytics screen coming soon!", Toast.LENGTH_SHORT).show()
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                // Tab 5: Profile
+                val isProfileSelected = currentRoute == ProfileRoutes.PROFILE
+                BottomTabItem(
+                    label = "Profile",
+                    icon = if (isProfileSelected) Icons.Rounded.Person else Icons.Outlined.Person,
+                    selected = isProfileSelected,
+                    onClick = {
+                        val profileDest = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
+                        if (profileDest != null) onDestinationClick(profileDest)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        // Center Offset FAB
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-16).dp) // Offset upwards to float
+                .size(64.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.background) // Match background for outer border look
+                .padding(4.dp) // Border thickness simulation
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest) // Inner white container
+                .clickable {
+                    Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
                 },
-                icon = {
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.AddCircle,
+                contentDescription = "Add Transaction",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(48.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BottomTabItem(
+    label: String,
+    icon: ImageVector,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .clickable(
+                onClick = onClick,
+                interactionSource = null,
+                indication = null // Simple clean click
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        if (selected) {
+            // Pill background active state
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        imageVector = destination.icon,
-                        contentDescription = destination.label,
+                        imageVector = icon,
+                        contentDescription = label,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.size(24.dp)
                     )
-                },
-                label = { Text(destination.label) },
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
+            }
+        } else {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             )
         }
     }

@@ -16,9 +16,7 @@ import com.flla.example.core.ui.ScreenScaffold
 import com.flla.example.core.ui.collectUiState
 
 @Composable
-fun ProfileRoute(
-    viewModel: ProfileViewModel = hiltViewModel(),
-) {
+fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectUiState()
     ProfileScreen(state = state)
 }
@@ -30,9 +28,10 @@ fun ProfileScreen(state: ProfileUiState) {
         topBar = { ExampleTopAppBar(title = "Profile") },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(spacing.lg),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(spacing.lg),
             verticalArrangement = Arrangement.spacedBy(spacing.md),
         ) {
             Text(text = state.user?.name ?: "Unknown user", style = MaterialTheme.typography.headlineSmall)

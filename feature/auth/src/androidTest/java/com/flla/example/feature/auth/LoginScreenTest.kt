@@ -22,10 +22,13 @@ class LoginScreenTest {
             ExampleTheme {
                 LoginScreen(
                     state = LoginUiState(),
-                    onEmailChanged = {},
-                    onPasswordChanged = {},
-                    onSubmit = { submitted = true },
-                    onRegisterClick = {},
+                    actions =
+                        LoginActions(
+                            onEmailChanged = {},
+                            onPasswordChanged = {},
+                            onSubmit = { submitted = true },
+                            onRegisterClick = {},
+                        ),
                 )
             }
         }

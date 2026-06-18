@@ -17,12 +17,13 @@ class OfflineFirstUserRepositoryTest {
     private val repository = OfflineFirstUserRepository(localDataSource, remoteDataSource)
 
     @Test
-    fun refreshCurrentUser_updatesLocalCacheFromNetwork() = runTest {
-        coEvery { remoteDataSource.getCurrentUser() } returns SampleData.user
-        coEvery { localDataSource.upsertCurrentUser(SampleData.user) } just Runs
+    fun refreshCurrentUser_updatesLocalCacheFromNetwork() =
+        runTest {
+            coEvery { remoteDataSource.getCurrentUser() } returns SampleData.user
+            coEvery { localDataSource.upsertCurrentUser(SampleData.user) } just Runs
 
-        repository.refreshCurrentUser()
+            repository.refreshCurrentUser()
 
-        coVerify { localDataSource.upsertCurrentUser(SampleData.user) }
-    }
+            coVerify { localDataSource.upsertCurrentUser(SampleData.user) }
+        }
 }

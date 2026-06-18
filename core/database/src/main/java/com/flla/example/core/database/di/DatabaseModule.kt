@@ -18,6 +18,7 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
+    @Suppress("SpreadOperator")
     fun provideDatabase(
         @ApplicationContext context: Context,
     ): ExampleDatabase =

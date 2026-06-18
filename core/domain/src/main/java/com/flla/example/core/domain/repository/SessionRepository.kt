@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SessionRepository {
     val sessionState: Flow<SessionState>
+
     suspend fun markSessionExpired()
 }

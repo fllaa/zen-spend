@@ -7,11 +7,11 @@ import com.flla.example.core.domain.usecase.ObserveUserPreferencesUseCase
 import com.flla.example.core.model.SessionState
 import com.flla.example.core.model.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 data class MainUiState(
     val sessionState: SessionState = SessionState.Loading,
@@ -19,17 +19,24 @@ data class MainUiState(
 )
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    observeSessionUseCase: ObserveSessionUseCase,
-    observeUserPreferencesUseCase: ObserveUserPreferencesUseCase,
-) : ViewModel() {
-    val uiState: StateFlow<MainUiState> = combine(
-        observeSessionUseCase.sessionState,
-        observeUserPreferencesUseCase.preferences,
-    ) { session, preferences ->
-        MainUiState(
-            sessionState = session,
-            themeMode = preferences.themeMode,
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), MainUiState())
-}
+class MainViewModel
+    @Inject
+    constructor(
+        observeSessionUseCase: ObserveSessionUseCase,
+        observeUserPreferencesUseCase: ObserveUserPreferencesUseCase,
+    ) : ViewModel() {
+        val uiState: StateFlow<MainUiState> =
+            combine(
+                observeSessionUseCase.sessionState,
+                observeUserPreferencesUseCase.preferences,
+            ) { session, preferences ->
+                MainUiState(
+                    sessionState = session,
+                    themeMode = preferences.themeMode,
+                )
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = MainUiState(),
+            )
+    }

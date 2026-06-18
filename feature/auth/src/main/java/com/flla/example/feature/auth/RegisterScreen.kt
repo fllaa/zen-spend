@@ -35,42 +35,50 @@ fun RegisterRoute(
     }
     RegisterScreen(
         state = state,
-        onNameChanged = viewModel::onNameChanged,
-        onEmailChanged = viewModel::onEmailChanged,
-        onPasswordChanged = viewModel::onPasswordChanged,
-        onSubmit = viewModel::submit,
-        onLoginClick = onLoginClick,
+        actions =
+            RegisterActions(
+                onNameChanged = viewModel::onNameChanged,
+                onEmailChanged = viewModel::onEmailChanged,
+                onPasswordChanged = viewModel::onPasswordChanged,
+                onSubmit = viewModel::submit,
+                onLoginClick = onLoginClick,
+            ),
     )
 }
+
+data class RegisterActions(
+    val onNameChanged: (String) -> Unit,
+    val onEmailChanged: (String) -> Unit,
+    val onPasswordChanged: (String) -> Unit,
+    val onSubmit: () -> Unit,
+    val onLoginClick: () -> Unit,
+)
 
 @Composable
 fun RegisterScreen(
     state: RegisterUiState,
-    onNameChanged: (String) -> Unit,
-    onEmailChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit,
-    onSubmit: () -> Unit,
-    onLoginClick: () -> Unit,
+    actions: RegisterActions,
 ) {
     val spacing = LocalExampleSpacing.current
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(spacing.lg),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(spacing.lg),
         verticalArrangement = Arrangement.Center,
     ) {
         Text(text = "Create account", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(spacing.lg))
         ExampleTextField(
             value = state.name,
-            onValueChange = onNameChanged,
+            onValueChange = actions.onNameChanged,
             label = "Name",
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(spacing.md))
         ExampleTextField(
             value = state.email,
-            onValueChange = onEmailChanged,
+            onValueChange = actions.onEmailChanged,
             label = "Email",
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -78,7 +86,7 @@ fun RegisterScreen(
         Spacer(Modifier.height(spacing.md))
         ExampleTextField(
             value = state.password,
-            onValueChange = onPasswordChanged,
+            onValueChange = actions.onPasswordChanged,
             label = "Password",
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -91,11 +99,11 @@ fun RegisterScreen(
         Spacer(Modifier.height(spacing.lg))
         ExamplePrimaryButton(
             text = "Register",
-            onClick = onSubmit,
+            onClick = actions.onSubmit,
             loading = state.isLoading,
         )
         TextButton(
-            onClick = onLoginClick,
+            onClick = actions.onLoginClick,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("I already have an account")

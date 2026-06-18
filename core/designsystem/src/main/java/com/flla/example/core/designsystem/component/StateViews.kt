@@ -30,9 +30,10 @@ fun ErrorState(
 ) {
     val spacing = LocalExampleSpacing.current
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(spacing.lg),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -47,9 +48,10 @@ fun EmptyState(
 ) {
     val spacing = LocalExampleSpacing.current
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(spacing.lg),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

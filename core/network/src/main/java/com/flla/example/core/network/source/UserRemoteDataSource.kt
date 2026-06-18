@@ -6,8 +6,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRemoteDataSource @Inject constructor(
-    private val userApi: UserApi,
-) {
-    suspend fun getCurrentUser() = userApi.getCurrentUser().asExternalModel()
-}
+class UserRemoteDataSource
+    @Inject
+    constructor(
+        private val userApi: UserApi,
+    ) {
+        suspend fun getCurrentUser() = userApi.getCurrentUser().asExternalModel()
+    }

@@ -8,9 +8,16 @@ class FakeAuthRepository : AuthRepository {
     var registerResult: AppResult<Unit> = AppResult.Success(Unit)
     var logoutResult: AppResult<Unit> = AppResult.Success(Unit)
 
-    override suspend fun login(email: String, password: String): AppResult<Unit> = loginResult
+    override suspend fun login(
+        email: String,
+        password: String,
+    ): AppResult<Unit> = loginResult
 
-    override suspend fun register(name: String, email: String, password: String): AppResult<Unit> = registerResult
+    override suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+    ): AppResult<Unit> = registerResult
 
     override suspend fun logout(): AppResult<Unit> = logoutResult
 }

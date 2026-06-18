@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
     val preferences: Flow<UserPreferences>
+
     suspend fun setThemeMode(themeMode: ThemeMode)
+
     suspend fun setOnboardingCompleted(completed: Boolean)
 }

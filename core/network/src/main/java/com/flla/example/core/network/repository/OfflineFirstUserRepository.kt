@@ -6,26 +6,28 @@ import com.flla.example.core.database.source.UserLocalDataSource
 import com.flla.example.core.domain.repository.UserRepository
 import com.flla.example.core.model.User
 import com.flla.example.core.network.source.UserRemoteDataSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 
 @Singleton
-class OfflineFirstUserRepository @Inject constructor(
-    private val localDataSource: UserLocalDataSource,
-    private val remoteDataSource: UserRemoteDataSource,
-) : UserRepository {
-    override fun observeCurrentUser(): Flow<User?> = localDataSource.observeCurrentUser()
+class OfflineFirstUserRepository
+    @Inject
+    constructor(
+        private val localDataSource: UserLocalDataSource,
+        private val remoteDataSource: UserRemoteDataSource,
+    ) : UserRepository {
+        override fun observeCurrentUser(): Flow<User?> = localDataSource.observeCurrentUser()
 
-    override suspend fun refreshCurrentUser(): AppResult<Unit> =
-        runCatching { remoteDataSource.getCurrentUser() }
-            .fold(
-                onSuccess = { user ->
-                    localDataSource.upsertCurrentUser(user)
-                    AppResult.Success(Unit)
-                },
-                onFailure = { throwable ->
-                    AppResult.Failure(AppError.NetworkUnavailable, throwable)
-                },
-            )
-}
+        override suspend fun refreshCurrentUser(): AppResult<Unit> =
+            runCatching { remoteDataSource.getCurrentUser() }
+                .fold(
+                    onSuccess = { user ->
+                        localDataSource.upsertCurrentUser(user)
+                        AppResult.Success(Unit)
+                    },
+                    onFailure = { throwable ->
+                        AppResult.Failure(AppError.NetworkUnavailable, throwable)
+                    },
+                )
+    }

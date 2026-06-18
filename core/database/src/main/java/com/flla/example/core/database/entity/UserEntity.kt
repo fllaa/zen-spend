@@ -13,17 +13,19 @@ data class UserEntity(
     val updatedAtMillis: Long,
 )
 
-fun UserEntity.asExternalModel() = User(
-    id = id,
-    name = name,
-    email = email,
-    avatarUrl = avatarUrl,
-)
+fun UserEntity.asExternalModel() =
+    User(
+        id = id,
+        name = name,
+        email = email,
+        avatarUrl = avatarUrl,
+    )
 
-fun User.asEntity(updatedAtMillis: Long = System.currentTimeMillis()) = UserEntity(
-    id = id,
-    name = name,
-    email = email,
-    avatarUrl = avatarUrl,
-    updatedAtMillis = updatedAtMillis,
-)
+fun User.asEntity(updatedAtMillis: Long = System.currentTimeMillis()) =
+    UserEntity(
+        id = id,
+        name = name,
+        email = email,
+        avatarUrl = avatarUrl,
+        updatedAtMillis = updatedAtMillis,
+    )

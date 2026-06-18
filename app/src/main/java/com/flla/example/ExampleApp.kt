@@ -1,10 +1,10 @@
 package com.flla.example
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.flla.example.core.model.SessionState
 import com.flla.example.feature.auth.AuthRoutes
@@ -32,34 +32,65 @@ import com.flla.example.feature.settings.settingsScreen
 import com.flla.example.navigation.ExampleRoutes
 import com.flla.example.navigation.SplashScreen
 
+private val mainDestinations =
+    listOf(
+        MainDestination(
+            route = HomeRoutes.GRAPH,
+            selectedRoute = HomeRoutes.HOME,
+            label = "Home",
+            icon = Icons.Filled.Home,
+        ),
+        MainDestination(
+            route = ProfileRoutes.PROFILE,
+            selectedRoute = ProfileRoutes.PROFILE,
+            label = "Profile",
+            icon = Icons.Filled.Person,
+        ),
+        MainDestination(
+            route = SettingsRoutes.SETTINGS,
+            selectedRoute = SettingsRoutes.SETTINGS,
+            label = "Settings",
+            icon = Icons.Filled.Settings,
+        ),
+    )
+
 @Composable
 fun ExampleApp(sessionState: SessionState) {
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
-    val mainDestinations =
-        listOf(
-            MainDestination(
-                route = HomeRoutes.GRAPH,
-                selectedRoute = HomeRoutes.HOME,
-                label = "Home",
-                icon = Icons.Filled.Home,
-            ),
-            MainDestination(
-                route = ProfileRoutes.PROFILE,
-                selectedRoute = ProfileRoutes.PROFILE,
-                label = "Profile",
-                icon = Icons.Filled.Person,
-            ),
-            MainDestination(
-                route = SettingsRoutes.SETTINGS,
-                selectedRoute = SettingsRoutes.SETTINGS,
-                label = "Settings",
-                icon = Icons.Filled.Settings,
-            ),
-        )
     val showBottomBar = mainDestinations.any { it.selectedRoute == currentRoute }
 
+    SessionNavigationEffect(
+        navController = navController,
+        sessionState = sessionState,
+    )
+
+    Scaffold(
+        bottomBar = {
+            if (showBottomBar) {
+                MainBottomBar(
+                    destinations = mainDestinations,
+                    currentRoute = currentRoute,
+                    onDestinationClick = navController::navigateToMainDestination,
+                )
+            }
+        },
+    ) { padding ->
+        AppNavHost(
+            navController = navController,
+            startDestination = ExampleRoutes.SPLASH,
+            modifier = Modifier.padding(padding),
+            sessionState = sessionState,
+        )
+    }
+}
+
+@Composable
+private fun SessionNavigationEffect(
+    navController: NavHostController,
+    sessionState: SessionState,
+) {
     LaunchedEffect(sessionState) {
         val target =
             when (sessionState) {
@@ -76,44 +107,40 @@ fun ExampleApp(sessionState: SessionState) {
             launchSingleTop = true
         }
     }
+}
 
-    Scaffold(
-        bottomBar = {
-            if (showBottomBar) {
-                mainBottomBar(
-                    destinations = mainDestinations,
-                    currentRoute = currentRoute,
-                    onDestinationClick = navController::navigateToMainDestination,
-                )
-            }
-        },
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = ExampleRoutes.SPLASH,
-            modifier = Modifier.padding(padding),
-        ) {
-            composable(ExampleRoutes.SPLASH) {
-                SplashScreen(sessionExpired = sessionState == SessionState.Expired)
-            }
-            authGraph(
-                navController = navController,
-                onAuthenticated = {
-                    navController.navigate(HomeRoutes.GRAPH) {
-                        popUpTo(AuthRoutes.GRAPH) { inclusive = true }
-                        launchSingleTop = true
-                    }
-                },
-            )
-            homeGraph()
-            profileScreen()
-            settingsScreen()
+@Composable
+private fun AppNavHost(
+    navController: NavHostController,
+    startDestination: String,
+    modifier: Modifier = Modifier,
+    sessionState: SessionState,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+        modifier = modifier,
+    ) {
+        composable(ExampleRoutes.SPLASH) {
+            SplashScreen(sessionExpired = sessionState == SessionState.Expired)
         }
+        authGraph(
+            navController = navController,
+            onAuthenticated = {
+                navController.navigate(HomeRoutes.GRAPH) {
+                    popUpTo(AuthRoutes.GRAPH) { inclusive = true }
+                    launchSingleTop = true
+                }
+            },
+        )
+        homeGraph()
+        profileScreen()
+        settingsScreen()
     }
 }
 
 @Composable
-private fun mainBottomBar(
+private fun MainBottomBar(
     destinations: List<MainDestination>,
     currentRoute: String?,
     onDestinationClick: (MainDestination) -> Unit,

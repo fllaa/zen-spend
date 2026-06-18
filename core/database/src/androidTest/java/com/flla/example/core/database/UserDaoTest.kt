@@ -15,12 +15,13 @@ class UserDaoTest {
 
     @Before
     fun setUp() {
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            ExampleDatabase::class.java,
-        )
-            .allowMainThreadQueries()
-            .build()
+        database =
+            Room.inMemoryDatabaseBuilder(
+                ApplicationProvider.getApplicationContext(),
+                ExampleDatabase::class.java,
+            )
+                .allowMainThreadQueries()
+                .build()
     }
 
     @After
@@ -29,17 +30,19 @@ class UserDaoTest {
     }
 
     @Test
-    fun observeCurrentUser_returnsUpsertedUser() = runTest {
-        val user = UserEntity(
-            id = "user-1",
-            name = "Room User",
-            email = "room@example.com",
-            avatarUrl = null,
-            updatedAtMillis = 1L,
-        )
+    fun observeCurrentUser_returnsUpsertedUser() =
+        runTest {
+            val user =
+                UserEntity(
+                    id = "user-1",
+                    name = "Room User",
+                    email = "room@example.com",
+                    avatarUrl = null,
+                    updatedAtMillis = 1L,
+                )
 
-        database.userDao().upsertUser(user)
+            database.userDao().upsertUser(user)
 
-        assertEquals(user, database.userDao().observeCurrentUser().first())
-    }
+            assertEquals(user, database.userDao().observeCurrentUser().first())
+        }
 }

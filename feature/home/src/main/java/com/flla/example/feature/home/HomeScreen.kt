@@ -29,10 +29,11 @@ fun HomeScreen(state: HomeUiState) {
         topBar = { ExampleTopAppBar(title = "Home") },
     ) { padding: PaddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(spacing.lg),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(spacing.lg),
             verticalArrangement = Arrangement.spacedBy(spacing.md),
         ) {
             Text(text = "Local-first dashboard", style = MaterialTheme.typography.headlineSmall)

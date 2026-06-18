@@ -20,9 +20,7 @@ import com.flla.example.core.ui.ScreenScaffold
 import com.flla.example.core.ui.collectUiState
 
 @Composable
-fun SettingsRoute(
-    viewModel: SettingsViewModel = hiltViewModel(),
-) {
+fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectUiState()
     SettingsScreen(
         state = state,
@@ -42,9 +40,10 @@ fun SettingsScreen(
         topBar = { ExampleTopAppBar(title = "Settings") },
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(spacing.lg),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(spacing.lg),
             verticalArrangement = Arrangement.spacedBy(spacing.lg),
         ) {
             Text(text = "Theme", style = MaterialTheme.typography.titleMedium)

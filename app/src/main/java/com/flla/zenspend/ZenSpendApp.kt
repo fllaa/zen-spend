@@ -361,7 +361,8 @@ private fun BottomTabItem(
                 .clickable(
                     onClick = onClick,
                     interactionSource = null,
-                    indication = null, // Simple clean click
+                    // Simple clean click.
+                    indication = null,
                 ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,

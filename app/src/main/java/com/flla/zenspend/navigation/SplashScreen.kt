@@ -470,6 +470,7 @@ private data class EnsoGeometry(
     val center: Offset,
     val radius: Float,
 )
+
 @Composable
 private fun rememberSplashAnimationStarted(): Boolean {
     var animationStarted by remember { mutableStateOf(false) }

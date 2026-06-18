@@ -566,13 +566,12 @@ private fun AccountStepContent(
                     if (active) {
                         MaterialTheme.colorScheme.primaryContainer
                     } else {
-                        MaterialTheme.colorScheme.surfaceVariant.copy(
-                            alpha = 0.4f,
-                        )
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                            .compositeOver(MaterialTheme.colorScheme.surface)
                     }
                 val textColor =
                     if (active) {
-                        MaterialTheme.colorScheme.primary
+                        MaterialTheme.colorScheme.onPrimaryContainer
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     }
@@ -596,7 +595,7 @@ private fun AccountStepContent(
                                 .clip(CircleShape)
                                 .background(
                                     if (active) {
-                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                        MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.15f)
                                     } else {
                                         MaterialTheme.colorScheme.surfaceVariant
                                     },
@@ -608,7 +607,7 @@ private fun AccountStepContent(
                             contentDescription = option.label,
                             tint =
                                 if (active) {
-                                    MaterialTheme.colorScheme.primary
+                                    MaterialTheme.colorScheme.onPrimaryContainer
                                 } else {
                                     MaterialTheme.colorScheme.onSurfaceVariant
                                 },

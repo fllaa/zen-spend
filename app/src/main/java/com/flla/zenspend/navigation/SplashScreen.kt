@@ -72,54 +72,60 @@ fun SplashScreen(sessionExpired: Boolean) {
     // Logo animations: scale-up and slide up
     val logoScale by animateFloatAsState(
         targetValue = if (animationStarted) 1f else 0.85f,
-        animationSpec = tween(
-            durationMillis = 1200,
-            easing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
-        ),
-        label = "logo_scale"
+        animationSpec =
+            tween(
+                durationMillis = 1200,
+                easing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f),
+            ),
+        label = "logo_scale",
     )
     val logoAlpha by animateFloatAsState(
         targetValue = if (animationStarted) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000,
-            easing = EaseInOutCubic
-        ),
-        label = "logo_alpha"
+        animationSpec =
+            tween(
+                durationMillis = 1000,
+                easing = EaseInOutCubic,
+            ),
+        label = "logo_alpha",
     )
     val logoTranslationY by animateFloatAsState(
         targetValue = if (animationStarted) 0f else 40f,
-        animationSpec = tween(
-            durationMillis = 1200,
-            easing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f)
-        ),
-        label = "logo_translation"
+        animationSpec =
+            tween(
+                durationMillis = 1200,
+                easing = CubicBezierEasing(0.2f, 0.8f, 0.2f, 1f),
+            ),
+        label = "logo_translation",
     )
 
     // Text animations with delayed fade-in
     val titleAlpha by animateFloatAsState(
         targetValue = if (animationStarted) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000,
-            delayMillis = 400,
-            easing = FastOutSlowInEasing
-        ),
-        label = "title_alpha"
+        animationSpec =
+            tween(
+                durationMillis = 1000,
+                delayMillis = 400,
+                easing = FastOutSlowInEasing,
+            ),
+        label = "title_alpha",
     )
     val subtitleAlpha by animateFloatAsState(
         targetValue = if (animationStarted) 0.7f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000,
-            delayMillis = 750,
-            easing = FastOutSlowInEasing
-        ),
-        label = "subtitle_alpha"
+        animationSpec =
+            tween(
+                durationMillis = 1000,
+                delayMillis = 750,
+                easing = FastOutSlowInEasing,
+            ),
+        label = "subtitle_alpha",
     )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(background),
+        contentAlignment = Alignment.Center,
     ) {
         // 1. Ambient Background Decoration (Floating Orbs)
         AmbientOrb(
@@ -129,7 +135,7 @@ fun SplashScreen(sessionExpired: Boolean) {
             targetOffsetX = (-70).dp,
             targetOffsetY = (-30).dp,
             durationMillis = 12000,
-            size = 300.dp
+            size = 300.dp,
         )
         AmbientOrb(
             color = secondaryColor.copy(alpha = 0.08f),
@@ -138,49 +144,53 @@ fun SplashScreen(sessionExpired: Boolean) {
             targetOffsetX = 40.dp,
             targetOffsetY = 70.dp,
             durationMillis = 15000,
-            size = 260.dp
+            size = 260.dp,
         )
 
         // 2. Custom Zen Ensō Circle (Drawing at the bottom background layer)
         EnsoCircle(
             primaryColor = primaryColor,
             secondaryColor = secondaryColor,
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(0.25f)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .alpha(0.25f),
         )
 
         // 3. Central Content Canvas
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.graphicsLayer {
-                translationY = logoTranslationY
-                alpha = logoAlpha
-                scaleX = logoScale
-                scaleY = logoScale
-            }
+            modifier =
+                Modifier.graphicsLayer {
+                    translationY = logoTranslationY
+                    alpha = logoAlpha
+                    scaleX = logoScale
+                    scaleY = logoScale
+                },
         ) {
             // Centered Logo with soft teal shadow/glow
             Box(
-                modifier = Modifier
-                    .size(96.dp)
-                    .drawBehind {
-                        drawCircle(
-                            brush = Brush.radialGradient(
-                                colors = listOf(primaryColor.copy(alpha = 0.15f), Color.Transparent),
-                                radius = 64.dp.toPx()
-                            ),
-                            radius = 64.dp.toPx()
-                        )
-                    }
-                    .background(Color.White, CircleShape),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .size(96.dp)
+                        .drawBehind {
+                            drawCircle(
+                                brush =
+                                    Brush.radialGradient(
+                                        colors = listOf(primaryColor.copy(alpha = 0.15f), Color.Transparent),
+                                        radius = 64.dp.toPx(),
+                                    ),
+                                radius = 64.dp.toPx(),
+                            )
+                        }
+                        .background(Color.White, CircleShape),
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Eco,
                     contentDescription = null,
                     tint = primaryColor,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(48.dp),
                 )
             }
 
@@ -193,7 +203,7 @@ fun SplashScreen(sessionExpired: Boolean) {
                 fontSize = 28.sp,
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = (-0.5).sp,
-                modifier = Modifier.alpha(titleAlpha)
+                modifier = Modifier.alpha(titleAlpha),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -205,17 +215,18 @@ fun SplashScreen(sessionExpired: Boolean) {
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 letterSpacing = 0.5.sp,
-                modifier = Modifier.alpha(subtitleAlpha)
+                modifier = Modifier.alpha(subtitleAlpha),
             )
         }
 
         // 4. Loading Indicator or Warning at the bottom
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .offset(y = (-80).dp),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .offset(y = (-80).dp),
+            contentAlignment = Alignment.Center,
         ) {
             if (sessionExpired) {
                 Text(
@@ -223,12 +234,12 @@ fun SplashScreen(sessionExpired: Boolean) {
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.alpha(subtitleAlpha)
+                    modifier = Modifier.alpha(subtitleAlpha),
                 )
             } else {
                 LoaderBar(
                     primaryColor = primaryColor,
-                    modifier = Modifier.alpha(subtitleAlpha)
+                    modifier = Modifier.alpha(subtitleAlpha),
                 )
             }
         }
@@ -244,7 +255,7 @@ private fun AmbientOrb(
     targetOffsetY: Dp,
     durationMillis: Int,
     size: Dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
     val initialOffsetXPx = with(density) { initialOffsetX.toPx() }
@@ -256,33 +267,37 @@ private fun AmbientOrb(
     val offsetX by transition.animateFloat(
         initialValue = initialOffsetXPx,
         targetValue = targetOffsetXPx,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "offsetX"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(durationMillis, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "offsetX",
     )
     val offsetY by transition.animateFloat(
         initialValue = initialOffsetYPx,
         targetValue = targetOffsetYPx,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "offsetY"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(durationMillis, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "offsetY",
     )
 
     Box(
-        modifier = modifier
-            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-            .size(size)
-            .background(
-                brush = Brush.radialGradient(
-                    colors = listOf(color, Color.Transparent),
-                    center = Offset(with(density) { size.toPx() / 2 }, with(density) { size.toPx() / 2 }),
-                    radius = with(density) { size.toPx() / 2 }
-                )
-            )
+        modifier =
+            modifier
+                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+                .size(size)
+                .background(
+                    brush =
+                        Brush.radialGradient(
+                            colors = listOf(color, Color.Transparent),
+                            center = Offset(with(density) { size.toPx() / 2 }, with(density) { size.toPx() / 2 }),
+                            radius = with(density) { size.toPx() / 2 },
+                        ),
+                ),
     )
 }
 
@@ -290,7 +305,7 @@ private fun AmbientOrb(
 private fun EnsoCircle(
     primaryColor: Color,
     secondaryColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Canvas(modifier = modifier) {
         val width = size.width
@@ -300,40 +315,44 @@ private fun EnsoCircle(
 
         // 1. Soft underlying glow
         drawArc(
-            brush = Brush.radialGradient(
-                colors = listOf(secondaryColor.copy(alpha = 0.1f), Color.Transparent),
-                center = center,
-                radius = radius * 1.5f
-            ),
+            brush =
+                Brush.radialGradient(
+                    colors = listOf(secondaryColor.copy(alpha = 0.1f), Color.Transparent),
+                    center = center,
+                    radius = radius * 1.5f,
+                ),
             startAngle = 30f,
             sweepAngle = 310f,
             useCenter = false,
-            style = Stroke(width = 60.dp.toPx(), cap = StrokeCap.Round)
+            style = Stroke(width = 60.dp.toPx(), cap = StrokeCap.Round),
         )
 
         // 2. Main body sweep gradient stroke
-        val mainBrush = Brush.sweepGradient(
-            colors = listOf(
-                primaryColor.copy(alpha = 0.0f),
-                primaryColor.copy(alpha = 0.15f),
-                secondaryColor.copy(alpha = 0.5f),
-                primaryColor.copy(alpha = 0.7f),
-                secondaryColor.copy(alpha = 0.3f),
-                primaryColor.copy(alpha = 0.0f)
-            ),
-            center = center
-        )
+        val mainBrush =
+            Brush.sweepGradient(
+                colors =
+                    listOf(
+                        primaryColor.copy(alpha = 0.0f),
+                        primaryColor.copy(alpha = 0.15f),
+                        secondaryColor.copy(alpha = 0.5f),
+                        primaryColor.copy(alpha = 0.7f),
+                        secondaryColor.copy(alpha = 0.3f),
+                        primaryColor.copy(alpha = 0.0f),
+                    ),
+                center = center,
+            )
 
         drawArc(
             brush = mainBrush,
             startAngle = 45f,
             sweepAngle = 290f,
             useCenter = false,
-            style = Stroke(
-                width = 24.dp.toPx(),
-                cap = StrokeCap.Round,
-                join = StrokeJoin.Round
-            )
+            style =
+                Stroke(
+                    width = 24.dp.toPx(),
+                    cap = StrokeCap.Round,
+                    join = StrokeJoin.Round,
+                ),
         )
 
         // 3. Dynamic layered watercolor texturing
@@ -342,10 +361,11 @@ private fun EnsoCircle(
             startAngle = 55f,
             sweepAngle = 270f,
             useCenter = false,
-            style = Stroke(
-                width = 6.dp.toPx(),
-                cap = StrokeCap.Round
-            )
+            style =
+                Stroke(
+                    width = 6.dp.toPx(),
+                    cap = StrokeCap.Round,
+                ),
         )
 
         drawArc(
@@ -353,10 +373,11 @@ private fun EnsoCircle(
             startAngle = 70f,
             sweepAngle = 240f,
             useCenter = false,
-            style = Stroke(
-                width = 10.dp.toPx(),
-                cap = StrokeCap.Round
-            )
+            style =
+                Stroke(
+                    width = 10.dp.toPx(),
+                    cap = StrokeCap.Round,
+                ),
         )
     }
 }
@@ -364,25 +385,27 @@ private fun EnsoCircle(
 @Composable
 private fun LoaderBar(
     primaryColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val transition = rememberInfiniteTransition(label = "loader_progress")
     val progress by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "progress"
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(1800, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Restart,
+            ),
+        label = "progress",
     )
 
     Box(
-        modifier = modifier
-            .width(64.dp)
-            .height(4.dp)
-            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f), RoundedCornerShape(2.dp))
-            .clip(RoundedCornerShape(2.dp))
+        modifier =
+            modifier
+                .width(64.dp)
+                .height(4.dp)
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f), RoundedCornerShape(2.dp))
+                .clip(RoundedCornerShape(2.dp)),
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val barWidth = size.width
@@ -394,9 +417,8 @@ private fun LoaderBar(
                 color = primaryColor,
                 topLeft = Offset(startX, 0f),
                 size = Size(indicatorWidth, barHeight),
-                cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx())
+                cornerRadius = CornerRadius(2.dp.toPx(), 2.dp.toPx()),
             )
         }
     }
 }
-

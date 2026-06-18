@@ -17,7 +17,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val state = viewModel.uiState.collectAsStateWithLifecycle().value
             ZenSpendTheme(themeMode = state.themeMode) {
-                ZenSpendApp(sessionState = state.sessionState)
+                ZenSpendApp(
+                    sessionState = state.sessionState,
+                    hasCompletedOnboarding = state.hasCompletedOnboarding,
+                )
             }
         }
     }

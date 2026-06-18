@@ -16,6 +16,7 @@ import javax.inject.Inject
 data class MainUiState(
     val sessionState: SessionState = SessionState.Loading,
     val themeMode: ThemeMode = ThemeMode.System,
+    val hasCompletedOnboarding: Boolean = false,
 )
 
 @HiltViewModel
@@ -33,6 +34,7 @@ class MainViewModel
                 MainUiState(
                     sessionState = session,
                     themeMode = preferences.themeMode,
+                    hasCompletedOnboarding = preferences.hasCompletedOnboarding,
                 )
             }.stateIn(
                 scope = viewModelScope,

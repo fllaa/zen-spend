@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -25,6 +26,8 @@ import com.flla.zenspend.feature.auth.AuthRoutes
 import com.flla.zenspend.feature.auth.authGraph
 import com.flla.zenspend.feature.home.HomeRoutes
 import com.flla.zenspend.feature.home.homeGraph
+import com.flla.zenspend.feature.onboarding.OnboardingRoutes
+import com.flla.zenspend.feature.onboarding.onboardingGraph
 import com.flla.zenspend.feature.profile.ProfileRoutes
 import com.flla.zenspend.feature.profile.profileScreen
 import com.flla.zenspend.feature.settings.SettingsRoutes
@@ -55,7 +58,10 @@ private val mainDestinations =
     )
 
 @Composable
-fun ZenSpendApp(sessionState: SessionState) {
+fun ZenSpendApp(
+    sessionState: SessionState,
+    hasCompletedOnboarding: Boolean,
+) {
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
@@ -64,6 +70,7 @@ fun ZenSpendApp(sessionState: SessionState) {
     SessionNavigationEffect(
         navController = navController,
         sessionState = sessionState,
+        hasCompletedOnboarding = hasCompletedOnboarding,
     )
 
     Scaffold(
@@ -90,15 +97,28 @@ fun ZenSpendApp(sessionState: SessionState) {
 private fun SessionNavigationEffect(
     navController: NavHostController,
     sessionState: SessionState,
+    hasCompletedOnboarding: Boolean,
 ) {
-    LaunchedEffect(sessionState) {
+    val minSplashDuration = 2000L
+    val startTime = remember { System.currentTimeMillis() }
+    LaunchedEffect(sessionState, hasCompletedOnboarding) {
+        if (sessionState == SessionState.Loading) return@LaunchedEffect
+
+        val elapsed = System.currentTimeMillis() - startTime
+        val remainingDelay = minSplashDuration - elapsed
+        if (remainingDelay > 0) {
+            kotlinx.coroutines.delay(remainingDelay)
+        }
+
         val target =
             when (sessionState) {
                 SessionState.Loading -> return@LaunchedEffect
                 SessionState.Authenticated -> HomeRoutes.GRAPH
                 SessionState.Unauthenticated,
                 SessionState.Expired,
-                -> AuthRoutes.GRAPH
+                -> {
+                    if (hasCompletedOnboarding) AuthRoutes.GRAPH else OnboardingRoutes.GRAPH
+                }
             }
         navController.navigate(target) {
             popUpTo(navController.graph.findStartDestination().id) {
@@ -124,6 +144,15 @@ private fun AppNavHost(
         composable(ZenSpendRoutes.SPLASH) {
             SplashScreen(sessionExpired = sessionState == SessionState.Expired)
         }
+        onboardingGraph(
+            navController = navController,
+            onCompleted = {
+                navController.navigate(AuthRoutes.GRAPH) {
+                    popUpTo(OnboardingRoutes.GRAPH) { inclusive = true }
+                    launchSingleTop = true
+                }
+            },
+        )
         authGraph(
             navController = navController,
             onAuthenticated = {

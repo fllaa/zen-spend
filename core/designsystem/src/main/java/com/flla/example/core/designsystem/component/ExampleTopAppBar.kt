@@ -1,5 +1,6 @@
 package com.flla.example.core.designsystem.component
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,7 @@ fun ExampleTopAppBar(
 ) {
     TopAppBar(
         title = { Text(title) },
+        windowInsets = WindowInsets(0),
         navigationIcon = {
             if (onBackClick != null) {
                 IconButton(onClick = onBackClick) {

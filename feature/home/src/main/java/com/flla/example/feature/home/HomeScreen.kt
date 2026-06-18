@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,35 +17,16 @@ import com.flla.example.core.designsystem.theme.LocalExampleSpacing
 import com.flla.example.core.ui.collectUiState
 
 @Composable
-fun HomeRoute(
-    onProfileClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
-) {
+fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectUiState()
-    HomeScreen(
-        state = state,
-        onProfileClick = onProfileClick,
-        onSettingsClick = onSettingsClick,
-    )
+    HomeScreen(state = state)
 }
 
 @Composable
-fun HomeScreen(
-    state: HomeUiState,
-    onProfileClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-) {
+fun HomeScreen(state: HomeUiState) {
     val spacing = LocalExampleSpacing.current
     Scaffold(
         topBar = { ExampleTopAppBar(title = "Home") },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(selected = true, onClick = {}, label = { Text("Home") }, icon = {})
-                NavigationBarItem(selected = false, onClick = onProfileClick, label = { Text("Profile") }, icon = {})
-                NavigationBarItem(selected = false, onClick = onSettingsClick, label = { Text("Settings") }, icon = {})
-            }
-        },
     ) { padding: PaddingValues ->
         Column(
             modifier = Modifier

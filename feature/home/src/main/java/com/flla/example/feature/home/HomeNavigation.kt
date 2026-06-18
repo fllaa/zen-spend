@@ -4,19 +4,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-fun NavGraphBuilder.homeGraph(
-    onProfileClick: () -> Unit,
-    onSettingsClick: () -> Unit,
-) {
+fun NavGraphBuilder.homeGraph() {
     navigation(
         startDestination = HomeRoutes.HOME,
         route = HomeRoutes.GRAPH,
     ) {
         composable(HomeRoutes.HOME) {
-            HomeRoute(
-                onProfileClick = onProfileClick,
-                onSettingsClick = onSettingsClick,
-            )
+            HomeRoute()
         }
     }
 }

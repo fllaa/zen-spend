@@ -17,21 +17,17 @@ import com.flla.example.core.ui.collectUiState
 
 @Composable
 fun ProfileRoute(
-    onBackClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
-    ProfileScreen(state = state, onBackClick = onBackClick)
+    ProfileScreen(state = state)
 }
 
 @Composable
-fun ProfileScreen(
-    state: ProfileUiState,
-    onBackClick: () -> Unit,
-) {
+fun ProfileScreen(state: ProfileUiState) {
     val spacing = LocalExampleSpacing.current
     ScreenScaffold(
-        topBar = { ExampleTopAppBar(title = "Profile", onBackClick = onBackClick) },
+        topBar = { ExampleTopAppBar(title = "Profile") },
     ) {
         Column(
             modifier = Modifier

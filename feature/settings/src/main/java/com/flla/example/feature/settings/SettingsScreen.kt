@@ -21,13 +21,11 @@ import com.flla.example.core.ui.collectUiState
 
 @Composable
 fun SettingsRoute(
-    onBackClick: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
     SettingsScreen(
         state = state,
-        onBackClick = onBackClick,
         onThemeModeClick = viewModel::setThemeMode,
         onLogoutClick = viewModel::logout,
     )
@@ -36,13 +34,12 @@ fun SettingsRoute(
 @Composable
 fun SettingsScreen(
     state: SettingsUiState,
-    onBackClick: () -> Unit,
     onThemeModeClick: (ThemeMode) -> Unit,
     onLogoutClick: () -> Unit,
 ) {
     val spacing = LocalExampleSpacing.current
     ScreenScaffold(
-        topBar = { ExampleTopAppBar(title = "Settings", onBackClick = onBackClick) },
+        topBar = { ExampleTopAppBar(title = "Settings") },
     ) {
         Column(
             modifier = Modifier

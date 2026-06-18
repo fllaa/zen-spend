@@ -3,8 +3,8 @@ package com.flla.example.feature.settings
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
-fun NavGraphBuilder.settingsScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.settingsScreen() {
     composable(SettingsRoutes.SETTINGS) {
-        SettingsRoute(onBackClick = onBackClick)
+        SettingsRoute()
     }
 }

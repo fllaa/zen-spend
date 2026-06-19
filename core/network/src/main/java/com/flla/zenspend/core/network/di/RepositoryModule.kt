@@ -2,12 +2,14 @@ package com.flla.zenspend.core.network.di
 
 import com.flla.zenspend.core.domain.repository.AccountRepository
 import com.flla.zenspend.core.domain.repository.AuthRepository
+import com.flla.zenspend.core.domain.repository.CategoryRepository
 import com.flla.zenspend.core.domain.repository.SessionRepository
 import com.flla.zenspend.core.domain.repository.TransactionRepository
 import com.flla.zenspend.core.domain.repository.UserPreferencesRepository
 import com.flla.zenspend.core.domain.repository.UserRepository
 import com.flla.zenspend.core.network.repository.DefaultAccountRepository
 import com.flla.zenspend.core.network.repository.DefaultAuthRepository
+import com.flla.zenspend.core.network.repository.DefaultCategoryRepository
 import com.flla.zenspend.core.network.repository.DefaultSessionRepository
 import com.flla.zenspend.core.network.repository.DefaultTransactionRepository
 import com.flla.zenspend.core.network.repository.DefaultUserPreferencesRepository
@@ -44,4 +46,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindAccountRepository(repository: DefaultAccountRepository): AccountRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCategoryRepository(repository: DefaultCategoryRepository): CategoryRepository
 }

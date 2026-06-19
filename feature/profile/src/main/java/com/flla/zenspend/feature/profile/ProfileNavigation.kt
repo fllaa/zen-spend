@@ -6,12 +6,14 @@ import androidx.navigation.compose.composable
 fun NavGraphBuilder.profileScreen(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
+    onCategoriesClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable(ProfileRoutes.PROFILE) {
         ProfileRoute(
             onEditProfileClick = onEditProfileClick,
             onAccountsClick = onAccountsClick,
+            onCategoriesClick = onCategoriesClick,
         )
     }
     composable(ProfileRoutes.EDIT_PROFILE) {
@@ -19,5 +21,8 @@ fun NavGraphBuilder.profileScreen(
     }
     composable(ProfileRoutes.ACCOUNTS) {
         AccountsRoute(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.CATEGORIES) {
+        CategoriesRoute(onBackClick = onBackClick)
     }
 }

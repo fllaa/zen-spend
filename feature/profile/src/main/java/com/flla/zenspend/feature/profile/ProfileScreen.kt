@@ -76,6 +76,7 @@ import com.flla.zenspend.core.ui.collectUiState
 fun ProfileRoute(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
+    onCategoriesClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
@@ -86,6 +87,7 @@ fun ProfileRoute(
         onToggleNotifications = viewModel::toggleNotifications,
         onEditProfileClick = onEditProfileClick,
         onAccountsClick = onAccountsClick,
+        onCategoriesClick = onCategoriesClick,
     )
 }
 
@@ -98,6 +100,7 @@ fun ProfileScreen(
     onToggleNotifications: (Boolean) -> Unit,
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
+    onCategoriesClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
@@ -149,9 +152,7 @@ fun ProfileScreen(
                 SettingsItem(
                     icon = Icons.Rounded.Category,
                     title = "Kategori Transaksi",
-                    onClick = {
-                        Toast.makeText(context, "Categories configuration coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onCategoriesClick,
                 )
                 SettingsDivider()
                 SettingsItem(

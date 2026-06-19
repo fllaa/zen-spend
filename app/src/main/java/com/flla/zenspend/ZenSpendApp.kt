@@ -246,6 +246,9 @@ private fun AppNavHost(
             onAccountsClick = {
                 navController.navigate(ProfileRoutes.ACCOUNTS)
             },
+            onCategoriesClick = {
+                navController.navigate(ProfileRoutes.CATEGORIES)
+            },
             onBackClick = {
                 navController.popBackStack()
             },

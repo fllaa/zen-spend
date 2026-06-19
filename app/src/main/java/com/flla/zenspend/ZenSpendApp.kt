@@ -71,6 +71,8 @@ import com.flla.zenspend.feature.profile.profileScreen
 import com.flla.zenspend.feature.settings.settingsScreen
 import com.flla.zenspend.feature.setup.SetupRoutes
 import com.flla.zenspend.feature.setup.setupGraph
+import com.flla.zenspend.feature.transaction.navigateToTransactionDetails
+import com.flla.zenspend.feature.transaction.transactionGraph
 import com.flla.zenspend.navigation.SplashScreen
 import com.flla.zenspend.navigation.ZenSpendRoutes
 
@@ -148,8 +150,7 @@ fun ZenSpendApp(
                 onDismissRequest = { showCategorySheet = false },
                 onCategorySelected = { categoryName, isIncome ->
                     showCategorySheet = false
-                    val type = if (isIncome) "Pemasukan" else "Pengeluaran"
-                    Toast.makeText(context, "Terpilih Kategori: $categoryName ($type)", Toast.LENGTH_SHORT).show()
+                    navController.navigateToTransactionDetails(categoryName, isIncome)
                 },
             )
         }
@@ -242,6 +243,10 @@ private fun AppNavHost(
         analyticsGraph()
         profileScreen()
         settingsScreen()
+        transactionGraph(
+            onBackClick = { navController.popBackStack() },
+            onSaveSuccess = { navController.popBackStack() },
+        )
     }
 }
 

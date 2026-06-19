@@ -6,6 +6,7 @@ import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
 import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.testing.MainDispatcherRule
 import com.flla.zenspend.core.testing.repository.FakeUserRepository
+import com.flla.zenspend.core.testing.repository.FakeTransactionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -126,14 +127,4 @@ class HistoryViewModelTest {
             assertEquals(10000000L, state.totalIncome)
             assertEquals(9700000L, state.remainingBudget)
         }
-}
-
-class FakeTransactionRepository : TransactionRepository {
-    private val transactionsFlow = MutableStateFlow<List<Transaction>>(emptyList())
-
-    override fun observeTransactions(): Flow<List<Transaction>> = transactionsFlow
-
-    fun setTransactions(list: List<Transaction>) {
-        transactionsFlow.value = list
-    }
 }

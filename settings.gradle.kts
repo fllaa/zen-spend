@@ -38,5 +38,6 @@ include(":feature:onboarding")
 include(":feature:setup")
 include(":feature:history")
 include(":feature:analytics")
+include(":feature:transaction")
 
 

@@ -6,6 +6,7 @@ import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
 import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.testing.MainDispatcherRule
 import com.flla.zenspend.core.testing.repository.FakeUserRepository
+import com.flla.zenspend.core.testing.repository.FakeTransactionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,14 +117,4 @@ class AnalyticsViewModelTest {
             val stateTahun = viewModel.uiState.first { it.selectedPeriod == "Tahun" }
             assertEquals(300000L, stateTahun.totalExpense)
         }
-}
-
-class FakeTransactionRepository : TransactionRepository {
-    private val transactionsFlow = MutableStateFlow<List<Transaction>>(emptyList())
-
-    override fun observeTransactions(): Flow<List<Transaction>> = transactionsFlow
-
-    fun setTransactions(list: List<Transaction>) {
-        transactionsFlow.value = list
-    }
 }

@@ -50,6 +50,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.flla.zenspend.core.model.SessionState
+import com.flla.zenspend.feature.analytics.AnalyticsRoutes
+import com.flla.zenspend.feature.analytics.analyticsGraph
 import com.flla.zenspend.feature.auth.AuthRoutes
 import com.flla.zenspend.feature.auth.authGraph
 import com.flla.zenspend.feature.history.HistoryRoutes
@@ -79,6 +81,12 @@ private val mainDestinations =
             selectedRoute = HistoryRoutes.HISTORY,
             label = "History",
             icon = Icons.AutoMirrored.Rounded.ReceiptLong,
+        ),
+        MainDestination(
+            route = AnalyticsRoutes.GRAPH,
+            selectedRoute = AnalyticsRoutes.ANALYTICS,
+            label = "Data",
+            icon = Icons.Rounded.Analytics,
         ),
         MainDestination(
             route = ProfileRoutes.PROFILE,
@@ -210,6 +218,7 @@ private fun AppNavHost(
         )
         homeGraph()
         historyGraph()
+        analyticsGraph()
         profileScreen()
         settingsScreen()
     }
@@ -224,6 +233,7 @@ private fun MainBottomBar(
     val context = LocalContext.current
     val homeDestination = destinations.find { it.selectedRoute == HomeRoutes.HOME }
     val historyDestination = destinations.find { it.selectedRoute == HistoryRoutes.HISTORY }
+    val analyticsDestination = destinations.find { it.selectedRoute == AnalyticsRoutes.ANALYTICS }
     val profileDestination = destinations.find { it.selectedRoute == ProfileRoutes.PROFILE }
 
     Box(
@@ -255,11 +265,9 @@ private fun MainBottomBar(
                     currentRoute = currentRoute,
                     homeDestination = homeDestination,
                     historyDestination = historyDestination,
+                    analyticsDestination = analyticsDestination,
                     profileDestination = profileDestination,
                     onDestinationClick = onDestinationClick,
-                    onPlaceholderClick = { message ->
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                    },
                 )
             }
         }
@@ -277,9 +285,9 @@ private fun RowScope.MainNavigationTabs(
     currentRoute: String?,
     homeDestination: MainDestination?,
     historyDestination: MainDestination?,
+    analyticsDestination: MainDestination?,
     profileDestination: MainDestination?,
     onDestinationClick: (MainDestination) -> Unit,
-    onPlaceholderClick: (String) -> Unit,
 ) {
     MainTabItem(
         spec =
@@ -304,12 +312,16 @@ private fun RowScope.MainNavigationTabs(
         onDestinationClick = onDestinationClick,
     )
     Spacer(modifier = Modifier.weight(1f))
-    BottomTabItem(
-        label = "Data",
-        icon = Icons.Rounded.Analytics,
-        selected = false,
-        onClick = { onPlaceholderClick("Analytics screen coming soon!") },
-        modifier = Modifier.weight(1f),
+    MainTabItem(
+        spec =
+            MainTabSpec(
+                label = "Data",
+                selected = currentRoute == AnalyticsRoutes.ANALYTICS,
+                selectedIcon = Icons.Rounded.Analytics,
+                unselectedIcon = Icons.Rounded.Analytics,
+                destination = analyticsDestination,
+            ),
+        onDestinationClick = onDestinationClick,
     )
     MainTabItem(
         spec =

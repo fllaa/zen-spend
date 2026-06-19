@@ -75,6 +75,7 @@ import com.flla.zenspend.core.ui.collectUiState
 @Composable
 fun ProfileRoute(
     onEditProfileClick: () -> Unit,
+    onAccountsClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
@@ -84,10 +85,11 @@ fun ProfileRoute(
         onLogoutClick = viewModel::logout,
         onToggleNotifications = viewModel::toggleNotifications,
         onEditProfileClick = onEditProfileClick,
+        onAccountsClick = onAccountsClick,
     )
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun ProfileScreen(
     state: ProfileUiState,
@@ -95,6 +97,7 @@ fun ProfileScreen(
     onLogoutClick: () -> Unit,
     onToggleNotifications: (Boolean) -> Unit,
     onEditProfileClick: () -> Unit,
+    onAccountsClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
@@ -140,9 +143,7 @@ fun ProfileScreen(
                 SettingsItem(
                     icon = Icons.Rounded.AccountBalance,
                     title = "Daftar Rekening",
-                    onClick = {
-                        Toast.makeText(context, "Accounts list coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onAccountsClick,
                 )
                 SettingsDivider()
                 SettingsItem(

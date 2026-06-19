@@ -243,6 +243,9 @@ private fun AppNavHost(
             onEditProfileClick = {
                 navController.navigate(ProfileRoutes.EDIT_PROFILE)
             },
+            onAccountsClick = {
+                navController.navigate(ProfileRoutes.ACCOUNTS)
+            },
             onBackClick = {
                 navController.popBackStack()
             },

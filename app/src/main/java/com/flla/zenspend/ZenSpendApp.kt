@@ -281,6 +281,18 @@ private fun NavGraphBuilder.registerRoutes(
         onBudgetClick = {
             navController.navigate(ProfileRoutes.BUDGET)
         },
+        onExportDataClick = {
+            navController.navigate(ProfileRoutes.EXPORT_DATA)
+        },
+        onBackupSyncClick = {
+            navController.navigate(ProfileRoutes.BACKUP_SYNC)
+        },
+        onHelpCenterClick = {
+            navController.navigate(ProfileRoutes.HELP_CENTER)
+        },
+        onPrivacyPolicyClick = {
+            navController.navigate(ProfileRoutes.PRIVACY_POLICY)
+        },
         onBackClick = {
             navController.popBackStack()
         },

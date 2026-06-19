@@ -3,11 +3,16 @@ package com.flla.zenspend.feature.profile
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
+@Suppress("LongParameterList")
 fun NavGraphBuilder.profileScreen(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onBudgetClick: () -> Unit,
+    onExportDataClick: () -> Unit,
+    onBackupSyncClick: () -> Unit,
+    onHelpCenterClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable(ProfileRoutes.PROFILE) {
@@ -16,6 +21,10 @@ fun NavGraphBuilder.profileScreen(
             onAccountsClick = onAccountsClick,
             onCategoriesClick = onCategoriesClick,
             onBudgetClick = onBudgetClick,
+            onExportDataClick = onExportDataClick,
+            onBackupSyncClick = onBackupSyncClick,
+            onHelpCenterClick = onHelpCenterClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick,
         )
     }
     composable(ProfileRoutes.EDIT_PROFILE) {
@@ -29,5 +38,17 @@ fun NavGraphBuilder.profileScreen(
     }
     composable(ProfileRoutes.BUDGET) {
         BudgetRoute(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.EXPORT_DATA) {
+        ExportDataScreen(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.BACKUP_SYNC) {
+        BackupSyncScreen(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.HELP_CENTER) {
+        HelpCenterScreen(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.PRIVACY_POLICY) {
+        PrivacyPolicyScreen(onBackClick = onBackClick)
     }
 }

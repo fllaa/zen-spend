@@ -75,12 +75,17 @@ import com.flla.zenspend.core.ui.ScreenScaffold
 import com.flla.zenspend.core.ui.collectUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongParameterList")
 @Composable
 fun ProfileRoute(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onBudgetClick: () -> Unit,
+    onExportDataClick: () -> Unit,
+    onBackupSyncClick: () -> Unit,
+    onHelpCenterClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
@@ -93,6 +98,10 @@ fun ProfileRoute(
         onAccountsClick = onAccountsClick,
         onCategoriesClick = onCategoriesClick,
         onBudgetClick = onBudgetClick,
+        onExportDataClick = onExportDataClick,
+        onBackupSyncClick = onBackupSyncClick,
+        onHelpCenterClick = onHelpCenterClick,
+        onPrivacyPolicyClick = onPrivacyPolicyClick,
         onCurrencySelected = viewModel::setCurrency,
     )
 }
@@ -109,6 +118,10 @@ fun ProfileScreen(
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onBudgetClick: () -> Unit,
+    onExportDataClick: () -> Unit,
+    onBackupSyncClick: () -> Unit,
+    onHelpCenterClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
     onCurrencySelected: (String) -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
@@ -217,33 +230,25 @@ fun ProfileScreen(
                 SettingsItem(
                     icon = Icons.Rounded.Share,
                     title = "Ekspor Data",
-                    onClick = {
-                        Toast.makeText(context, "Export data functionality coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onExportDataClick,
                 )
                 SettingsDivider()
                 SettingsItem(
                     icon = Icons.Rounded.CloudSync,
                     title = "Cadangan & Sinkronisasi",
-                    onClick = {
-                        Toast.makeText(context, "Sync and backup coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onBackupSyncClick,
                 )
                 SettingsDivider()
                 SettingsItem(
                     icon = Icons.AutoMirrored.Rounded.HelpOutline,
                     title = "Pusat Bantuan",
-                    onClick = {
-                        Toast.makeText(context, "Help center link coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onHelpCenterClick,
                 )
                 SettingsDivider()
                 SettingsItem(
                     icon = Icons.Rounded.Policy,
                     title = "Kebijakan Privasi",
-                    onClick = {
-                        Toast.makeText(context, "Privacy Policy page coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onPrivacyPolicyClick,
                 )
             }
 

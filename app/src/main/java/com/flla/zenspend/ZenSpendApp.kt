@@ -28,6 +28,7 @@ import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Analytics
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,7 +36,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +54,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.flla.zenspend.core.designsystem.component.CategorySelectionBottomSheet
 import com.flla.zenspend.core.model.SessionState
 import com.flla.zenspend.feature.analytics.AnalyticsRoutes
 import com.flla.zenspend.feature.analytics.analyticsGraph
@@ -96,6 +102,7 @@ private val mainDestinations =
         ),
     )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ZenSpendApp(
     sessionState: SessionState,
@@ -106,6 +113,8 @@ fun ZenSpendApp(
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = mainDestinations.any { it.selectedRoute == currentRoute }
+    val context = LocalContext.current
+    var showCategorySheet by rememberSaveable { mutableStateOf(false) }
 
     SessionNavigationEffect(
         navController = navController,
@@ -121,6 +130,7 @@ fun ZenSpendApp(
                     destinations = mainDestinations,
                     currentRoute = currentRoute,
                     onDestinationClick = navController::navigateToMainDestination,
+                    onAddClick = { showCategorySheet = true },
                 )
             }
         },
@@ -132,6 +142,17 @@ fun ZenSpendApp(
             sessionState = sessionState,
             hasCompletedSetup = hasCompletedSetup,
         )
+
+        if (showCategorySheet) {
+            CategorySelectionBottomSheet(
+                onDismissRequest = { showCategorySheet = false },
+                onCategorySelected = { categoryName, isIncome ->
+                    showCategorySheet = false
+                    val type = if (isIncome) "Pemasukan" else "Pengeluaran"
+                    Toast.makeText(context, "Terpilih Kategori: $categoryName ($type)", Toast.LENGTH_SHORT).show()
+                },
+            )
+        }
     }
 }
 
@@ -229,8 +250,8 @@ private fun MainBottomBar(
     destinations: List<MainDestination>,
     currentRoute: String?,
     onDestinationClick: (MainDestination) -> Unit,
+    onAddClick: () -> Unit,
 ) {
-    val context = LocalContext.current
     val homeDestination = destinations.find { it.selectedRoute == HomeRoutes.HOME }
     val historyDestination = destinations.find { it.selectedRoute == HistoryRoutes.HISTORY }
     val analyticsDestination = destinations.find { it.selectedRoute == AnalyticsRoutes.ANALYTICS }
@@ -272,9 +293,7 @@ private fun MainBottomBar(
             }
         }
         AddTransactionFab(
-            onClick = {
-                Toast.makeText(context, "Add Transaction screen coming soon!", Toast.LENGTH_SHORT).show()
-            },
+            onClick = onAddClick,
         )
     }
 }

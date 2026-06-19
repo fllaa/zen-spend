@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Edit
@@ -35,7 +34,6 @@ import androidx.compose.material.icons.rounded.VerifiedUser
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -79,7 +77,7 @@ fun EditProfileRoute(
     )
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun EditProfileScreen(
     uiState: EditProfileUiState,
@@ -105,16 +103,17 @@ fun EditProfileScreen(
         topBar = {
             ZenSpendTopAppBar(
                 title = "Edit Profil",
-                onBackClick = onBackClick
+                onBackClick = onBackClick,
             )
         },
     ) { _ ->
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = spacing.containerPadding, vertical = spacing.lg),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = spacing.containerPadding, vertical = spacing.lg),
                 verticalArrangement = Arrangement.spacedBy(spacing.lg),
             ) {
                 // Profile Avatar editing section
@@ -123,34 +122,38 @@ fun EditProfileScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .size(128.dp)
-                            .zenSpendShadowLevel1(darkTheme),
+                        modifier =
+                            Modifier
+                                .size(128.dp)
+                                .zenSpendShadowLevel1(darkTheme),
                     ) {
                         Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
-                                .border(4.dp, MaterialTheme.colorScheme.surfaceContainerLowest, CircleShape),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                                    .border(4.dp, MaterialTheme.colorScheme.surfaceContainerLowest, CircleShape),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 text = (uiState.name.take(1).ifBlank { "A" }).uppercase(),
-                                style = MaterialTheme.typography.displayMedium.copy(
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    fontWeight = FontWeight.Bold,
-                                ),
+                                style =
+                                    MaterialTheme.typography.displayMedium.copy(
+                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                        fontWeight = FontWeight.Bold,
+                                    ),
                             )
                         }
 
                         Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                                .clickable { /* Avatar update coming soon */ },
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                                    .clickable { /* Avatar update coming soon */ },
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
@@ -164,11 +167,12 @@ fun EditProfileScreen(
                     Spacer(modifier = Modifier.height(spacing.sm))
                     Text(
                         text = "FOTO PROFIL",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                            fontWeight = FontWeight.SemiBold,
-                            letterSpacing = 1.sp,
-                        ),
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                fontWeight = FontWeight.SemiBold,
+                                letterSpacing = 1.sp,
+                            ),
                     )
                 }
 
@@ -209,7 +213,7 @@ fun EditProfileScreen(
                         text = uiState.errorMessage,
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = spacing.xs)
+                        modifier = Modifier.padding(horizontal = spacing.xs),
                     )
                 }
 
@@ -217,13 +221,15 @@ fun EditProfileScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.2f),
-                    ),
-                    border = androidx.compose.foundation.BorderStroke(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
-                    )
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.2f),
+                        ),
+                    border =
+                        androidx.compose.foundation.BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+                        ),
                 ) {
                     Row(
                         modifier = Modifier.padding(spacing.md),
@@ -241,16 +247,18 @@ fun EditProfileScreen(
                         ) {
                             Text(
                                 text = "Akun Terverifikasi",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.primary,
-                                ),
+                                style =
+                                    MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    ),
                             )
                             Text(
                                 text = "Profil Anda telah diverifikasi untuk keamanan transaksi maksimal.",
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                ),
+                                style =
+                                    MaterialTheme.typography.bodyMedium.copy(
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    ),
                             )
                         }
                     }
@@ -264,16 +272,18 @@ fun EditProfileScreen(
                 visible = uiState.isSaveSuccess,
                 enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
                 exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 96.dp)
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 96.dp),
             ) {
                 Card(
                     shape = CircleShape,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.inverseSurface,
-                        contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-                    ),
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.inverseSurface,
+                            contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                 ) {
                     Row(
@@ -297,11 +307,12 @@ fun EditProfileScreen(
 
             // Fixed Save Button at the Bottom
             Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(spacing.containerPadding),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(spacing.containerPadding),
             ) {
                 ZenSpendPrimaryButton(
                     text = "Simpan Perubahan",
@@ -330,11 +341,12 @@ fun EditProfileInputField(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Medium,
-            ),
-            modifier = Modifier.padding(horizontal = spacing.xs)
+            style =
+                MaterialTheme.typography.labelMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Medium,
+                ),
+            modifier = Modifier.padding(horizontal = spacing.xs),
         )
 
         TextField(
@@ -349,14 +361,15 @@ fun EditProfileInputField(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-            ),
+            colors =
+                TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
             trailingIcon = {
                 Icon(
                     imageVector = icon,

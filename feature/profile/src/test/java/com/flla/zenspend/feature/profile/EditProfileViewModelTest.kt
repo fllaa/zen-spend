@@ -24,13 +24,14 @@ class EditProfileViewModelTest {
 
     @Before
     fun setUp() {
-        val initialUser = User(
-            id = "demo-user",
-            name = "Budi Santoso",
-            email = "budi.santoso@email.com",
-            phone = "+62 812 3456 7890",
-            avatarUrl = null
-        )
+        val initialUser =
+            User(
+                id = "demo-user",
+                name = "Budi Santoso",
+                email = "budi.santoso@email.com",
+                phone = "+62 812 3456 7890",
+                avatarUrl = null,
+            )
         userRepository.setUser(initialUser)
         viewModel = EditProfileViewModel(observeCurrentUserUseCase, updateProfileUseCase)
     }

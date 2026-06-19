@@ -111,6 +111,7 @@ fun TransactionRoute(
     )
 }
 
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun TransactionScreen(
     uiState: TransactionUiState,
@@ -130,20 +131,22 @@ fun TransactionScreen(
     Scaffold(
         topBar = {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = spacing.containerPadding),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(horizontal = spacing.containerPadding),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(
                     onClick = onBackClick,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    modifier =
+                        Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceContainerLow),
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.ArrowBack,
@@ -160,10 +163,11 @@ fun TransactionScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(32.dp))
-                        .background(categoryStyle.containerColor)
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(32.dp))
+                            .background(categoryStyle.containerColor)
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
                 ) {
                     Icon(
                         imageVector = categoryStyle.icon,
@@ -183,22 +187,25 @@ fun TransactionScreen(
         modifier = modifier.fillMaxSize(),
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 320.dp), // Height allowance for sticky numpad area
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 320.dp),
+            // Height allowance for sticky numpad area
         ) {
             // Amount Input Card
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = spacing.containerPadding)
-                    .padding(top = spacing.md, bottom = spacing.lg)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
-                    .padding(vertical = spacing.lg),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = spacing.containerPadding)
+                        .padding(top = spacing.md, bottom = spacing.lg)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f))
+                        .padding(vertical = spacing.lg),
                 contentAlignment = Alignment.Center,
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -210,7 +217,7 @@ fun TransactionScreen(
                     Spacer(modifier = Modifier.height(spacing.xs))
                     Row(
                         verticalAlignment = Alignment.Bottom,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         Text(
                             text = "Rp ",
@@ -237,9 +244,10 @@ fun TransactionScreen(
 
             // Form Fields
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = spacing.containerPadding),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = spacing.containerPadding),
                 verticalArrangement = Arrangement.spacedBy(spacing.lg),
             ) {
                 // Account Selector
@@ -251,28 +259,29 @@ fun TransactionScreen(
                         modifier = Modifier.padding(horizontal = spacing.xs),
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(spacing.sm),
                     ) {
                         AccountOptionItem(
                             name = "Tunai",
                             icon = Icons.Rounded.Payments,
                             isSelected = uiState.selectedAccount == "Tunai",
-                            onClick = { onAccountSelect("Tunai") }
+                            onClick = { onAccountSelect("Tunai") },
                         )
                         AccountOptionItem(
                             name = "BCA",
                             icon = Icons.Rounded.AccountBalance,
                             isSelected = uiState.selectedAccount == "BCA",
-                            onClick = { onAccountSelect("BCA") }
+                            onClick = { onAccountSelect("BCA") },
                         )
                         AccountOptionItem(
                             name = "GoPay",
                             icon = Icons.Rounded.Wallet,
                             isSelected = uiState.selectedAccount == "GoPay",
-                            onClick = { onAccountSelect("GoPay") }
+                            onClick = { onAccountSelect("GoPay") },
                         )
                     }
                 }
@@ -285,31 +294,33 @@ fun TransactionScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = spacing.xs),
                     )
-                    val date = Instant.ofEpochMilli(uiState.dateEpochMillis)
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
+                    val date =
+                        Instant.ofEpochMilli(uiState.dateEpochMillis)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
                     val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("id", "ID"))
 
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .zenSpendShadowLevel1()
-                            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                            .clickable {
-                                showDatePicker(context, date) { year, month, day ->
-                                    val calendar = Calendar.getInstance()
-                                    calendar.set(year, month, day)
-                                    onDateChange(calendar.timeInMillis)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .zenSpendShadowLevel1()
+                                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                                .clickable {
+                                    showDatePicker(context, date) { year, month, day ->
+                                        val calendar = Calendar.getInstance()
+                                        calendar.set(year, month, day)
+                                        onDateChange(calendar.timeInMillis)
+                                    }
                                 }
-                            }
-                            .padding(horizontal = spacing.md),
-                        contentAlignment = Alignment.CenterStart
+                                .padding(horizontal = spacing.md),
+                        contentAlignment = Alignment.CenterStart,
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = date.format(formatter),
@@ -342,35 +353,39 @@ fun TransactionScreen(
                                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f),
                             )
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .zenSpendShadowLevel1(),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .zenSpendShadowLevel1(),
                         shape = RoundedCornerShape(16.dp),
                         singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                            unfocusedBorderColor = Color.Transparent,
-                        ),
+                        colors =
+                            OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                                focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                unfocusedBorderColor = Color.Transparent,
+                            ),
                     )
                 }
 
                 // Visual decoration: Zen State indicator
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(96.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(96.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = "Zen State Enabled",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            letterSpacing = 2.sp
-                        ),
+                        style =
+                            MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                letterSpacing = 2.sp,
+                            ),
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center,
                     )
@@ -380,28 +395,30 @@ fun TransactionScreen(
 
         // Sticky keypad & save button
         Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
+            modifier =
+                Modifier
+                    .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .zenSpendShadowLevel2()
-                    .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                    .padding(top = spacing.md, bottom = spacing.containerPadding)
-                    .padding(horizontal = spacing.containerPadding),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .zenSpendShadowLevel2()
+                        .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+                        .padding(top = spacing.md, bottom = spacing.containerPadding)
+                        .padding(horizontal = spacing.containerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // Keypad grid
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         KeypadButton(text = "1", onClick = { onDigitClick("1") }, modifier = Modifier.weight(1f))
                         KeypadButton(text = "2", onClick = { onDigitClick("2") }, modifier = Modifier.weight(1f))
@@ -409,7 +426,7 @@ fun TransactionScreen(
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         KeypadButton(text = "4", onClick = { onDigitClick("4") }, modifier = Modifier.weight(1f))
                         KeypadButton(text = "5", onClick = { onDigitClick("5") }, modifier = Modifier.weight(1f))
@@ -417,7 +434,7 @@ fun TransactionScreen(
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         KeypadButton(text = "7", onClick = { onDigitClick("7") }, modifier = Modifier.weight(1f))
                         KeypadButton(text = "8", onClick = { onDigitClick("8") }, modifier = Modifier.weight(1f))
@@ -426,24 +443,25 @@ fun TransactionScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         KeypadButton(text = "000", onClick = { onDigitClick("000") }, modifier = Modifier.weight(1f))
                         KeypadButton(text = "0", onClick = { onDigitClick("0") }, modifier = Modifier.weight(1f))
                         Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(52.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
-                                .clickable(onClick = onDeleteClick),
-                            contentAlignment = Alignment.Center
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .height(52.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                                    .clickable(onClick = onDeleteClick),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Backspace,
                                 contentDescription = "Hapus",
                                 tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(22.dp),
                             )
                         }
                     }
@@ -454,24 +472,26 @@ fun TransactionScreen(
                 // Save button
                 Button(
                     onClick = onSaveClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .zenSpendShadowLevel1(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
-                    ),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .zenSpendShadowLevel1(),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
                     shape = RoundedCornerShape(28.dp),
                     enabled = !uiState.isSaving,
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = if (uiState.isSaving) "Menyimpan..." else "Simpan",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                         )
                         Spacer(modifier = Modifier.width(spacing.sm))
                         Icon(
@@ -497,21 +517,22 @@ private fun AccountOptionItem(
     val spacing = LocalZenSpendSpacing.current
     val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
     val textColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-    val baseModifier = modifier
-        .clip(RoundedCornerShape(16.dp))
-        .border(
-            width = 1.dp,
-            color = borderColor,
-            shape = RoundedCornerShape(16.dp),
-        )
-        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-        .clickable(onClick = onClick)
-        .padding(horizontal = spacing.md, vertical = 12.dp)
+    val baseModifier =
+        modifier
+            .clip(RoundedCornerShape(16.dp))
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = RoundedCornerShape(16.dp),
+            )
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+            .clickable(onClick = onClick)
+            .padding(horizontal = spacing.md, vertical = 12.dp)
 
     Row(
         modifier = if (isSelected) baseModifier.zenSpendShadowLevel1() else baseModifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         Icon(
             imageVector = icon,
@@ -535,12 +556,13 @@ private fun KeypadButton(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .height(52.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .height(52.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
@@ -568,17 +590,21 @@ private fun showDatePicker(
         },
         currentDate.year,
         currentDate.monthValue - 1,
-        currentDate.dayOfMonth
+        currentDate.dayOfMonth,
     ).show()
 }
 
 private data class CategoryStyle(
     val icon: ImageVector,
     val color: Color,
-    val containerColor: Color
+    val containerColor: Color,
 )
 
-private fun getCategoryStyle(category: String, isIncome: Boolean): CategoryStyle {
+@Suppress("CyclomaticComplexMethod")
+private fun getCategoryStyle(
+    category: String,
+    isIncome: Boolean,
+): CategoryStyle {
     return if (isIncome) {
         when (category) {
             "Gaji" -> CategoryStyle(Icons.Rounded.AccountBalanceWallet, Color(0xFF006064), Color(0xFFE0F2F1))

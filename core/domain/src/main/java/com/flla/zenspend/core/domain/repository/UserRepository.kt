@@ -9,5 +9,9 @@ interface UserRepository {
 
     suspend fun refreshCurrentUser(): AppResult<Unit>
 
-    suspend fun updateProfile(name: String, email: String, phone: String?): AppResult<User>
+    suspend fun updateProfile(
+        name: String,
+        email: String,
+        phone: String?,
+    ): AppResult<User>
 }

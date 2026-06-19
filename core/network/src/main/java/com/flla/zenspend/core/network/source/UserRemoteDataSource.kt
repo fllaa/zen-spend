@@ -14,6 +14,9 @@ class UserRemoteDataSource
     ) {
         suspend fun getCurrentUser() = userApi.getCurrentUser().asExternalModel()
 
-        suspend fun updateProfile(name: String, email: String, phone: String?) =
-            userApi.updateProfile(UpdateProfileRequest(name, email, phone)).asExternalModel()
+        suspend fun updateProfile(
+            name: String,
+            email: String,
+            phone: String?,
+        ) = userApi.updateProfile(UpdateProfileRequest(name, email, phone)).asExternalModel()
     }

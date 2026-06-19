@@ -1,15 +1,12 @@
 package com.flla.zenspend.feature.analytics
 
-import com.flla.zenspend.core.domain.repository.TransactionRepository
 import com.flla.zenspend.core.domain.usecase.ObserveCurrentUserUseCase
 import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
 import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.testing.MainDispatcherRule
-import com.flla.zenspend.core.testing.repository.FakeUserRepository
 import com.flla.zenspend.core.testing.repository.FakeTransactionRepository
+import com.flla.zenspend.core.testing.repository.FakeUserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

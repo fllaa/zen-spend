@@ -26,93 +26,103 @@ data class TransactionUiState(
 )
 
 @HiltViewModel
-class TransactionViewModel @Inject constructor(
-    private val saveTransactionUseCase: SaveTransactionUseCase,
-) : ViewModel() {
+class TransactionViewModel
+    @Inject
+    constructor(
+        private val saveTransactionUseCase: SaveTransactionUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(TransactionUiState())
+        val uiState: StateFlow<TransactionUiState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(TransactionUiState())
-    val uiState: StateFlow<TransactionUiState> = _uiState.asStateFlow()
-
-    fun initialize(category: String, isIncome: Boolean) {
-        _uiState.update {
-            it.copy(
-                category = category,
-                isIncome = isIncome
-            )
-        }
-    }
-
-    fun appendDigit(digit: String) {
-        _uiState.update { state ->
-            val current = state.amount
-            val newAmount = when {
-                current == "0" && digit == "000" -> "0"
-                current == "0" -> digit
-                current.length >= 12 -> current // Limit to 12 digits
-                else -> current + digit
-            }
-            state.copy(
-                amount = newAmount,
-                amountErrorMessage = null
-            )
-        }
-    }
-
-    fun deleteDigit() {
-        _uiState.update { state ->
-            val current = state.amount
-            val newAmount = if (current.length <= 1) {
-                "0"
-            } else {
-                current.substring(0, current.length - 1)
-            }
-            state.copy(
-                amount = newAmount,
-                amountErrorMessage = null
-            )
-        }
-    }
-
-    fun selectAccount(account: String) {
-        _uiState.update { it.copy(selectedAccount = account) }
-    }
-
-    fun updateDate(epochMillis: Long) {
-        _uiState.update { it.copy(dateEpochMillis = epochMillis) }
-    }
-
-    fun updateNote(note: String) {
-        _uiState.update { it.copy(note = note) }
-    }
-
-    fun saveTransaction() {
-        val amountVal = _uiState.value.amount.toLongOrNull() ?: 0L
-        if (amountVal <= 0L) {
-            _uiState.update { it.copy(amountErrorMessage = "Jumlah harus lebih besar dari 0") }
-            return
-        }
-
-        _uiState.update { it.copy(isSaving = true) }
-        viewModelScope.launch {
-            try {
-                val state = _uiState.value
-                val noteTitle = state.note.ifBlank {
-                    if (state.isIncome) "Pemasukan ${state.category}" else "Pengeluaran ${state.category}"
-                }
-                val transaction = Transaction(
-                    id = UUID.randomUUID().toString(),
-                    title = noteTitle,
-                    amount = amountVal,
-                    category = state.category,
-                    account = state.selectedAccount,
-                    isIncome = state.isIncome,
-                    timestamp = state.dateEpochMillis
+        fun initialize(
+            category: String,
+            isIncome: Boolean,
+        ) {
+            _uiState.update {
+                it.copy(
+                    category = category,
+                    isIncome = isIncome,
                 )
-                saveTransactionUseCase(transaction)
-                _uiState.update { it.copy(isSaveSuccess = true, isSaving = false) }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
+
+        fun appendDigit(digit: String) {
+            _uiState.update { state ->
+                val current = state.amount
+                val newAmount =
+                    when {
+                        current == "0" && digit == "000" -> "0"
+                        current == "0" -> digit
+                        current.length >= 12 -> current // Limit to 12 digits
+                        else -> current + digit
+                    }
+                state.copy(
+                    amount = newAmount,
+                    amountErrorMessage = null,
+                )
+            }
+        }
+
+        fun deleteDigit() {
+            _uiState.update { state ->
+                val current = state.amount
+                val newAmount =
+                    if (current.length <= 1) {
+                        "0"
+                    } else {
+                        current.substring(0, current.length - 1)
+                    }
+                state.copy(
+                    amount = newAmount,
+                    amountErrorMessage = null,
+                )
+            }
+        }
+
+        fun selectAccount(account: String) {
+            _uiState.update { it.copy(selectedAccount = account) }
+        }
+
+        fun updateDate(epochMillis: Long) {
+            _uiState.update { it.copy(dateEpochMillis = epochMillis) }
+        }
+
+        fun updateNote(note: String) {
+            _uiState.update { it.copy(note = note) }
+        }
+
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
+        fun saveTransaction() {
+            val amountVal = _uiState.value.amount.toLongOrNull() ?: 0L
+            if (amountVal <= 0L) {
+                _uiState.update { it.copy(amountErrorMessage = "Jumlah harus lebih besar dari 0") }
+                return
+            }
+
+            _uiState.update { it.copy(isSaving = true) }
+            viewModelScope.launch {
+                try {
+                    val state = _uiState.value
+                    val noteTitle =
+                        state.note.ifBlank {
+                            if (state.isIncome) "Pemasukan ${state.category}" else "Pengeluaran ${state.category}"
+                        }
+                    val transaction =
+                        Transaction(
+                            id = UUID.randomUUID().toString(),
+                            title = noteTitle,
+                            amount = amountVal,
+                            category = state.category,
+                            account = state.selectedAccount,
+                            isIncome = state.isIncome,
+                            timestamp = state.dateEpochMillis,
+                        )
+                    saveTransactionUseCase(transaction)
+                    _uiState.update { it.copy(isSaveSuccess = true, isSaving = false) }
+                } catch (e: Exception) {
+                    // Intentional: save errors are non-fatal; state is reset to allow retry
+                    _uiState.update { it.copy(isSaving = false) }
+                }
             }
         }
     }
-}

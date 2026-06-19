@@ -15,14 +15,19 @@ class FakeUserRepository : UserRepository {
 
     override suspend fun refreshCurrentUser(): AppResult<Unit> = refreshResult
 
-    override suspend fun updateProfile(name: String, email: String, phone: String?): AppResult<User> {
-        val updatedUser = User(
-            id = userFlow.value?.id ?: "demo-user",
-            name = name,
-            email = email,
-            phone = phone,
-            avatarUrl = userFlow.value?.avatarUrl
-        )
+    override suspend fun updateProfile(
+        name: String,
+        email: String,
+        phone: String?,
+    ): AppResult<User> {
+        val updatedUser =
+            User(
+                id = userFlow.value?.id ?: "demo-user",
+                name = name,
+                email = email,
+                phone = phone,
+                avatarUrl = userFlow.value?.avatarUrl,
+            )
         userFlow.value = updatedUser
         return AppResult.Success(updatedUser)
     }

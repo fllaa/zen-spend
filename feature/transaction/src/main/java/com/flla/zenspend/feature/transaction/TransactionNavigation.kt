@@ -7,7 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 
-fun NavController.navigateToTransactionDetails(category: String, isIncome: Boolean) {
+fun NavController.navigateToTransactionDetails(
+    category: String,
+    isIncome: Boolean,
+) {
     navigate(TransactionRoutes.detailsRoute(category, isIncome))
 }
 
@@ -21,16 +24,17 @@ fun NavGraphBuilder.transactionGraph(
     ) {
         composable(
             route = TransactionRoutes.TRANSACTION_DETAILS,
-            arguments = listOf(
-                navArgument("category") {
-                    type = NavType.StringType
-                    defaultValue = "Lainnya"
-                },
-                navArgument("isIncome") {
-                    type = NavType.BoolType
-                    defaultValue = false
-                }
-            )
+            arguments =
+                listOf(
+                    navArgument("category") {
+                        type = NavType.StringType
+                        defaultValue = "Lainnya"
+                    },
+                    navArgument("isIncome") {
+                        type = NavType.BoolType
+                        defaultValue = false
+                    },
+                ),
         ) { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: "Lainnya"
             val isIncome = backStackEntry.arguments?.getBoolean("isIncome") ?: false

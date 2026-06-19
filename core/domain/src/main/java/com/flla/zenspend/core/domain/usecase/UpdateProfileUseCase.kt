@@ -10,7 +10,11 @@ class UpdateProfileUseCase
     constructor(
         private val userRepository: UserRepository,
     ) {
-        suspend operator fun invoke(name: String, email: String, phone: String?): AppResult<User> {
+        suspend operator fun invoke(
+            name: String,
+            email: String,
+            phone: String?,
+        ): AppResult<User> {
             return userRepository.updateProfile(name, email, phone)
         }
     }

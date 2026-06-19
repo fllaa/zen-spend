@@ -14,7 +14,6 @@ import javax.inject.Singleton
 class DefaultTransactionRepository
     @Inject
     constructor() : TransactionRepository {
-        
         private val transactionsFlow: MutableStateFlow<List<Transaction>>
 
         init {

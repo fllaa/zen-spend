@@ -11,6 +11,7 @@ import javax.inject.Inject
 class FakeDemoInterceptor
     @Inject
     constructor() : Interceptor {
+        @Suppress("CyclomaticComplexMethod")
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
             if (request.url.host != DEMO_HOST) return chain.proceed(request)
@@ -23,9 +24,15 @@ class FakeDemoInterceptor
                     val nameRegex = """"name"\s*:\s*(?:"([^"]+)"|null)""".toRegex()
                     val emailRegex = """"email"\s*:\s*(?:"([^"]+)"|null)""".toRegex()
                     val phoneRegex = """"phone"\s*:\s*(?:"([^"]+)"|null)""".toRegex()
-                    val name = nameRegex.find(requestBodyString)?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: "Demo User"
-                    val email = emailRegex.find(requestBodyString)?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: "demo@example.com"
-                    val phone = phoneRegex.find(requestBodyString)?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: ""
+                    val name =
+                        nameRegex.find(requestBodyString)
+                            ?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: "Demo User"
+                    val email =
+                        emailRegex.find(requestBodyString)
+                            ?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: "demo@example.com"
+                    val phone =
+                        phoneRegex.find(requestBodyString)
+                            ?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } ?: ""
                     val phoneJsonVal = if (phone.isEmpty()) "null" else "\"$phone\""
                     """{"id":"demo-user","name":"$name","email":"$email","phone":$phoneJsonVal,"avatar_url":null}"""
                 } else {

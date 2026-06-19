@@ -1,6 +1,5 @@
 package com.flla.zenspend
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -115,7 +113,7 @@ fun ZenSpendApp(
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = mainDestinations.any { it.selectedRoute == currentRoute }
-    val context = LocalContext.current
+
     var showCategorySheet by rememberSaveable { mutableStateOf(false) }
 
     SessionNavigationEffect(
@@ -247,7 +245,7 @@ private fun AppNavHost(
             },
             onBackClick = {
                 navController.popBackStack()
-            }
+            },
         )
         settingsScreen()
         transactionGraph(

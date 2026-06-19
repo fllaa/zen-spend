@@ -12,6 +12,6 @@ interface UserApi {
 
     @PUT("me")
     suspend fun updateProfile(
-        @Body request: UpdateProfileRequest
+        @Body request: UpdateProfileRequest,
     ): UserDto
 }

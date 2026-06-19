@@ -25,80 +25,81 @@ data class EditProfileUiState(
 )
 
 @HiltViewModel
-class EditProfileViewModel @Inject constructor(
-    private val observeCurrentUserUseCase: ObserveCurrentUserUseCase,
-    private val updateProfileUseCase: UpdateProfileUseCase,
-) : ViewModel() {
+class EditProfileViewModel
+    @Inject
+    constructor(
+        private val observeCurrentUserUseCase: ObserveCurrentUserUseCase,
+        private val updateProfileUseCase: UpdateProfileUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(EditProfileUiState())
+        val uiState: StateFlow<EditProfileUiState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(EditProfileUiState())
-    val uiState: StateFlow<EditProfileUiState> = _uiState.asStateFlow()
-
-    init {
-        loadUserProfile()
-    }
-
-    private fun loadUserProfile() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            val user = observeCurrentUserUseCase().firstOrNull()
-            if (user != null) {
-                _uiState.update {
-                    it.copy(
-                        name = user.name,
-                        email = user.email,
-                        phone = user.phone ?: "",
-                        isLoading = false
-                    )
-                }
-            } else {
-                _uiState.update { it.copy(isLoading = false) }
-            }
-        }
-    }
-
-    fun onNameChange(name: String) {
-        _uiState.update { it.copy(name = name, errorMessage = null, isSaveSuccess = false) }
-    }
-
-    fun onEmailChange(email: String) {
-        _uiState.update { it.copy(email = email, errorMessage = null, isSaveSuccess = false) }
-    }
-
-    fun onPhoneChange(phone: String) {
-        _uiState.update { it.copy(phone = phone, errorMessage = null, isSaveSuccess = false) }
-    }
-
-    fun saveProfile() {
-        val state = _uiState.value
-        if (state.name.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Nama lengkap tidak boleh kosong") }
-            return
-        }
-        if (state.email.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Email tidak boleh kosong") }
-            return
+        init {
+            loadUserProfile()
         }
 
-        _uiState.update { it.copy(isLoading = true, errorMessage = null, isSaveSuccess = false) }
-        viewModelScope.launch {
-            updateProfileUseCase(
-                name = state.name,
-                email = state.email,
-                phone = state.phone.ifBlank { null },
-            ).onSuccess {
-                _uiState.update { it.copy(isLoading = false, isSaveSuccess = true) }
-            }.onFailure { error ->
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "Gagal memperbarui profil: ${error::class.simpleName}"
-                    )
+        private fun loadUserProfile() {
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true) }
+                val user = observeCurrentUserUseCase().firstOrNull()
+                if (user != null) {
+                    _uiState.update {
+                        it.copy(
+                            name = user.name,
+                            email = user.email,
+                            phone = user.phone ?: "",
+                            isLoading = false,
+                        )
+                    }
+                } else {
+                    _uiState.update { it.copy(isLoading = false) }
                 }
             }
         }
-    }
 
-    fun resetSaveSuccess() {
-        _uiState.update { it.copy(isSaveSuccess = false) }
+        fun onNameChange(name: String) {
+            _uiState.update { it.copy(name = name, errorMessage = null, isSaveSuccess = false) }
+        }
+
+        fun onEmailChange(email: String) {
+            _uiState.update { it.copy(email = email, errorMessage = null, isSaveSuccess = false) }
+        }
+
+        fun onPhoneChange(phone: String) {
+            _uiState.update { it.copy(phone = phone, errorMessage = null, isSaveSuccess = false) }
+        }
+
+        fun saveProfile() {
+            val state = _uiState.value
+            if (state.name.isBlank()) {
+                _uiState.update { it.copy(errorMessage = "Nama lengkap tidak boleh kosong") }
+                return
+            }
+            if (state.email.isBlank()) {
+                _uiState.update { it.copy(errorMessage = "Email tidak boleh kosong") }
+                return
+            }
+
+            _uiState.update { it.copy(isLoading = true, errorMessage = null, isSaveSuccess = false) }
+            viewModelScope.launch {
+                updateProfileUseCase(
+                    name = state.name,
+                    email = state.email,
+                    phone = state.phone.ifBlank { null },
+                ).onSuccess {
+                    _uiState.update { it.copy(isLoading = false, isSaveSuccess = true) }
+                }.onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "Gagal memperbarui profil: ${error::class.simpleName}",
+                        )
+                    }
+                }
+            }
+        }
+
+        fun resetSaveSuccess() {
+            _uiState.update { it.copy(isSaveSuccess = false) }
+        }
     }
-}

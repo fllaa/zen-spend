@@ -103,12 +103,11 @@ fun ProfileScreen(
                 title = "Profile & Settings",
             )
         },
-    ) { paddingValues ->
+    ) { _ ->
         Column(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = spacing.containerPadding, vertical = spacing.lg),
             verticalArrangement = Arrangement.spacedBy(spacing.lg),

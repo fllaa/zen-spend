@@ -1,7 +1,10 @@
 package com.flla.zenspend.feature.history
 
+import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +26,9 @@ import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.Coffee
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DirectionsCar
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Payments
 import androidx.compose.material.icons.rounded.ReceiptLong
 import androidx.compose.material.icons.rounded.Restaurant
@@ -52,6 +57,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -582,6 +588,7 @@ fun FilterChipItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Suppress("LongMethod")
 @Composable
 fun TransactionRow(
@@ -590,6 +597,8 @@ fun TransactionRow(
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
+    val context = LocalContext.current
+    var menuExpanded by remember { mutableStateOf(false) }
 
     // Determine category specific icon and background tints
     val (categoryIcon, categoryTint, categoryBg) =
@@ -632,77 +641,116 @@ fun TransactionRow(
                 )
         }
 
-    Card(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .zenSpendShadowLevel1(darkTheme),
-        shape = RoundedCornerShape(16.dp),
-        colors =
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            ),
-    ) {
-        Row(
+    Box(modifier = modifier) {
+        Card(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(spacing.md),
+                    .combinedClickable(
+                        onClick = {},
+                        onLongClick = { menuExpanded = true },
+                    )
+                    .zenSpendShadowLevel1(darkTheme),
+            shape = RoundedCornerShape(16.dp),
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                ),
         ) {
-            // Category Icon with soft background
-            Box(
+            Row(
                 modifier =
                     Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(categoryBg),
-                contentAlignment = Alignment.Center,
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(spacing.md),
             ) {
-                Icon(
-                    imageVector = categoryIcon,
-                    contentDescription = null,
-                    tint = categoryTint,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
+                // Category Icon with soft background
+                Box(
+                    modifier =
+                        Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(categoryBg),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = categoryIcon,
+                        contentDescription = null,
+                        tint = categoryTint,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
 
-            // Title and Details (Category + Account)
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                Text(
-                    text = transaction.title,
-                    style =
-                        MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                // Title and Details (Category + Account)
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     Text(
-                        text = transaction.category,
+                        text = transaction.title,
                         style =
-                            MaterialTheme.typography.labelSmall.copy(
-                                color = MaterialTheme.colorScheme.outline,
+                            MaterialTheme.typography.bodyLarge.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Text(
+                            text = transaction.category,
+                            style =
+                                MaterialTheme.typography.labelSmall.copy(
+                                    color = MaterialTheme.colorScheme.outline,
+                                ),
+                        )
+                        Box(
+                            modifier =
+                                Modifier
+                                    .size(3.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
+                        )
+                        Text(
+                            text = transaction.account,
+                            style =
+                                MaterialTheme.typography.labelSmall.copy(
+                                    color = MaterialTheme.colorScheme.outline,
+                                ),
+                        )
+                    }
+                }
+
+                // Transaction amount and time
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    val amountText = (if (transaction.isIncome) "+" else "-") + " " + formatCurrency(transaction.amount)
+                    val amountColor =
+                        if (transaction.isIncome) {
+                            MaterialTheme.colorScheme.tertiary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        }
+
+                    Text(
+                        text = amountText,
+                        style =
+                            NumericDataTextStyle.copy(
+                                color = amountColor,
+                                fontWeight = FontWeight.SemiBold,
                             ),
                     )
-                    Box(
-                        modifier =
-                            Modifier
-                                .size(3.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
-                    )
+
+                    // Format time from timestamp
+                    val timeString = formatTime(transaction.timestamp)
                     Text(
-                        text = transaction.account,
+                        text = timeString,
                         style =
                             MaterialTheme.typography.labelSmall.copy(
                                 color = MaterialTheme.colorScheme.outline,
@@ -710,39 +758,39 @@ fun TransactionRow(
                     )
                 }
             }
+        }
 
-            // Transaction amount and time
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                val amountText = (if (transaction.isIncome) "+" else "-") + " " + formatCurrency(transaction.amount)
-                val amountColor =
-                    if (transaction.isIncome) {
-                        MaterialTheme.colorScheme.tertiary
-                    } else {
-                        MaterialTheme.colorScheme.error
-                    }
-
-                Text(
-                    text = amountText,
-                    style =
-                        NumericDataTextStyle.copy(
-                            color = amountColor,
-                            fontWeight = FontWeight.SemiBold,
-                        ),
-                )
-
-                // Format time from timestamp
-                val timeString = formatTime(transaction.timestamp)
-                Text(
-                    text = timeString,
-                    style =
-                        MaterialTheme.typography.labelSmall.copy(
-                            color = MaterialTheme.colorScheme.outline,
-                        ),
-                )
-            }
+        DropdownMenu(
+            expanded = menuExpanded,
+            onDismissRequest = { menuExpanded = false },
+        ) {
+            DropdownMenuItem(
+                text = { Text("Ubah") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Edit,
+                        contentDescription = null,
+                    )
+                },
+                onClick = {
+                    menuExpanded = false
+                    Toast.makeText(context, "Ubah: ${transaction.title}", Toast.LENGTH_SHORT).show()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text("Hapus") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                    )
+                },
+                onClick = {
+                    menuExpanded = false
+                    Toast.makeText(context, "Hapus: ${transaction.title}", Toast.LENGTH_SHORT).show()
+                },
+            )
         }
     }
 }

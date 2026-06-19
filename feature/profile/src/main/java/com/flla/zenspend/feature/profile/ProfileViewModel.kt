@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.flla.zenspend.core.domain.usecase.LogoutUseCase
 import com.flla.zenspend.core.domain.usecase.ObserveCurrentUserUseCase
 import com.flla.zenspend.core.domain.usecase.ObserveUserPreferencesUseCase
+import com.flla.zenspend.core.domain.usecase.SetCurrencyUseCase
 import com.flla.zenspend.core.domain.usecase.SetThemeModeUseCase
 import com.flla.zenspend.core.model.ThemeMode
 import com.flla.zenspend.core.model.User
@@ -20,6 +21,7 @@ import javax.inject.Inject
 data class ProfileUiState(
     val user: User? = null,
     val themeMode: ThemeMode = ThemeMode.System,
+    val currency: String = "IDR",
     val notificationsEnabled: Boolean = true,
 )
 
@@ -31,6 +33,7 @@ class ProfileViewModel
         observeUserPreferencesUseCase: ObserveUserPreferencesUseCase,
         private val setThemeModeUseCase: SetThemeModeUseCase,
         private val logoutUseCase: LogoutUseCase,
+        private val setCurrencyUseCase: SetCurrencyUseCase,
     ) : ViewModel() {
         private val notificationsEnabledState = MutableStateFlow(true)
 
@@ -43,6 +46,7 @@ class ProfileViewModel
                 ProfileUiState(
                     user = user,
                     themeMode = preferences.themeMode,
+                    currency = preferences.currency,
                     notificationsEnabled = notifications,
                 )
             }.stateIn(
@@ -64,6 +68,12 @@ class ProfileViewModel
         fun logout() {
             viewModelScope.launch {
                 logoutUseCase()
+            }
+        }
+
+        fun setCurrency(currency: String) {
+            viewModelScope.launch {
+                setCurrencyUseCase(currency)
             }
         }
     }

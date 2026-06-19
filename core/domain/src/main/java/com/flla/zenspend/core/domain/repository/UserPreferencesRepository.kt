@@ -12,4 +12,6 @@ interface UserPreferencesRepository {
     suspend fun setOnboardingCompleted(completed: Boolean)
 
     suspend fun setSetupCompleted(completed: Boolean)
+
+    suspend fun setCurrency(currency: String)
 }

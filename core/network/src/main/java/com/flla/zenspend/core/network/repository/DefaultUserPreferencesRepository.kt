@@ -25,4 +25,8 @@ class DefaultUserPreferencesRepository
         override suspend fun setSetupCompleted(completed: Boolean) {
             dataSource.setSetupCompleted(completed)
         }
+
+        override suspend fun setCurrency(currency: String) {
+            dataSource.setCurrency(currency)
+        }
     }

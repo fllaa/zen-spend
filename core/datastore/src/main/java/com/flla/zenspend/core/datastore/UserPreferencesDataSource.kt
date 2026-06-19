@@ -24,6 +24,7 @@ class UserPreferencesDataSource
                     themeMode = preferences[THEME_MODE]?.let(ThemeMode::valueOf) ?: ThemeMode.System,
                     hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED] ?: false,
                     hasCompletedSetup = preferences[SETUP_COMPLETED] ?: false,
+                    currency = preferences[CURRENCY] ?: "IDR",
                 )
             }
 
@@ -45,9 +46,16 @@ class UserPreferencesDataSource
             }
         }
 
+        suspend fun setCurrency(currency: String) {
+            dataStore.edit { preferences ->
+                preferences[CURRENCY] = currency
+            }
+        }
+
         private companion object {
             val THEME_MODE = stringPreferencesKey("theme_mode")
             val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
             val SETUP_COMPLETED = booleanPreferencesKey("setup_completed")
+            val CURRENCY = stringPreferencesKey("currency")
         }
     }

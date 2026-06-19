@@ -111,4 +111,8 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     override suspend fun setSetupCompleted(completed: Boolean) {
         _preferences.value = _preferences.value.copy(hasCompletedSetup = completed)
     }
+
+    override suspend fun setCurrency(currency: String) {
+        _preferences.value = _preferences.value.copy(currency = currency)
+    }
 }

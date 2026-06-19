@@ -42,6 +42,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.flla.zenspend.core.designsystem.component.CurrencySelectionBottomSheet
 import com.flla.zenspend.core.designsystem.component.ZenSpendTopAppBar
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
@@ -72,6 +74,7 @@ import com.flla.zenspend.core.model.User
 import com.flla.zenspend.core.ui.ScreenScaffold
 import com.flla.zenspend.core.ui.collectUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
     onEditProfileClick: () -> Unit,
@@ -90,9 +93,11 @@ fun ProfileRoute(
         onAccountsClick = onAccountsClick,
         onCategoriesClick = onCategoriesClick,
         onBudgetClick = onBudgetClick,
+        onCurrencySelected = viewModel::setCurrency,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod", "LongParameterList")
 @Composable
 fun ProfileScreen(
@@ -104,12 +109,23 @@ fun ProfileScreen(
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
     onBudgetClick: () -> Unit,
+    onCurrencySelected: (String) -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
     val context = LocalContext.current
 
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showCurrencyBottomSheet by remember { mutableStateOf(false) }
+
+    val currencySubtitle =
+        when (state.currency) {
+            "IDR" -> "IDR (Rp)"
+            "USD" -> "USD ($)"
+            "EUR" -> "EUR (€)"
+            "SGD" -> "SGD (S$)"
+            else -> "IDR (Rp)"
+        }
 
     ScreenScaffold(
         topBar = {
@@ -140,9 +156,9 @@ fun ProfileScreen(
                 SettingsItem(
                     icon = Icons.Rounded.Payments,
                     title = "Mata Uang",
-                    subtitle = "IDR (Rp)",
+                    subtitle = currencySubtitle,
                     onClick = {
-                        Toast.makeText(context, "Currency selection coming soon!", Toast.LENGTH_SHORT).show()
+                        showCurrencyBottomSheet = true
                     },
                 )
                 SettingsDivider()
@@ -283,6 +299,17 @@ fun ProfileScreen(
             onThemeSelected = { theme ->
                 onThemeModeClick(theme)
                 showThemeDialog = false
+            },
+        )
+    }
+
+    if (showCurrencyBottomSheet) {
+        CurrencySelectionBottomSheet(
+            selectedCurrency = state.currency,
+            onDismissRequest = { showCurrencyBottomSheet = false },
+            onCurrencySelected = { currency ->
+                onCurrencySelected(currency)
+                showCurrencyBottomSheet = false
             },
         )
     }

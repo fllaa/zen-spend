@@ -9,6 +9,7 @@ object SampleData {
             id = "user-1",
             name = "Test User",
             email = "test@example.com",
+            phone = null,
             avatarUrl = null,
         )
 

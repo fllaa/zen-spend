@@ -9,6 +9,7 @@ data class UserEntity(
     @PrimaryKey val id: String,
     val name: String,
     val email: String,
+    val phone: String?,
     val avatarUrl: String?,
     val updatedAtMillis: Long,
 )
@@ -18,6 +19,7 @@ fun UserEntity.asExternalModel() =
         id = id,
         name = name,
         email = email,
+        phone = phone,
         avatarUrl = avatarUrl,
     )
 
@@ -26,6 +28,7 @@ fun User.asEntity(updatedAtMillis: Long = System.currentTimeMillis()) =
         id = id,
         name = name,
         email = email,
+        phone = phone,
         avatarUrl = avatarUrl,
         updatedAtMillis = updatedAtMillis,
     )

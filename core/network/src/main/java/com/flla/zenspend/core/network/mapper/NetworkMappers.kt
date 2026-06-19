@@ -16,5 +16,6 @@ fun UserDto.asExternalModel() =
         id = id,
         name = name,
         email = email,
+        phone = phone,
         avatarUrl = avatarUrl,
     )

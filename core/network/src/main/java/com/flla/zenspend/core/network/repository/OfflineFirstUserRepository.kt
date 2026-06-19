@@ -30,4 +30,16 @@ class OfflineFirstUserRepository
                         AppResult.Failure(AppError.NetworkUnavailable, throwable)
                     },
                 )
+
+        override suspend fun updateProfile(name: String, email: String, phone: String?): AppResult<User> =
+            runCatching { remoteDataSource.updateProfile(name, email, phone) }
+                .fold(
+                    onSuccess = { user ->
+                        localDataSource.upsertCurrentUser(user)
+                        AppResult.Success(user)
+                    },
+                    onFailure = { throwable ->
+                        AppResult.Failure(AppError.NetworkUnavailable, throwable)
+                    },
+                )
     }

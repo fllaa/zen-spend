@@ -37,6 +37,7 @@ class UserDaoTest {
                     id = "user-1",
                     name = "Room User",
                     email = "room@example.com",
+                    phone = null,
                     avatarUrl = null,
                     updatedAtMillis = 1L,
                 )

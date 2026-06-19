@@ -241,7 +241,14 @@ private fun AppNavHost(
         homeGraph()
         historyGraph()
         analyticsGraph()
-        profileScreen()
+        profileScreen(
+            onEditProfileClick = {
+                navController.navigate(ProfileRoutes.EDIT_PROFILE)
+            },
+            onBackClick = {
+                navController.popBackStack()
+            }
+        )
         settingsScreen()
         transactionGraph(
             onBackClick = { navController.popBackStack() },

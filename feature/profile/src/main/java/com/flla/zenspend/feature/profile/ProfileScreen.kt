@@ -73,13 +73,17 @@ import com.flla.zenspend.core.ui.ScreenScaffold
 import com.flla.zenspend.core.ui.collectUiState
 
 @Composable
-fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfileRoute(
+    onEditProfileClick: () -> Unit,
+    viewModel: ProfileViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectUiState()
     ProfileScreen(
         state = state,
         onThemeModeClick = viewModel::setThemeMode,
         onLogoutClick = viewModel::logout,
         onToggleNotifications = viewModel::toggleNotifications,
+        onEditProfileClick = onEditProfileClick,
     )
 }
 
@@ -90,6 +94,7 @@ fun ProfileScreen(
     onThemeModeClick: (ThemeMode) -> Unit,
     onLogoutClick: () -> Unit,
     onToggleNotifications: (Boolean) -> Unit,
+    onEditProfileClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
@@ -118,9 +123,7 @@ fun ProfileScreen(
                 onEditClick = {
                     Toast.makeText(context, "Edit avatar coming soon!", Toast.LENGTH_SHORT).show()
                 },
-                onEditProfileClick = {
-                    Toast.makeText(context, "Edit profile coming soon!", Toast.LENGTH_SHORT).show()
-                },
+                onEditProfileClick = onEditProfileClick,
             )
 
             // Settings Group 1: Account & Finance

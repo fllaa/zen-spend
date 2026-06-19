@@ -223,6 +223,7 @@ private fun AppNavHost(
     }
 }
 
+@Suppress("LongMethod")
 private fun NavGraphBuilder.registerRoutes(
     navController: NavHostController,
     sessionState: SessionState,
@@ -259,7 +260,14 @@ private fun NavGraphBuilder.registerRoutes(
     )
     homeGraph()
     historyGraph()
-    analyticsGraph()
+    analyticsGraph(
+        onNavigateToCategoryDetail = {
+            navController.navigate(AnalyticsRoutes.CATEGORY_DETAIL)
+        },
+        onBackClick = {
+            navController.popBackStack()
+        },
+    )
     profileScreen(
         onEditProfileClick = {
             navController.navigate(ProfileRoutes.EDIT_PROFILE)

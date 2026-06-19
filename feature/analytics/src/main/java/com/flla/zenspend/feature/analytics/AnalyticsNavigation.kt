@@ -4,13 +4,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-fun NavGraphBuilder.analyticsGraph() {
+fun NavGraphBuilder.analyticsGraph(
+    onNavigateToCategoryDetail: () -> Unit,
+    onBackClick: () -> Unit,
+) {
     navigation(
         startDestination = AnalyticsRoutes.ANALYTICS,
         route = AnalyticsRoutes.GRAPH,
     ) {
         composable(AnalyticsRoutes.ANALYTICS) {
-            AnalyticsRoute()
+            AnalyticsRoute(onNavigateToCategoryDetail = onNavigateToCategoryDetail)
+        }
+        composable(AnalyticsRoutes.CATEGORY_DETAIL) {
+            AnalyticsCategoryDetailRoute(onBackClick = onBackClick)
         }
     }
 }

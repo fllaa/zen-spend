@@ -66,12 +66,16 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun AnalyticsRoute(viewModel: AnalyticsViewModel = hiltViewModel()) {
+fun AnalyticsRoute(
+    onNavigateToCategoryDetail: () -> Unit,
+    viewModel: AnalyticsViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     AnalyticsScreen(
         state = state,
         onPeriodSelected = viewModel::onPeriodSelected,
+        onSeeAllCategoriesClick = onNavigateToCategoryDetail,
     )
 }
 
@@ -79,6 +83,7 @@ fun AnalyticsRoute(viewModel: AnalyticsViewModel = hiltViewModel()) {
 fun AnalyticsScreen(
     state: AnalyticsUiState,
     onPeriodSelected: (String) -> Unit,
+    onSeeAllCategoriesClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val context = LocalContext.current
@@ -133,6 +138,7 @@ fun AnalyticsScreen(
             // Category Breakdown & Donut Chart
             CategoryBreakdownCard(
                 categories = state.categories,
+                onSeeAllCategoriesClick = onSeeAllCategoriesClick,
             )
 
             // Zen Insights
@@ -196,7 +202,7 @@ private fun AnalyticsHeader(
 }
 
 @Composable
-private fun PeriodSelector(
+fun PeriodSelector(
     selectedPeriod: String,
     onPeriodSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -565,6 +571,7 @@ private fun BarChartColumn(
 @Composable
 private fun CategoryBreakdownCard(
     categories: List<CategoryBreakdown>,
+    onSeeAllCategoriesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
@@ -609,7 +616,7 @@ private fun CategoryBreakdownCard(
                         ),
                     modifier =
                         Modifier.clickable {
-                            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+                            onSeeAllCategoriesClick()
                         },
                 )
             }
@@ -943,13 +950,13 @@ private fun ZenInsightCard(
 }
 
 // Helpers
-private fun formatCurrency(amount: Long): String {
+fun formatCurrency(amount: Long): String {
     val numberFormat = NumberFormat.getNumberInstance(Locale("in", "ID"))
     return "Rp ${numberFormat.format(amount)}"
 }
 
 @Composable
-private fun getCategoryColor(category: String): Color {
+fun getCategoryColor(category: String): Color {
     return when (category) {
         "Makanan" -> MaterialTheme.colorScheme.error
         "Pendapatan" -> MaterialTheme.colorScheme.tertiary
@@ -960,7 +967,7 @@ private fun getCategoryColor(category: String): Color {
     }
 }
 
-private fun getCategoryIcon(category: String): ImageVector {
+fun getCategoryIcon(category: String): ImageVector {
     return when (category) {
         "Makanan" -> Icons.Rounded.Restaurant
         "Transportasi" -> Icons.Rounded.DirectionsCar
@@ -970,7 +977,7 @@ private fun getCategoryIcon(category: String): ImageVector {
     }
 }
 
-private fun getCategoryDisplayName(category: String): String {
+fun getCategoryDisplayName(category: String): String {
     return when (category) {
         "Makanan" -> "Makanan & Minuman"
         "Kebutuhan" -> "Belanja"

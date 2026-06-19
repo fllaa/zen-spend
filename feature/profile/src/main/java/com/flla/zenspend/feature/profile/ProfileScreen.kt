@@ -77,6 +77,7 @@ fun ProfileRoute(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
+    onBudgetClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectUiState()
@@ -88,6 +89,7 @@ fun ProfileRoute(
         onEditProfileClick = onEditProfileClick,
         onAccountsClick = onAccountsClick,
         onCategoriesClick = onCategoriesClick,
+        onBudgetClick = onBudgetClick,
     )
 }
 
@@ -101,6 +103,7 @@ fun ProfileScreen(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
+    onBudgetClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
@@ -158,9 +161,7 @@ fun ProfileScreen(
                 SettingsItem(
                     icon = Icons.Rounded.TrackChanges,
                     title = "Atur Anggaran",
-                    onClick = {
-                        Toast.makeText(context, "Budget configuration coming soon!", Toast.LENGTH_SHORT).show()
-                    },
+                    onClick = onBudgetClick,
                 )
             }
 

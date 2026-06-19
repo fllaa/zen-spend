@@ -7,6 +7,7 @@ fun NavGraphBuilder.profileScreen(
     onEditProfileClick: () -> Unit,
     onAccountsClick: () -> Unit,
     onCategoriesClick: () -> Unit,
+    onBudgetClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     composable(ProfileRoutes.PROFILE) {
@@ -14,6 +15,7 @@ fun NavGraphBuilder.profileScreen(
             onEditProfileClick = onEditProfileClick,
             onAccountsClick = onAccountsClick,
             onCategoriesClick = onCategoriesClick,
+            onBudgetClick = onBudgetClick,
         )
     }
     composable(ProfileRoutes.EDIT_PROFILE) {
@@ -24,5 +26,8 @@ fun NavGraphBuilder.profileScreen(
     }
     composable(ProfileRoutes.CATEGORIES) {
         CategoriesRoute(onBackClick = onBackClick)
+    }
+    composable(ProfileRoutes.BUDGET) {
+        BudgetRoute(onBackClick = onBackClick)
     }
 }

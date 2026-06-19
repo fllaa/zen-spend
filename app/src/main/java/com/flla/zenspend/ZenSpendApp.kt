@@ -270,6 +270,9 @@ private fun NavGraphBuilder.registerRoutes(
         onCategoriesClick = {
             navController.navigate(ProfileRoutes.CATEGORIES)
         },
+        onBudgetClick = {
+            navController.navigate(ProfileRoutes.BUDGET)
+        },
         onBackClick = {
             navController.popBackStack()
         },

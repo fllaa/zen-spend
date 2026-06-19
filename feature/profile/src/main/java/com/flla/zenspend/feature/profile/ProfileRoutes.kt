@@ -5,4 +5,5 @@ object ProfileRoutes {
     const val EDIT_PROFILE = "profile/edit"
     const val ACCOUNTS = "profile/accounts"
     const val CATEGORIES = "profile/categories"
+    const val BUDGET = "profile/budget"
 }

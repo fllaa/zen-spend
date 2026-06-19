@@ -1,5 +1,8 @@
 package com.flla.zenspend
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -206,59 +210,75 @@ private fun AppNavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(100)) },
+        exitTransition = { fadeOut(animationSpec = tween(100)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(100)) },
+        popExitTransition = { fadeOut(animationSpec = tween(100)) },
     ) {
-        composable(ZenSpendRoutes.SPLASH) {
-            SplashScreen(sessionExpired = sessionState == SessionState.Expired)
-        }
-        onboardingGraph(
-            onCompleted = {
-                navController.navigate(AuthRoutes.GRAPH) {
-                    popUpTo(OnboardingRoutes.GRAPH) { inclusive = true }
-                    launchSingleTop = true
-                }
-            },
-        )
-        authGraph(
+        registerRoutes(
             navController = navController,
-            onAuthenticated = {
-                val target = if (hasCompletedSetup) HomeRoutes.GRAPH else SetupRoutes.GRAPH
-                navController.navigate(target) {
-                    popUpTo(AuthRoutes.GRAPH) { inclusive = true }
-                    launchSingleTop = true
-                }
-            },
-        )
-        setupGraph(
-            onCompleted = {
-                navController.navigate(HomeRoutes.GRAPH) {
-                    popUpTo(SetupRoutes.GRAPH) { inclusive = true }
-                    launchSingleTop = true
-                }
-            },
-        )
-        homeGraph()
-        historyGraph()
-        analyticsGraph()
-        profileScreen(
-            onEditProfileClick = {
-                navController.navigate(ProfileRoutes.EDIT_PROFILE)
-            },
-            onAccountsClick = {
-                navController.navigate(ProfileRoutes.ACCOUNTS)
-            },
-            onCategoriesClick = {
-                navController.navigate(ProfileRoutes.CATEGORIES)
-            },
-            onBackClick = {
-                navController.popBackStack()
-            },
-        )
-        settingsScreen()
-        transactionGraph(
-            onBackClick = { navController.popBackStack() },
-            onSaveSuccess = { navController.popBackStack() },
+            sessionState = sessionState,
+            hasCompletedSetup = hasCompletedSetup,
         )
     }
+}
+
+private fun NavGraphBuilder.registerRoutes(
+    navController: NavHostController,
+    sessionState: SessionState,
+    hasCompletedSetup: Boolean,
+) {
+    composable(ZenSpendRoutes.SPLASH) {
+        SplashScreen(sessionExpired = sessionState == SessionState.Expired)
+    }
+    onboardingGraph(
+        onCompleted = {
+            navController.navigate(AuthRoutes.GRAPH) {
+                popUpTo(OnboardingRoutes.GRAPH) { inclusive = true }
+                launchSingleTop = true
+            }
+        },
+    )
+    authGraph(
+        navController = navController,
+        onAuthenticated = {
+            val target = if (hasCompletedSetup) HomeRoutes.GRAPH else SetupRoutes.GRAPH
+            navController.navigate(target) {
+                popUpTo(AuthRoutes.GRAPH) { inclusive = true }
+                launchSingleTop = true
+            }
+        },
+    )
+    setupGraph(
+        onCompleted = {
+            navController.navigate(HomeRoutes.GRAPH) {
+                popUpTo(SetupRoutes.GRAPH) { inclusive = true }
+                launchSingleTop = true
+            }
+        },
+    )
+    homeGraph()
+    historyGraph()
+    analyticsGraph()
+    profileScreen(
+        onEditProfileClick = {
+            navController.navigate(ProfileRoutes.EDIT_PROFILE)
+        },
+        onAccountsClick = {
+            navController.navigate(ProfileRoutes.ACCOUNTS)
+        },
+        onCategoriesClick = {
+            navController.navigate(ProfileRoutes.CATEGORIES)
+        },
+        onBackClick = {
+            navController.popBackStack()
+        },
+    )
+    settingsScreen()
+    transactionGraph(
+        onBackClick = { navController.popBackStack() },
+        onSaveSuccess = { navController.popBackStack() },
+    )
 }
 
 @Composable

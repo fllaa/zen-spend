@@ -1,0 +1,22 @@
+# Lefthook configuration
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  parallel: true
+  commands:
+    ktlint:
+      name: ktlint
+      run: ./gradlew ktlintCheck --daemon
+      fail_text: "ktlint found code style violations. Run ./gradlew ktlintFormat to auto-fix."
+
+    detekt:
+      name: detekt
+      run: ./gradlew detekt --daemon
+      fail_text: "detekt found code quality violations. Check the report above and fix them."
+
+pre-push:
+  commands:
+    unit-tests:
+      name: unit tests
+      run: ./gradlew testDebugUnitTest --daemon
+      fail_text: "Unit tests failed. Fix failing tests before pushing."

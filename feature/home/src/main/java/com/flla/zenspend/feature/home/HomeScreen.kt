@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +38,6 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -48,8 +46,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +69,7 @@ import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.NumericDataTextStyle
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel2
+import com.flla.zenspend.core.model.User
 import com.flla.zenspend.core.ui.collectUiState
 
 @Composable
@@ -81,7 +78,6 @@ fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
     HomeScreen(state = state)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun HomeScreen(state: HomeUiState) {
@@ -167,6 +163,7 @@ fun HomeScreen(state: HomeUiState) {
     Scaffold(
         topBar = {
             HomeTopBar(
+                user = state.user,
                 currentMonth = "Oktober",
                 onMonthClick = {},
                 onProfileClick = {},
@@ -224,35 +221,43 @@ fun HomeScreen(state: HomeUiState) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun HomeTopBar(
+    user: User?,
     currentMonth: String,
     onMonthClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
-    TopAppBar(
-        title = {
-            Text(
-                text = "ZenSpend",
-                style =
-                    MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = (-0.5).sp,
-                    ),
-            )
-        },
-        actions = {
+    Row(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = spacing.containerPadding),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "ZenSpend",
+            style =
+                MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    letterSpacing = (-0.02 * 24).sp,
+                ),
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(spacing.sm),
+        ) {
             // Month selector pill
             Surface(
-                modifier =
-                    Modifier
-                        .padding(end = spacing.md)
-                        .clickable { onMonthClick() },
+                modifier = Modifier.clickable { onMonthClick() },
                 color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = RoundedCornerShape(32.dp),
             ) {
@@ -282,37 +287,24 @@ fun HomeTopBar(
             Box(
                 modifier =
                     Modifier
-                        .padding(end = spacing.containerPadding)
                         .size(40.dp)
                         .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primaryContainer)
                         .border(2.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
                         .clickable { onProfileClick() },
+                contentAlignment = Alignment.Center,
             ) {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "A",
-                        style =
-                            MaterialTheme.typography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontWeight = FontWeight.Bold,
-                            ),
-                    )
-                }
+                Text(
+                    text = (user?.name?.take(1) ?: "A").uppercase(),
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        ),
+                )
             }
-        },
-        windowInsets = WindowInsets(0.dp),
-        colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-            ),
-        modifier = modifier,
-    )
+        }
+    }
 }
 
 @Composable

@@ -157,6 +157,7 @@ private fun AnalyticsHeader(
             modifier
                 .fillMaxWidth()
                 .height(64.dp)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = spacing.containerPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -164,10 +165,10 @@ private fun AnalyticsHeader(
         Text(
             text = "ZenSpend",
             style =
-                MaterialTheme.typography.titleLarge.copy(
+                MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    letterSpacing = (-0.5).sp,
+                    letterSpacing = (-0.02 * 24).sp,
                 ),
         )
 
@@ -177,17 +178,17 @@ private fun AnalyticsHeader(
                 Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .border(2.dp, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f), CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .border(2.dp, MaterialTheme.colorScheme.primaryContainer, CircleShape)
                     .clickable(onClick = onProfileClick),
             contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = (user?.name?.take(1) ?: "A").uppercase(),
                 style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     ),
             )
         }

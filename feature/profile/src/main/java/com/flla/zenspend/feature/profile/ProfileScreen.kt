@@ -29,7 +29,6 @@ import androidx.compose.material.icons.rounded.Category
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.CloudSync
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Fingerprint
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material.icons.rounded.Notifications
@@ -45,7 +44,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -158,9 +156,6 @@ fun ProfileScreen(
             // Profile Card
             ProfileCard(
                 user = state.user,
-                onEditClick = {
-                    Toast.makeText(context, "Edit avatar coming soon!", Toast.LENGTH_SHORT).show()
-                },
                 onEditProfileClick = onEditProfileClick,
             )
 
@@ -324,7 +319,6 @@ fun ProfileScreen(
 @Composable
 fun ProfileCard(
     user: User?,
-    onEditClick: () -> Unit,
     onEditProfileClick: () -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
@@ -376,23 +370,6 @@ fun ProfileCard(
                                 ),
                         )
                     }
-                }
-
-                IconButton(
-                    onClick = onEditClick,
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomEnd)
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primaryContainer),
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Edit,
-                        contentDescription = "Edit Avatar",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(16.dp),
-                    )
                 }
             }
 

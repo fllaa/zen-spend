@@ -25,15 +25,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
 import androidx.compose.material.icons.rounded.AutoAwesome
-import androidx.compose.material.icons.rounded.Coffee
-import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.Lightbulb
-import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.Savings
-import androidx.compose.material.icons.rounded.ShoppingBag
-import androidx.compose.material.icons.rounded.TrendingUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -49,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.flla.zenspend.core.designsystem.component.categoryVisualStyle
+import com.flla.zenspend.core.designsystem.component.parseCategoryColor
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
 import com.flla.zenspend.core.model.User
@@ -312,7 +308,7 @@ private fun BentoSummaryGrid(
                     modifier = Modifier.padding(top = 4.dp),
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.TrendingUp,
+                        imageVector = Icons.AutoMirrored.Rounded.TrendingUp,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(16.dp),
@@ -638,7 +634,7 @@ private fun CategoryBreakdownCard(
                         verticalArrangement = Arrangement.spacedBy(spacing.xs),
                     ) {
                         categories.take(4).forEach { cat ->
-                            val color = getCategoryColor(cat.category)
+                            val color = parseCategoryColor(cat.colorHex)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(spacing.sm),
@@ -697,7 +693,7 @@ private fun DonutChart(
     categories: List<CategoryBreakdown>,
     modifier: Modifier = Modifier,
 ) {
-    val colors = categories.map { getCategoryColor(it.category) }
+    val colors = categories.map { parseCategoryColor(it.colorHex) }
 
     Canvas(modifier = modifier) {
         var startAngle = -90f
@@ -725,8 +721,11 @@ private fun CategoryItem(
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
-    val color = getCategoryColor(categoryBreakdown.category)
-    val icon = getCategoryIcon(categoryBreakdown.category)
+    val categoryStyle =
+        categoryVisualStyle(
+            iconName = categoryBreakdown.iconName,
+            colorHex = categoryBreakdown.colorHex,
+        )
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -739,13 +738,13 @@ private fun CategoryItem(
                 Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(color.copy(alpha = 0.1f)),
+                    .background(categoryStyle.containerTint),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = categoryStyle.icon,
                 contentDescription = null,
-                tint = color,
+                tint = categoryStyle.tint,
                 modifier = Modifier.size(24.dp),
             )
         }
@@ -761,7 +760,7 @@ private fun CategoryItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = getCategoryDisplayName(categoryBreakdown.category),
+                    text = categoryBreakdown.category,
                     style =
                         MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium,
@@ -790,7 +789,7 @@ private fun CategoryItem(
                             .weight(1f)
                             .height(6.dp)
                             .clip(RoundedCornerShape(3.dp)),
-                    color = color,
+                    color = categoryStyle.tint,
                     trackColor = MaterialTheme.colorScheme.surfaceContainerLow,
                 )
                 Text(
@@ -858,7 +857,7 @@ private fun ZenInsightCard(
             InsightType.WARNING ->
                 Triple(
                     MaterialTheme.colorScheme.error,
-                    Icons.Rounded.TrendingUp,
+                    Icons.AutoMirrored.Rounded.TrendingUp,
                     MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f),
                 )
             InsightType.SUCCESS ->
@@ -949,38 +948,7 @@ private fun ZenInsightCard(
     }
 }
 
-// Helpers
 fun formatCurrency(amount: Long): String {
     val numberFormat = NumberFormat.getNumberInstance(Locale("in", "ID"))
     return "Rp ${numberFormat.format(amount)}"
-}
-
-@Composable
-fun getCategoryColor(category: String): Color {
-    return when (category) {
-        "Makanan" -> MaterialTheme.colorScheme.error
-        "Pendapatan" -> MaterialTheme.colorScheme.tertiary
-        "Transportasi" -> MaterialTheme.colorScheme.primary
-        "Kebutuhan", "Belanja" -> MaterialTheme.colorScheme.secondary
-        "Utilitas" -> Color(0xFFE65100)
-        else -> MaterialTheme.colorScheme.outline
-    }
-}
-
-fun getCategoryIcon(category: String): ImageVector {
-    return when (category) {
-        "Makanan" -> Icons.Rounded.Restaurant
-        "Transportasi" -> Icons.Rounded.DirectionsCar
-        "Kebutuhan", "Belanja" -> Icons.Rounded.ShoppingBag
-        "Utilitas" -> Icons.AutoMirrored.Rounded.ReceiptLong
-        else -> Icons.Rounded.Coffee
-    }
-}
-
-fun getCategoryDisplayName(category: String): String {
-    return when (category) {
-        "Makanan" -> "Makanan & Minuman"
-        "Kebutuhan" -> "Belanja"
-        else -> category
-    }
 }

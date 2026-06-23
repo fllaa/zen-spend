@@ -2,7 +2,11 @@ package com.flla.zenspend.feature.transaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.flla.zenspend.core.domain.usecase.ObserveAccountsUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
 import com.flla.zenspend.core.domain.usecase.SaveTransactionUseCase
+import com.flla.zenspend.core.model.Account
+import com.flla.zenspend.core.model.Category
 import com.flla.zenspend.core.model.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +19,13 @@ import javax.inject.Inject
 
 data class TransactionUiState(
     val amount: String = "0",
-    val category: String = "",
+    val categoryId: String = "",
+    val categoryName: String = "",
+    val categoryIconName: String = "more_horiz",
+    val categoryColorHex: String = "#37474F",
     val isIncome: Boolean = false,
-    val selectedAccount: String = "Tunai",
+    val availableAccounts: List<Account> = emptyList(),
+    val selectedAccountId: String = "",
     val dateEpochMillis: Long = System.currentTimeMillis(),
     val note: String = "",
     val isSaveSuccess: Boolean = false,
@@ -29,18 +37,60 @@ data class TransactionUiState(
 class TransactionViewModel
     @Inject
     constructor(
+        observeAccountsUseCase: ObserveAccountsUseCase,
+        observeCategoriesUseCase: ObserveCategoriesUseCase,
         private val saveTransactionUseCase: SaveTransactionUseCase,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(TransactionUiState())
         val uiState: StateFlow<TransactionUiState> = _uiState.asStateFlow()
 
+        private var latestAccounts: List<Account> = emptyList()
+        private var latestCategories: List<Category> = emptyList()
+
+        init {
+            viewModelScope.launch {
+                observeAccountsUseCase().collect { accounts ->
+                    latestAccounts = accounts
+                    _uiState.update { state ->
+                        val selectedAccountId =
+                            state.selectedAccountId
+                                .takeIf { id -> accounts.any { it.id == id } }
+                                ?: accounts.firstOrNull { it.isPrimary }?.id
+                                ?: accounts.firstOrNull()?.id.orEmpty()
+                        state.copy(
+                            availableAccounts = accounts,
+                            selectedAccountId = selectedAccountId,
+                        )
+                    }
+                }
+            }
+
+            viewModelScope.launch {
+                observeCategoriesUseCase().collect { categories ->
+                    latestCategories = categories
+                    _uiState.update { state ->
+                        val selectedCategory = categories.firstOrNull { it.id == state.categoryId }
+                        state.copy(
+                            categoryName = selectedCategory?.name ?: state.categoryName,
+                            categoryIconName = selectedCategory?.iconName ?: state.categoryIconName,
+                            categoryColorHex = selectedCategory?.colorHex ?: state.categoryColorHex,
+                        )
+                    }
+                }
+            }
+        }
+
         fun initialize(
-            category: String,
+            categoryId: String,
             isIncome: Boolean,
         ) {
             _uiState.update {
+                val selectedCategory = latestCategories.firstOrNull { category -> category.id == categoryId }
                 it.copy(
-                    category = category,
+                    categoryId = categoryId,
+                    categoryName = selectedCategory?.name.orEmpty(),
+                    categoryIconName = selectedCategory?.iconName ?: it.categoryIconName,
+                    categoryColorHex = selectedCategory?.colorHex ?: it.categoryColorHex,
                     isIncome = isIncome,
                 )
             }
@@ -79,8 +129,8 @@ class TransactionViewModel
             }
         }
 
-        fun selectAccount(account: String) {
-            _uiState.update { it.copy(selectedAccount = account) }
+        fun selectAccount(accountId: String) {
+            _uiState.update { it.copy(selectedAccountId = accountId) }
         }
 
         fun updateDate(epochMillis: Long) {
@@ -103,19 +153,28 @@ class TransactionViewModel
             viewModelScope.launch {
                 try {
                     val state = _uiState.value
+                    val selectedAccount =
+                        latestAccounts.firstOrNull { account -> account.id == state.selectedAccountId }
                     val noteTitle =
                         state.note.ifBlank {
-                            if (state.isIncome) "Pemasukan ${state.category}" else "Pengeluaran ${state.category}"
+                            if (state.isIncome) {
+                                "Pemasukan ${state.categoryName}"
+                            } else {
+                                "Pengeluaran ${state.categoryName}"
+                            }
                         }
                     val transaction =
                         Transaction(
                             id = UUID.randomUUID().toString(),
                             title = noteTitle,
                             amount = amountVal,
-                            category = state.category,
-                            account = state.selectedAccount,
+                            categoryId = state.categoryId,
+                            categoryName = state.categoryName,
+                            accountId = selectedAccount?.id ?: state.selectedAccountId,
+                            accountName = selectedAccount?.iconType ?: selectedAccount?.name.orEmpty(),
                             isIncome = state.isIncome,
                             timestamp = state.dateEpochMillis,
+                            note = state.note.ifBlank { null },
                         )
                     saveTransactionUseCase(transaction)
                     _uiState.update { it.copy(isSaveSuccess = true, isSaving = false) }

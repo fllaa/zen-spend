@@ -25,15 +25,9 @@ import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Category
-import androidx.compose.material.icons.rounded.Coffee
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Payments
-import androidx.compose.material.icons.rounded.ReceiptLong
-import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -63,9 +57,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.flla.zenspend.core.designsystem.component.categoryVisualStyle
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.NumericDataTextStyle
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
+import com.flla.zenspend.core.model.Account
+import com.flla.zenspend.core.model.Category
 import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.model.User
 import com.flla.zenspend.core.ui.ScreenScaffold
@@ -91,11 +88,12 @@ fun HistoryScreen(
     state: HistoryUiState,
     onSearchQueryChange: (String) -> Unit,
     onPeriodChange: (String) -> Unit,
-    onAccountChange: (String) -> Unit,
-    onCategoryChange: (String) -> Unit,
+    onAccountChange: (String?) -> Unit,
+    onCategoryChange: (String?) -> Unit,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
+    val categoriesById = remember(state.categories) { state.categories.associateBy(Category::id) }
 
     ScreenScaffold(
         topBar = {
@@ -130,9 +128,11 @@ fun HistoryScreen(
                     onQueryChange = onSearchQueryChange,
                     selectedPeriod = state.selectedPeriod,
                     onPeriodChange = onPeriodChange,
-                    selectedAccount = state.selectedAccount,
+                    selectedAccountLabel = state.selectedAccountLabel,
+                    accounts = state.accounts,
                     onAccountChange = onAccountChange,
-                    selectedCategory = state.selectedCategory,
+                    selectedCategoryLabel = state.selectedCategoryLabel,
+                    categories = state.categories.filterNot(Category::isIncome),
                     onCategoryChange = onCategoryChange,
                 )
             }
@@ -195,7 +195,10 @@ fun HistoryScreen(
                                 verticalArrangement = Arrangement.spacedBy(spacing.sm),
                             ) {
                                 transactions.forEach { transaction ->
-                                    TransactionRow(transaction = transaction)
+                                    TransactionRow(
+                                        transaction = transaction,
+                                        category = categoriesById[transaction.categoryId],
+                                    )
                                 }
                             }
                         }
@@ -395,10 +398,12 @@ fun SearchAndFilterSection(
     onQueryChange: (String) -> Unit,
     selectedPeriod: String,
     onPeriodChange: (String) -> Unit,
-    selectedAccount: String,
-    onAccountChange: (String) -> Unit,
-    selectedCategory: String,
-    onCategoryChange: (String) -> Unit,
+    selectedAccountLabel: String,
+    accounts: List<Account>,
+    onAccountChange: (String?) -> Unit,
+    selectedCategoryLabel: String,
+    categories: List<Category>,
+    onCategoryChange: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
@@ -480,20 +485,27 @@ fun SearchAndFilterSection(
             item {
                 Box {
                     FilterChipItem(
-                        label = selectedAccount,
+                        label = selectedAccountLabel,
                         icon = Icons.AutoMirrored.Rounded.ReceiptLong,
-                        active = selectedAccount != "Semua Rekening",
+                        active = selectedAccountLabel != "Semua Rekening",
                         onClick = { accountMenuExpanded = true },
                     )
                     DropdownMenu(
                         expanded = accountMenuExpanded,
                         onDismissRequest = { accountMenuExpanded = false },
                     ) {
-                        listOf("Semua Rekening", "BCA", "Mandiri", "Tunai").forEach { acc ->
+                        DropdownMenuItem(
+                            text = { Text("Semua Rekening") },
+                            onClick = {
+                                onAccountChange(null)
+                                accountMenuExpanded = false
+                            },
+                        )
+                        accounts.forEach { account ->
                             DropdownMenuItem(
-                                text = { Text(acc) },
+                                text = { Text(account.name) },
                                 onClick = {
-                                    onAccountChange(acc)
+                                    onAccountChange(account.id)
                                     accountMenuExpanded = false
                                 },
                             )
@@ -506,21 +518,27 @@ fun SearchAndFilterSection(
             item {
                 Box {
                     FilterChipItem(
-                        label = selectedCategory,
+                        label = selectedCategoryLabel,
                         icon = Icons.Rounded.Category,
-                        active = selectedCategory != "Kategori",
+                        active = selectedCategoryLabel != "Kategori",
                         onClick = { categoryMenuExpanded = true },
                     )
                     DropdownMenu(
                         expanded = categoryMenuExpanded,
                         onDismissRequest = { categoryMenuExpanded = false },
                     ) {
-                        listOf("Kategori", "Makanan", "Pendapatan", "Transportasi", "Kebutuhan", "Utilitas").forEach {
-                                cat ->
+                        DropdownMenuItem(
+                            text = { Text("Kategori") },
+                            onClick = {
+                                onCategoryChange(null)
+                                categoryMenuExpanded = false
+                            },
+                        )
+                        categories.forEach { category ->
                             DropdownMenuItem(
-                                text = { Text(cat) },
+                                text = { Text(category.name) },
                                 onClick = {
-                                    onCategoryChange(cat)
+                                    onCategoryChange(category.id)
                                     categoryMenuExpanded = false
                                 },
                             )
@@ -593,53 +611,19 @@ fun FilterChipItem(
 @Composable
 fun TransactionRow(
     transaction: Transaction,
+    category: Category?,
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
     val context = LocalContext.current
     var menuExpanded by remember { mutableStateOf(false) }
-
-    // Determine category specific icon and background tints
-    val (categoryIcon, categoryTint, categoryBg) =
-        when (transaction.category) {
-            "Makanan" ->
-                Triple(
-                    Icons.Rounded.Restaurant,
-                    MaterialTheme.colorScheme.error,
-                    MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f),
-                )
-            "Pendapatan" ->
-                Triple(
-                    Icons.Rounded.Payments,
-                    MaterialTheme.colorScheme.tertiary,
-                    MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.2f),
-                )
-            "Transportasi" ->
-                Triple(
-                    Icons.Rounded.DirectionsCar,
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
-                )
-            "Kebutuhan" ->
-                Triple(
-                    Icons.Rounded.ShoppingBag,
-                    MaterialTheme.colorScheme.secondary,
-                    MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.2f),
-                )
-            "Utilitas" ->
-                Triple(
-                    Icons.AutoMirrored.Rounded.ReceiptLong,
-                    Color(0xFFE65100),
-                    Color(0xFFFFE0B2).copy(alpha = 0.4f),
-                )
-            else ->
-                Triple(
-                    Icons.Rounded.Coffee,
-                    MaterialTheme.colorScheme.outline,
-                    MaterialTheme.colorScheme.surfaceContainerHigh,
-                )
-        }
+    val categoryStyle =
+        categoryVisualStyle(
+            iconName = category?.iconName ?: if (transaction.isIncome) "account_balance_wallet" else "more_horiz",
+            colorHex = category?.colorHex ?: "#6F787D",
+            containerAlpha = 0.16f,
+        )
 
     Box(modifier = modifier) {
         Card(
@@ -671,13 +655,13 @@ fun TransactionRow(
                         Modifier
                             .size(48.dp)
                             .clip(CircleShape)
-                            .background(categoryBg),
+                            .background(categoryStyle.containerTint),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
-                        imageVector = categoryIcon,
+                        imageVector = categoryStyle.icon,
                         contentDescription = null,
-                        tint = categoryTint,
+                        tint = categoryStyle.tint,
                         modifier = Modifier.size(24.dp),
                     )
                 }
@@ -702,7 +686,7 @@ fun TransactionRow(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         Text(
-                            text = transaction.category,
+                            text = transaction.categoryName,
                             style =
                                 MaterialTheme.typography.labelSmall.copy(
                                     color = MaterialTheme.colorScheme.outline,
@@ -716,7 +700,7 @@ fun TransactionRow(
                                     .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
                         )
                         Text(
-                            text = transaction.account,
+                            text = transaction.accountName,
                             style =
                                 MaterialTheme.typography.labelSmall.copy(
                                     color = MaterialTheme.colorScheme.outline,

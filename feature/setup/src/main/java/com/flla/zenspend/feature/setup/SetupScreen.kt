@@ -860,14 +860,14 @@ private fun CategoriesStepContent(
 
         val categories =
             listOf(
-                CategoryOptionInfo("Makanan", Icons.Rounded.Restaurant),
-                CategoryOptionInfo("Transportasi", Icons.Rounded.DirectionsCar),
-                CategoryOptionInfo("Belanja", Icons.Rounded.ShoppingBag),
-                CategoryOptionInfo("Hiburan", Icons.Rounded.Movie),
-                CategoryOptionInfo("Kesehatan", Icons.Rounded.MedicalServices),
-                CategoryOptionInfo("Tagihan", Icons.AutoMirrored.Rounded.ReceiptLong),
-                CategoryOptionInfo("Pendidikan", Icons.Rounded.School),
-                CategoryOptionInfo("Lainnya", Icons.Rounded.MoreHoriz),
+                CategoryOptionInfo("cat_makan", "Makanan", Icons.Rounded.Restaurant),
+                CategoryOptionInfo("cat_transport", "Transportasi", Icons.Rounded.DirectionsCar),
+                CategoryOptionInfo("cat_belanja", "Belanja", Icons.Rounded.ShoppingBag),
+                CategoryOptionInfo("cat_hiburan", "Hiburan", Icons.Rounded.Movie),
+                CategoryOptionInfo("cat_kesehatan", "Kesehatan", Icons.Rounded.MedicalServices),
+                CategoryOptionInfo("cat_tagihan", "Tagihan", Icons.AutoMirrored.Rounded.ReceiptLong),
+                CategoryOptionInfo("cat_pendidikan", "Pendidikan", Icons.Rounded.School),
+                CategoryOptionInfo("cat_lainnya_expense", "Lainnya", Icons.Rounded.MoreHoriz),
             )
 
         LazyVerticalGrid(
@@ -878,7 +878,7 @@ private fun CategoriesStepContent(
             contentPadding = PaddingValues(bottom = spacing.md),
         ) {
             items(categories) { category ->
-                val active = selectedCategories.contains(category.name)
+                val active = selectedCategories.contains(category.id)
                 val borderStrokeColor =
                     if (active) {
                         MaterialTheme.colorScheme.primary
@@ -893,11 +893,11 @@ private fun CategoriesStepContent(
                     }
 
                 Card(
-                    onClick = { onToggleCategory(category.name) },
+                    onClick = { onToggleCategory(category.id) },
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .testTag("category_option_${category.name}"),
+                            .testTag("category_option_${category.id}"),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = containerColor),
                     border = BorderStroke(2.dp, borderStrokeColor),
@@ -985,6 +985,7 @@ private fun CategoriesStepContent(
 }
 
 private data class CategoryOptionInfo(
+    val id: String,
     val name: String,
     val icon: ImageVector,
 )

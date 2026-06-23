@@ -13,14 +13,7 @@ class FakeCategoryRepository : CategoryRepository {
 
     override suspend fun saveCategory(category: Category) {
         categoriesFlow.update { currentList ->
-            val existingIndex =
-                currentList.indexOfFirst {
-                    it.id == category.id ||
-                        (
-                            it.name.equals(category.name, ignoreCase = true) &&
-                                it.isIncome == category.isIncome
-                        )
-                }
+            val existingIndex = currentList.indexOfFirst { it.id == category.id }
             if (existingIndex >= 0) {
                 currentList.toMutableList().apply {
                     set(existingIndex, category)

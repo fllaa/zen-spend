@@ -2,8 +2,11 @@ package com.flla.zenspend.feature.analytics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.flla.zenspend.core.domain.usecase.ObserveBudgetsUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
 import com.flla.zenspend.core.domain.usecase.ObserveCurrentUserUseCase
 import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
+import com.flla.zenspend.core.model.Budget
 import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +23,10 @@ import java.util.Locale
 import javax.inject.Inject
 
 data class CategoryBreakdown(
+    val categoryId: String,
     val category: String,
+    val iconName: String,
+    val colorHex: String,
     val amount: Long,
     // Percentage value between 0.0 and 1.0
     val percentage: Float,
@@ -67,6 +73,8 @@ class AnalyticsViewModel
     @Inject
     constructor(
         observeTransactionsUseCase: ObserveTransactionsUseCase,
+        observeCategoriesUseCase: ObserveCategoriesUseCase,
+        observeBudgetsUseCase: ObserveBudgetsUseCase,
         observeCurrentUserUseCase: ObserveCurrentUserUseCase,
     ) : ViewModel() {
         private val selectedPeriodState = MutableStateFlow("Bulan")
@@ -74,9 +82,11 @@ class AnalyticsViewModel
         val uiState: StateFlow<AnalyticsUiState> =
             combine(
                 observeTransactionsUseCase(),
+                observeCategoriesUseCase(),
+                observeBudgetsUseCase(),
                 observeCurrentUserUseCase(),
                 selectedPeriodState,
-            ) { transactions, user, period ->
+            ) { transactions, categories, budgets, user, period ->
                 val zoneId = ZoneId.systemDefault()
                 val today = LocalDate.now()
 
@@ -106,24 +116,27 @@ class AnalyticsViewModel
                 val dailyAverage = if (totalExpense > 0) totalExpense / daysInPeriod else 0L
 
                 // 3. Category grouping and breakdown
-                val categoryGroups = expenses.groupBy { it.category }
+                val categoryMap = categories.associateBy { it.id }
+                val budgetMap = budgets.associateBy(Budget::categoryId)
+                val categoryGroups = expenses.groupBy { it.categoryId }
                 val categoryBreakdowns =
-                    categoryGroups.map { (cat, txs) ->
+                    categoryGroups.mapNotNull { (categoryId, txs) ->
+                        val category = categoryMap[categoryId] ?: return@mapNotNull null
                         val amount = txs.sumOf { it.amount }
                         val pct = if (totalExpense > 0) amount.toFloat() / totalExpense else 0f
-
-                        // Hardcoded budgets for demonstration
-                        val budgetLimit =
-                            when (cat) {
-                                "Makanan" -> 2000000L
-                                "Kebutuhan" -> 1500000L
-                                "Transportasi" -> 1500000L
-                                else -> 5000000L
+                        val budgetLimit = budgetMap[category.id]?.limitAmount ?: 0L
+                        val progress =
+                            if (budgetLimit > 0) {
+                                (amount.toFloat() / budgetLimit).coerceAtMost(1.0f)
+                            } else {
+                                0f
                             }
-                        val progress = (amount.toFloat() / budgetLimit).coerceAtMost(1.0f)
 
                         CategoryBreakdown(
-                            category = cat,
+                            categoryId = category.id,
+                            category = category.name,
+                            iconName = category.iconName,
+                            colorHex = category.colorHex,
                             amount = amount,
                             percentage = pct,
                             budgetProgress = progress,
@@ -135,26 +148,19 @@ class AnalyticsViewModel
                 val largestCategory = categoryBreakdowns.firstOrNull()?.category ?: "-"
 
                 // 4. Calculate Trends for the last 3 months
-                // Using dynamic month naming but anchored to default values from design system if data is missing
+                val expenseByMonth =
+                    transactions.filter { !it.isIncome }
+                        .groupBy { tx ->
+                            val txDate = Instant.ofEpochMilli(tx.timestamp).atZone(zoneId).toLocalDate()
+                            txDate.year to txDate.monthValue
+                        }.mapValues { (_, txs) -> txs.sumOf { it.amount } }
                 val trends =
                     (2 downTo 0).map { offset ->
                         val monthDate = today.minusMonths(offset.toLong())
                         val monthName = monthDate.month.getDisplayName(TextStyle.SHORT, Locale("in", "ID"))
                         val isCurrent = offset == 0
 
-                        // Compute dynamic expense for current month.
-                        // Previous months fallback to realistic mock numbers.
-                        val amount =
-                            if (isCurrent) {
-                                totalExpense
-                            } else {
-                                // Realistic mock data scaled to current expense to look proportional
-                                if (offset == 1) {
-                                    (totalExpense * 0.96).toLong().coerceAtLeast(4100000L)
-                                } else {
-                                    (totalExpense * 0.89).toLong().coerceAtLeast(3800000L)
-                                }
-                            }
+                        val amount = expenseByMonth[monthDate.year to monthDate.monthValue] ?: 0L
 
                         MonthlyTrend(
                             monthName = monthName,
@@ -173,28 +179,8 @@ class AnalyticsViewModel
                     }
 
                 // 5. Dynamic Zen Insights
-                val insights =
-                    listOf(
-                        ZenInsight(
-                            title = "Kategori Makan Meningkat",
-                            description =
-                                "Pengeluaran naik 15%. Coba kurangi makan di luar " +
-                                    "minggu ini untuk menghemat Rp 200rb.",
-                            type = InsightType.WARNING,
-                        ),
-                        ZenInsight(
-                            title = "Pola Hemat Terdeteksi",
-                            description = "Kamu paling hemat di hari Selasa. Pertahankan ritme kesadaran finansialmu!",
-                            type = InsightType.SUCCESS,
-                        ),
-                        ZenInsight(
-                            title = "Target Tabungan",
-                            description =
-                                "Dengan tren saat ini, kamu bisa menabung Rp 500rb " +
-                                    "lebih banyak bulan depan.",
-                            type = InsightType.INFO,
-                        ),
-                    )
+                val highestBudgetUsage = categoryBreakdowns.maxByOrNull { it.budgetProgress }
+                val insights = buildInsights(totalExpense, largestCategory, highestBudgetUsage)
 
                 AnalyticsUiState(
                     user = user,
@@ -215,4 +201,48 @@ class AnalyticsViewModel
         fun onPeriodSelected(period: String) {
             selectedPeriodState.value = period
         }
+
+        private fun buildInsights(
+            totalExpense: Long,
+            largestCategory: String,
+            highestBudgetUsage: CategoryBreakdown?,
+        ): List<ZenInsight> {
+            val insights = mutableListOf<ZenInsight>()
+
+            if (largestCategory != "-") {
+                insights +=
+                    ZenInsight(
+                        title = "Kategori Terbesar Saat Ini",
+                        description = "$largestCategory menjadi kategori pengeluaran terbesar untuk periode ini.",
+                        type = InsightType.INFO,
+                    )
+            }
+
+            highestBudgetUsage?.let { category ->
+                if (category.budgetLimit > 0 && category.budgetProgress >= 0.8f) {
+                    insights +=
+                        ZenInsight(
+                            title = "Budget Hampir Habis",
+                            description =
+                                "Budget ${category.category.lowercase()} " +
+                                    "sudah terpakai ${"%.0f".format(category.budgetProgress * 100)}%.",
+                            type = InsightType.WARNING,
+                        )
+                }
+            }
+
+            insights +=
+                ZenInsight(
+                    title = "Ringkasan Pengeluaran",
+                    description =
+                        "Total pengeluaran tercatat Rp ${formatAmount(totalExpense)} " +
+                            "pada periode yang dipilih.",
+                    type = InsightType.SUCCESS,
+                )
+
+            return insights
+        }
+
+        private fun formatAmount(amount: Long): String =
+            java.text.NumberFormat.getNumberInstance(Locale("in", "ID")).format(amount)
     }

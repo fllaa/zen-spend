@@ -1,5 +1,10 @@
 package com.flla.zenspend.feature.profile
 
+import com.flla.zenspend.core.domain.usecase.DeleteBudgetUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveBudgetsUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
+import com.flla.zenspend.core.domain.usecase.SaveBudgetUseCase
 import com.flla.zenspend.core.model.Budget
 import com.flla.zenspend.core.model.BudgetPeriod
 import com.flla.zenspend.core.model.Category
@@ -32,8 +37,8 @@ class BudgetViewModelTest {
 
     private val testCategories =
         listOf(
-            Category("cat_makan", "Makan", "restaurant", "#E65100", isIncome = false, isPrimary = true),
-            Category("cat_transport", "Transport", "directions_car", "#0D47A1", isIncome = false, isPrimary = true),
+            Category("cat_makan", "Makanan", "restaurant", "#E65100", isIncome = false, isPrimary = true),
+            Category("cat_transport", "Transportasi", "directions_car", "#0D47A1", isIncome = false, isPrimary = true),
             Category("cat_gaji", "Gaji", "account_balance_wallet", "#006064", isIncome = true, isPrimary = true),
         )
 
@@ -44,8 +49,8 @@ class BudgetViewModelTest {
 
     private val testTransactions =
         listOf(
-            Transaction("1", "Makan Siang", 200000L, "Makanan", "BCA", isIncome = false, 1000L),
-            Transaction("2", "Gaji", 5000000L, "Gaji", "Mandiri", isIncome = true, 2000L),
+            Transaction("1", "Makan Siang", 200000L, "cat_makan", "Makanan", "acc_bca", "BCA", isIncome = false, 1000L),
+            Transaction("2", "Gaji", 5000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", isIncome = true, 2000L),
         )
 
     @Before
@@ -56,9 +61,11 @@ class BudgetViewModelTest {
 
         viewModel =
             BudgetViewModel(
-                budgetRepository = budgetRepository,
-                categoryRepository = categoryRepository,
-                transactionRepository = transactionRepository,
+                observeBudgetsUseCase = ObserveBudgetsUseCase(budgetRepository),
+                observeCategoriesUseCase = ObserveCategoriesUseCase(categoryRepository),
+                observeTransactionsUseCase = ObserveTransactionsUseCase(transactionRepository),
+                saveBudgetUseCase = SaveBudgetUseCase(budgetRepository),
+                deleteBudgetUseCase = DeleteBudgetUseCase(budgetRepository),
             )
     }
 

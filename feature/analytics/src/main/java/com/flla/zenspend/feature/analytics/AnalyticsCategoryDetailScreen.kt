@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.flla.zenspend.core.designsystem.component.ZenSpendTopAppBar
+import com.flla.zenspend.core.designsystem.component.categoryVisualStyle
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
 import com.flla.zenspend.core.model.Transaction
@@ -152,9 +153,11 @@ fun AnalyticsCategoryDetailScreen(
             if (state.categories.isNotEmpty()) {
                 items(state.categories, key = { it.category }) { categoryBreakdown ->
                     val isExpanded = expandedStates[categoryBreakdown.category] ?: false
-                    val color = getCategoryColor(categoryBreakdown.category)
-                    val icon = getCategoryIcon(categoryBreakdown.category)
-                    val displayName = getCategoryDisplayName(categoryBreakdown.category)
+                    val categoryStyle =
+                        categoryVisualStyle(
+                            iconName = categoryBreakdown.iconName,
+                            colorHex = categoryBreakdown.colorHex,
+                        )
 
                     // Animate rotation of the expand caret icon
                     val rotationAngle by animateFloatAsState(
@@ -202,13 +205,13 @@ fun AnalyticsCategoryDetailScreen(
                                         Modifier
                                             .size(48.dp)
                                             .clip(CircleShape)
-                                            .background(color.copy(alpha = 0.1f)),
+                                            .background(categoryStyle.containerTint),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Icon(
-                                        imageVector = icon,
+                                        imageVector = categoryStyle.icon,
                                         contentDescription = null,
-                                        tint = color,
+                                        tint = categoryStyle.tint,
                                         modifier = Modifier.size(24.dp),
                                     )
                                 }
@@ -218,7 +221,7 @@ fun AnalyticsCategoryDetailScreen(
                                     verticalArrangement = Arrangement.spacedBy(2.dp),
                                 ) {
                                     Text(
-                                        text = displayName,
+                                        text = categoryBreakdown.category,
                                         style =
                                             MaterialTheme.typography.bodyLarge.copy(
                                                 fontWeight = FontWeight.SemiBold,
@@ -427,7 +430,7 @@ private fun TransactionRowItem(
                             .background(MaterialTheme.colorScheme.outlineVariant),
                 )
                 Text(
-                    text = transaction.account,
+                    text = transaction.accountName,
                     style =
                         MaterialTheme.typography.labelSmall.copy(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,

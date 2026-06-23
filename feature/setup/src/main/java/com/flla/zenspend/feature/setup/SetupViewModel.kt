@@ -2,7 +2,8 @@ package com.flla.zenspend.feature.setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.flla.zenspend.core.domain.usecase.SetSetupCompletedUseCase
+import com.flla.zenspend.core.domain.usecase.CompleteSetupRequest
+import com.flla.zenspend.core.domain.usecase.CompleteSetupUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +30,7 @@ data class SetupUiState(
     val accountType: AccountType = AccountType.BANK,
     val accountBalance: String = "",
     val accountName: String = "",
-    val selectedCategories: Set<String> = setOf("Makanan", "Transportasi", "Belanja"),
+    val selectedCategories: Set<String> = setOf("cat_makan", "cat_transport", "cat_belanja"),
     val hasCompleted: Boolean = false,
 )
 
@@ -37,7 +38,7 @@ data class SetupUiState(
 class SetupViewModel
     @Inject
     constructor(
-        private val setSetupCompletedUseCase: SetSetupCompletedUseCase,
+        private val completeSetupUseCase: CompleteSetupUseCase,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(SetupUiState())
         val uiState: StateFlow<SetupUiState> = _uiState.asStateFlow()
@@ -101,7 +102,32 @@ class SetupViewModel
 
         fun completeSetup() {
             viewModelScope.launch {
-                setSetupCompletedUseCase(true)
+                val state = _uiState.value
+                val balance = state.accountBalance.toLongOrNull() ?: 0L
+                val defaultAccountName =
+                    state.accountName.ifBlank {
+                        when (state.accountType) {
+                            AccountType.CASH -> "Tunai"
+                            AccountType.BANK -> "Rekening Utama"
+                            AccountType.WALLET -> "Dompet Digital"
+                        }
+                    }
+                val (accountType, provider) =
+                    when (state.accountType) {
+                        AccountType.CASH -> "Cash" to "Tunai"
+                        AccountType.BANK -> "Bank" to "Bank"
+                        AccountType.WALLET -> "Wallet" to "Wallet"
+                    }
+                completeSetupUseCase(
+                    CompleteSetupRequest(
+                        currency = state.selectedCurrency,
+                        accountName = defaultAccountName,
+                        accountType = accountType,
+                        provider = provider,
+                        initialBalance = balance,
+                        selectedCategoryIds = state.selectedCategories,
+                    ),
+                )
                 _uiState.update { it.copy(hasCompleted = true) }
             }
         }

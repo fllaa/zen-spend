@@ -28,17 +28,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
-import androidx.compose.material.icons.rounded.Coffee
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.DonutLarge
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.Payments
-import androidx.compose.material.icons.rounded.Restaurant
-import androidx.compose.material.icons.rounded.ShoppingBag
-import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Card
@@ -74,12 +67,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.flla.zenspend.core.designsystem.component.categoryIcon
+import com.flla.zenspend.core.designsystem.component.categoryVisualStyle
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.NumericDataTextStyle
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel2
 import com.flla.zenspend.core.model.User
 import com.flla.zenspend.core.ui.collectUiState
+import java.text.NumberFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
@@ -96,78 +97,32 @@ fun HomeScreen(state: HomeUiState) {
 
     var balanceVisible by rememberSaveable { mutableStateOf(true) }
 
-    // Mock data based on Stitch screen spec
     val categoryItems =
-        listOf(
+        state.topCategories.map { category ->
+            val categoryStyle =
+                categoryVisualStyle(
+                    iconName = category.iconName,
+                    colorHex = category.colorHex,
+                )
             TopCategoryItem(
-                name = "Makanan",
-                amount = "Rp1.2M",
-                icon = Icons.Rounded.Restaurant,
-                iconColor = MaterialTheme.colorScheme.error,
-                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
-            ),
-            TopCategoryItem(
-                name = "Transport",
-                amount = "Rp850rb",
-                icon = Icons.Rounded.DirectionsCar,
-                iconColor = MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-            ),
-            TopCategoryItem(
-                name = "Belanja",
-                amount = "Rp620rb",
-                icon = Icons.Rounded.ShoppingBag,
-                iconColor = MaterialTheme.colorScheme.tertiary,
-                containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f),
-            ),
-            TopCategoryItem(
-                name = "Tagihan",
-                amount = "Rp450rb",
-                // Shopping cart stands in for a bill/payment category here.
-                icon = Icons.Rounded.ShoppingCart,
-                iconColor = MaterialTheme.colorScheme.secondary,
-                containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
-            ),
-        )
+                name = category.name,
+                amount = formatCompactCurrency(category.amount),
+                icon = categoryStyle.icon,
+                iconColor = categoryStyle.tint,
+                containerColor = categoryStyle.containerTint,
+            )
+        }
 
     val transactionItems =
-        listOf(
+        state.recentTransactions.map { transaction ->
             TransactionItem(
-                title = "Indomaret Point",
-                timestamp = "Hari ini, 10:24",
-                amount = "45.000",
-                isIncome = false,
-                icon = Icons.Rounded.ShoppingCart,
-            ),
-            TransactionItem(
-                title = "Gojek - Perjalanan",
-                timestamp = "Kemarin, 18:30",
-                amount = "18.000",
-                isIncome = false,
-                icon = Icons.Rounded.DirectionsCar,
-            ),
-            TransactionItem(
-                title = "Gaji Bulanan",
-                timestamp = "25 Okt, 08:00",
-                amount = "12.000.000",
-                isIncome = true,
-                icon = Icons.Rounded.Payments,
-            ),
-            TransactionItem(
-                title = "Starbucks Coffee",
-                timestamp = "24 Okt, 14:15",
-                amount = "55.000",
-                isIncome = false,
-                icon = Icons.Rounded.Coffee,
-            ),
-            TransactionItem(
-                title = "Listrik & Air",
-                timestamp = "20 Okt, 09:10",
-                amount = "450.000",
-                isIncome = false,
-                icon = Icons.Rounded.Home,
-            ),
-        )
+                title = transaction.title,
+                timestamp = formatTransactionTimestamp(transaction.timestamp),
+                amount = formatAmountWithoutPrefix(transaction.amount),
+                isIncome = transaction.isIncome,
+                icon = categoryIcon(transaction.iconName),
+            )
+        }
 
     Scaffold(
         topBar = {
@@ -205,9 +160,9 @@ fun HomeScreen(state: HomeUiState) {
 
             // Balance Card
             BalanceCard(
-                balance = "8.250.000",
-                income = "Rp 12.4M",
-                expense = "Rp 4.1M",
+                balance = formatAmountWithoutPrefix(state.totalBalance),
+                income = formatCompactCurrency(state.totalIncome),
+                expense = formatCompactCurrency(state.totalExpense),
                 balanceVisible = balanceVisible,
                 onToggleBalanceVisibility = { balanceVisible = !balanceVisible },
             )
@@ -963,5 +918,34 @@ fun RecentTransactionsSection(
                 }
             }
         }
+    }
+}
+
+private fun formatAmountWithoutPrefix(amount: Long): String =
+    NumberFormat.getNumberInstance(Locale("in", "ID")).format(amount)
+
+private fun formatCompactCurrency(amount: Long): String {
+    val absAmount = kotlin.math.abs(amount)
+    val formatted =
+        when {
+            absAmount >= 1_000_000_000L -> String.format(Locale.US, "%.1fB", amount / 1_000_000_000f)
+            absAmount >= 1_000_000L -> String.format(Locale.US, "%.1fM", amount / 1_000_000f)
+            absAmount >= 1_000L -> String.format(Locale.US, "%.0frb", amount / 1_000f)
+            else -> formatAmountWithoutPrefix(amount)
+        }
+    return "Rp $formatted"
+}
+
+private fun formatTransactionTimestamp(timestamp: Long): String {
+    val zoneId = ZoneId.systemDefault()
+    val today = LocalDate.now()
+    val dateTime = Instant.ofEpochMilli(timestamp).atZone(zoneId)
+    val date = dateTime.toLocalDate()
+    val time = dateTime.toLocalTime()
+    val timeText = time.format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
+    return when (date) {
+        today -> "Hari ini, $timeText"
+        today.minusDays(1) -> "Kemarin, $timeText"
+        else -> date.format(DateTimeFormatter.ofPattern("dd MMM, HH:mm", Locale("id", "ID")))
     }
 }

@@ -21,26 +21,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.Backspace
 import androidx.compose.material.icons.rounded.AccountBalance
-import androidx.compose.material.icons.rounded.AccountBalanceWallet
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Backspace
-import androidx.compose.material.icons.rounded.CardGiftcard
 import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.EditNote
-import androidx.compose.material.icons.rounded.LaptopMac
-import androidx.compose.material.icons.rounded.MedicalServices
-import androidx.compose.material.icons.rounded.MilitaryTech
-import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Payments
-import androidx.compose.material.icons.rounded.Restaurant
-import androidx.compose.material.icons.rounded.School
-import androidx.compose.material.icons.rounded.ShoppingBag
-import androidx.compose.material.icons.rounded.TrendingUp
 import androidx.compose.material.icons.rounded.Wallet
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -66,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.flla.zenspend.core.designsystem.component.categoryVisualStyle
 import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel1
 import com.flla.zenspend.core.designsystem.theme.zenSpendShadowLevel2
@@ -79,7 +66,7 @@ import java.util.Locale
 
 @Composable
 fun TransactionRoute(
-    category: String,
+    categoryId: String,
     isIncome: Boolean,
     onBackClick: () -> Unit,
     onSaveSuccess: () -> Unit,
@@ -88,8 +75,8 @@ fun TransactionRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(category, isIncome) {
-        viewModel.initialize(category, isIncome)
+    LaunchedEffect(categoryId, isIncome) {
+        viewModel.initialize(categoryId, isIncome)
     }
 
     LaunchedEffect(uiState.isSaveSuccess) {
@@ -126,7 +113,12 @@ fun TransactionScreen(
 ) {
     val spacing = LocalZenSpendSpacing.current
     val context = LocalContext.current
-    val categoryStyle = getCategoryStyle(uiState.category, uiState.isIncome)
+    val categoryStyle =
+        categoryVisualStyle(
+            iconName = uiState.categoryIconName,
+            colorHex = uiState.categoryColorHex,
+            containerAlpha = 0.16f,
+        )
 
     Scaffold(
         topBar = {
@@ -149,7 +141,7 @@ fun TransactionScreen(
                             .background(MaterialTheme.colorScheme.surfaceContainerLow),
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.primary,
                     )
@@ -166,20 +158,20 @@ fun TransactionScreen(
                     modifier =
                         Modifier
                             .clip(RoundedCornerShape(32.dp))
-                            .background(categoryStyle.containerColor)
+                            .background(categoryStyle.containerTint)
                             .padding(horizontal = 12.dp, vertical = 6.dp),
                 ) {
                     Icon(
                         imageVector = categoryStyle.icon,
-                        contentDescription = uiState.category,
-                        tint = categoryStyle.color,
+                        contentDescription = uiState.categoryName,
+                        tint = categoryStyle.tint,
                         modifier = Modifier.size(18.dp),
                     )
                     Spacer(modifier = Modifier.width(spacing.xs))
                     Text(
-                        text = uiState.category,
+                        text = uiState.categoryName,
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                        color = categoryStyle.color,
+                        color = categoryStyle.tint,
                     )
                 }
             }
@@ -265,24 +257,14 @@ fun TransactionScreen(
                                 .horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(spacing.sm),
                     ) {
-                        AccountOptionItem(
-                            name = "Tunai",
-                            icon = Icons.Rounded.Payments,
-                            isSelected = uiState.selectedAccount == "Tunai",
-                            onClick = { onAccountSelect("Tunai") },
-                        )
-                        AccountOptionItem(
-                            name = "BCA",
-                            icon = Icons.Rounded.AccountBalance,
-                            isSelected = uiState.selectedAccount == "BCA",
-                            onClick = { onAccountSelect("BCA") },
-                        )
-                        AccountOptionItem(
-                            name = "GoPay",
-                            icon = Icons.Rounded.Wallet,
-                            isSelected = uiState.selectedAccount == "GoPay",
-                            onClick = { onAccountSelect("GoPay") },
-                        )
+                        uiState.availableAccounts.forEach { account ->
+                            AccountOptionItem(
+                                name = account.name,
+                                icon = getAccountIcon(account.iconType),
+                                isSelected = uiState.selectedAccountId == account.id,
+                                onClick = { onAccountSelect(account.id) },
+                            )
+                        }
                     }
                 }
 
@@ -458,7 +440,7 @@ fun TransactionScreen(
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.Backspace,
+                                imageVector = Icons.AutoMirrored.Rounded.Backspace,
                                 contentDescription = "Hapus",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(22.dp),
@@ -594,36 +576,9 @@ private fun showDatePicker(
     ).show()
 }
 
-private data class CategoryStyle(
-    val icon: ImageVector,
-    val color: Color,
-    val containerColor: Color,
-)
-
-@Suppress("CyclomaticComplexMethod")
-private fun getCategoryStyle(
-    category: String,
-    isIncome: Boolean,
-): CategoryStyle {
-    return if (isIncome) {
-        when (category) {
-            "Gaji" -> CategoryStyle(Icons.Rounded.AccountBalanceWallet, Color(0xFF006064), Color(0xFFE0F2F1))
-            "Bonus" -> CategoryStyle(Icons.Rounded.MilitaryTech, Color(0xFFF57F17), Color(0xFFFFFDE7))
-            "Freelance" -> CategoryStyle(Icons.Rounded.LaptopMac, Color(0xFF006064), Color(0xFFE0F7FA))
-            "Investasi" -> CategoryStyle(Icons.Rounded.TrendingUp, Color(0xFF1A237E), Color(0xFFE8EAF6))
-            "Hadiah" -> CategoryStyle(Icons.Rounded.CardGiftcard, Color(0xFF880E4F), Color(0xFFFCE4EC))
-            else -> CategoryStyle(Icons.Rounded.Add, Color(0xFF37474F), Color(0xFFECEFF1))
-        }
-    } else {
-        when (category) {
-            "Makan" -> CategoryStyle(Icons.Rounded.Restaurant, Color(0xFFE65100), Color(0xFFFFF3E0))
-            "Transport" -> CategoryStyle(Icons.Rounded.DirectionsCar, Color(0xFF0D47A1), Color(0xFFE3F2FD))
-            "Belanja" -> CategoryStyle(Icons.Rounded.ShoppingBag, Color(0xFF4A148C), Color(0xFFF3E5F5))
-            "Tagihan" -> CategoryStyle(Icons.AutoMirrored.Rounded.ReceiptLong, Color(0xFFB71C1C), Color(0xFFFFEBEE))
-            "Kesehatan" -> CategoryStyle(Icons.Rounded.MedicalServices, Color(0xFF1B5E20), Color(0xFFE8F5E9))
-            "Hiburan" -> CategoryStyle(Icons.Rounded.Movie, Color(0xFF004D40), Color(0xFFE0F2F1))
-            "Edukasi" -> CategoryStyle(Icons.Rounded.School, Color(0xFFFF8F00), Color(0xFFFFFDE7))
-            else -> CategoryStyle(Icons.Rounded.MoreHoriz, Color(0xFF37474F), Color(0xFFECEFF1))
-        }
+private fun getAccountIcon(provider: String): ImageVector =
+    when (provider.uppercase()) {
+        "BCA", "MANDIRI", "SEABANK" -> Icons.Rounded.AccountBalance
+        "GOPAY", "OVO", "DANA" -> Icons.Rounded.Wallet
+        else -> Icons.Rounded.Payments
     }
-}

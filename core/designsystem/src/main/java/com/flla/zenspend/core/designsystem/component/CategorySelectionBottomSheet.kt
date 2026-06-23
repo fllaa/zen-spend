@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CardGiftcard
@@ -32,7 +33,6 @@ import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.ShoppingBag
-import androidx.compose.material.icons.rounded.TrendingUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -63,7 +63,7 @@ import com.flla.zenspend.core.designsystem.theme.LocalZenSpendSpacing
 @Composable
 fun CategorySelectionBottomSheet(
     onDismissRequest: () -> Unit,
-    onCategorySelected: (categoryName: String, isIncome: Boolean) -> Unit,
+    onCategorySelected: (categoryId: String, isIncome: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
 ) {
@@ -74,26 +74,110 @@ fun CategorySelectionBottomSheet(
     val expenseCategories =
         remember {
             listOf(
-                CategoryItem("Makan", Icons.Rounded.Restaurant, Color(0xFFE65100), Color(0xFFFFF3E0)),
-                CategoryItem("Transport", Icons.Rounded.DirectionsCar, Color(0xFF0D47A1), Color(0xFFE3F2FD)),
-                CategoryItem("Belanja", Icons.Rounded.ShoppingBag, Color(0xFF4A148C), Color(0xFFF3E5F5)),
-                CategoryItem("Tagihan", Icons.AutoMirrored.Rounded.ReceiptLong, Color(0xFFB71C1C), Color(0xFFFFEBEE)),
-                CategoryItem("Kesehatan", Icons.Rounded.MedicalServices, Color(0xFF1B5E20), Color(0xFFE8F5E9)),
-                CategoryItem("Hiburan", Icons.Rounded.Movie, Color(0xFF004D40), Color(0xFFE0F2F1)),
-                CategoryItem("Edukasi", Icons.Rounded.School, Color(0xFFFF8F00), Color(0xFFFFFDE7)),
-                CategoryItem("Lainnya", Icons.Rounded.MoreHoriz, Color(0xFF37474F), Color(0xFFECEFF1)),
+                CategoryItem(
+                    "cat_makan",
+                    "Makanan",
+                    Icons.Rounded.Restaurant,
+                    Color(0xFFE65100),
+                    Color(0xFFFFF3E0),
+                ),
+                CategoryItem(
+                    "cat_transport",
+                    "Transportasi",
+                    Icons.Rounded.DirectionsCar,
+                    Color(0xFF0D47A1),
+                    Color(0xFFE3F2FD),
+                ),
+                CategoryItem(
+                    "cat_belanja",
+                    "Belanja",
+                    Icons.Rounded.ShoppingBag,
+                    Color(0xFF4A148C),
+                    Color(0xFFF3E5F5),
+                ),
+                CategoryItem(
+                    "cat_tagihan",
+                    "Tagihan",
+                    Icons.AutoMirrored.Rounded.ReceiptLong,
+                    Color(0xFFB71C1C),
+                    Color(0xFFFFEBEE),
+                ),
+                CategoryItem(
+                    "cat_kesehatan",
+                    "Kesehatan",
+                    Icons.Rounded.MedicalServices,
+                    Color(0xFF1B5E20),
+                    Color(0xFFE8F5E9),
+                ),
+                CategoryItem(
+                    "cat_hiburan",
+                    "Hiburan",
+                    Icons.Rounded.Movie,
+                    Color(0xFF004D40),
+                    Color(0xFFE0F2F1),
+                ),
+                CategoryItem(
+                    "cat_pendidikan",
+                    "Pendidikan",
+                    Icons.Rounded.School,
+                    Color(0xFFFF8F00),
+                    Color(0xFFFFFDE7),
+                ),
+                CategoryItem(
+                    "cat_lainnya_expense",
+                    "Lainnya",
+                    Icons.Rounded.MoreHoriz,
+                    Color(0xFF37474F),
+                    Color(0xFFECEFF1),
+                ),
             )
         }
 
     val incomeCategories =
         remember {
             listOf(
-                CategoryItem("Gaji", Icons.Rounded.AccountBalanceWallet, Color(0xFF006064), Color(0xFFE0F2F1)),
-                CategoryItem("Bonus", Icons.Rounded.MilitaryTech, Color(0xFFF57F17), Color(0xFFFFFDE7)),
-                CategoryItem("Freelance", Icons.Rounded.LaptopMac, Color(0xFF006064), Color(0xFFE0F7FA)),
-                CategoryItem("Investasi", Icons.Rounded.TrendingUp, Color(0xFF1A237E), Color(0xFFE8EAF6)),
-                CategoryItem("Hadiah", Icons.Rounded.CardGiftcard, Color(0xFF880E4F), Color(0xFFFCE4EC)),
-                CategoryItem("Lainnya", Icons.Rounded.Add, Color(0xFF37474F), Color(0xFFECEFF1)),
+                CategoryItem(
+                    "cat_gaji",
+                    "Gaji",
+                    Icons.Rounded.AccountBalanceWallet,
+                    Color(0xFF006064),
+                    Color(0xFFE0F2F1),
+                ),
+                CategoryItem(
+                    "cat_bonus",
+                    "Bonus",
+                    Icons.Rounded.MilitaryTech,
+                    Color(0xFFF57F17),
+                    Color(0xFFFFFDE7),
+                ),
+                CategoryItem(
+                    "cat_freelance",
+                    "Freelance",
+                    Icons.Rounded.LaptopMac,
+                    Color(0xFF006064),
+                    Color(0xFFE0F7FA),
+                ),
+                CategoryItem(
+                    "cat_investasi",
+                    "Investasi",
+                    Icons.AutoMirrored.Rounded.TrendingUp,
+                    Color(0xFF1A237E),
+                    Color(0xFFE8EAF6),
+                ),
+                CategoryItem(
+                    "cat_hadiah",
+                    "Hadiah",
+                    Icons.Rounded.CardGiftcard,
+                    Color(0xFF880E4F),
+                    Color(0xFFFCE4EC),
+                ),
+                CategoryItem(
+                    "cat_lainnya_income",
+                    "Lainnya",
+                    Icons.Rounded.Add,
+                    Color(0xFF37474F),
+                    Color(0xFFECEFF1),
+                ),
             )
         }
 
@@ -184,7 +268,7 @@ fun CategorySelectionBottomSheet(
                         CategoryGridItem(
                             item = category,
                             onClick = {
-                                onCategorySelected(category.name, isIncomeSelected)
+                                onCategorySelected(category.id, isIncomeSelected)
                             },
                         )
                     }

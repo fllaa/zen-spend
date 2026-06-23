@@ -4,8 +4,11 @@ data class Transaction(
     val id: String,
     val title: String,
     val amount: Long,
-    val category: String,
-    val account: String,
+    val categoryId: String,
+    val categoryName: String,
+    val accountId: String,
+    val accountName: String,
     val isIncome: Boolean,
     val timestamp: Long,
+    val note: String? = null,
 )

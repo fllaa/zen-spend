@@ -1,85 +1,56 @@
 package com.flla.zenspend.core.network.repository
 
+import com.flla.zenspend.core.database.seed.FinanceSeedData
+import com.flla.zenspend.core.database.source.AccountLocalDataSource
 import com.flla.zenspend.core.domain.repository.AccountRepository
 import com.flla.zenspend.core.model.Account
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DefaultAccountRepository
     @Inject
-    constructor() : AccountRepository {
-        private val accountsFlow: MutableStateFlow<List<Account>>
-
+    constructor(
+        private val localDataSource: AccountLocalDataSource,
+    ) : AccountRepository {
         init {
-            val initialAccounts =
-                listOf(
-                    Account(
-                        id = "bca",
-                        name = "BCA Personal",
-                        balance = 12400000L,
-                        type = "BCA Personal",
-                        iconType = "BCA",
-                        isVisible = true,
-                        isPrimary = true,
-                    ),
-                    Account(
-                        id = "mandiri",
-                        name = "Mandiri Tabungan",
-                        balance = 8150000L,
-                        type = "Mandiri Tabungan",
-                        iconType = "Mandiri",
-                        isVisible = true,
-                        isPrimary = false,
-                    ),
-                    Account(
-                        id = "gopay",
-                        name = "GoPay",
-                        balance = 2200000L,
-                        type = "GoPay",
-                        iconType = "GoPay",
-                        isVisible = true,
-                        isPrimary = false,
-                    ),
-                    Account(
-                        id = "tunai",
-                        name = "Uang Tunai",
-                        balance = 1500000L,
-                        type = "Uang Tunai",
-                        iconType = "Tunai",
-                        isVisible = true,
-                        isPrimary = false,
-                    ),
-                )
-            accountsFlow = MutableStateFlow(initialAccounts)
+            runBlocking { seedIfEmpty() }
         }
 
-        override fun observeAccounts(): Flow<List<Account>> = accountsFlow
+        override fun observeAccounts(): Flow<List<Account>> {
+            runBlocking { seedIfEmpty() }
+            return localDataSource.observeAccounts()
+        }
 
         override suspend fun saveAccount(account: Account) {
-            accountsFlow.update { currentList ->
-                val listWithNewAccount =
-                    if (account.isPrimary) {
-                        currentList.map { it.copy(isPrimary = false) } + account
-                    } else {
-                        currentList + account
-                    }
-                listWithNewAccount
-            }
+            val existingAccounts = localDataSource.getAccounts()
+            val normalizedAccounts =
+                if (account.isPrimary) {
+                    existingAccounts.map { it.copy(isPrimary = false) }
+                } else {
+                    existingAccounts
+                }
+            localDataSource.upsertAccounts(normalizedAccounts)
+            localDataSource.upsertAccount(account)
         }
 
         override suspend fun toggleAccountVisibility(accountId: String) {
-            accountsFlow.update { currentList ->
-                currentList.map { account ->
+            val updatedAccounts =
+                localDataSource.getAccounts().map { account ->
                     if (account.id == accountId) {
                         account.copy(isVisible = !account.isVisible)
                     } else {
                         account
                     }
                 }
+            localDataSource.upsertAccounts(updatedAccounts)
+        }
+
+        private suspend fun seedIfEmpty() {
+            if (localDataSource.isEmpty()) {
+                localDataSource.upsertAccounts(FinanceSeedData.accounts)
             }
         }
     }

@@ -1,7 +1,13 @@
 package com.flla.zenspend.feature.transaction
 
+import com.flla.zenspend.core.domain.usecase.ObserveAccountsUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
 import com.flla.zenspend.core.domain.usecase.SaveTransactionUseCase
+import com.flla.zenspend.core.model.Account
+import com.flla.zenspend.core.model.Category
 import com.flla.zenspend.core.testing.MainDispatcherRule
+import com.flla.zenspend.core.testing.repository.FakeAccountRepository
+import com.flla.zenspend.core.testing.repository.FakeCategoryRepository
 import com.flla.zenspend.core.testing.repository.FakeTransactionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -19,23 +25,45 @@ class TransactionViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var fakeTransactionRepository: FakeTransactionRepository
+    private lateinit var fakeAccountRepository: FakeAccountRepository
+    private lateinit var fakeCategoryRepository: FakeCategoryRepository
+    private lateinit var observeAccountsUseCase: ObserveAccountsUseCase
+    private lateinit var observeCategoriesUseCase: ObserveCategoriesUseCase
     private lateinit var saveTransactionUseCase: SaveTransactionUseCase
     private lateinit var viewModel: TransactionViewModel
 
     @Before
     fun setUp() {
         fakeTransactionRepository = FakeTransactionRepository()
+        fakeAccountRepository = FakeAccountRepository()
+        fakeCategoryRepository = FakeCategoryRepository()
+        fakeAccountRepository.setAccounts(
+            listOf(
+                Account("acc_tunai", "Tunai", 1_000_000L, "Cash", "Tunai", isVisible = true, isPrimary = true),
+                Account("acc_bca", "BCA Personal", 2_000_000L, "Bank", "BCA", isVisible = true, isPrimary = false),
+            ),
+        )
+        fakeCategoryRepository.setCategories(
+            listOf(
+                Category("cat_makan", "Makanan", "restaurant", "#E65100", isIncome = false, isPrimary = true),
+            ),
+        )
+        observeAccountsUseCase = ObserveAccountsUseCase(fakeAccountRepository)
+        observeCategoriesUseCase = ObserveCategoriesUseCase(fakeCategoryRepository)
         saveTransactionUseCase = SaveTransactionUseCase(fakeTransactionRepository)
-        viewModel = TransactionViewModel(saveTransactionUseCase)
+        viewModel = TransactionViewModel(observeAccountsUseCase, observeCategoriesUseCase, saveTransactionUseCase)
     }
 
     @Test
     fun initialize_setsCategoryAndType() =
         runTest {
-            viewModel.initialize(category = "Makan", isIncome = false)
+            viewModel.initialize(categoryId = "cat_makan", isIncome = false)
 
             val state = viewModel.uiState.value
-            assertEquals("Makan", state.category)
+            assertEquals("cat_makan", state.categoryId)
+            assertEquals("Makanan", state.categoryName)
+            assertEquals("restaurant", state.categoryIconName)
+            assertEquals("#E65100", state.categoryColorHex)
             assertEquals(false, state.isIncome)
         }
 
@@ -93,7 +121,7 @@ class TransactionViewModelTest {
     @Test
     fun saveTransaction_fails_whenAmountIsZero() =
         runTest {
-            viewModel.initialize(category = "Makan", isIncome = false)
+            viewModel.initialize(categoryId = "cat_makan", isIncome = false)
             // Amount is default "0"
             viewModel.saveTransaction()
 
@@ -105,7 +133,7 @@ class TransactionViewModelTest {
     @Test
     fun saveTransaction_savesSuccessfully_whenAmountIsPositive() =
         runTest {
-            viewModel.initialize(category = "Makan", isIncome = false)
+            viewModel.initialize(categoryId = "cat_makan", isIncome = false)
             viewModel.appendDigit("5")
             viewModel.appendDigit("000") // Rp 5.000
             viewModel.updateNote("Makan Bakso")
@@ -122,7 +150,10 @@ class TransactionViewModelTest {
             val saved = transactions.first()
             assertEquals("Makan Bakso", saved.title)
             assertEquals(5000L, saved.amount)
-            assertEquals("Makan", saved.category)
+            assertEquals("cat_makan", saved.categoryId)
+            assertEquals("Makanan", saved.categoryName)
+            assertEquals("acc_tunai", saved.accountId)
+            assertEquals("Tunai", saved.accountName)
             assertEquals(false, saved.isIncome)
         }
 }

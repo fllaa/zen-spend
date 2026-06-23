@@ -8,10 +8,10 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 
 fun NavController.navigateToTransactionDetails(
-    category: String,
+    categoryId: String,
     isIncome: Boolean,
 ) {
-    navigate(TransactionRoutes.detailsRoute(category, isIncome))
+    navigate(TransactionRoutes.detailsRoute(categoryId, isIncome))
 }
 
 fun NavGraphBuilder.transactionGraph(
@@ -26,9 +26,9 @@ fun NavGraphBuilder.transactionGraph(
             route = TransactionRoutes.TRANSACTION_DETAILS,
             arguments =
                 listOf(
-                    navArgument("category") {
+                    navArgument("categoryId") {
                         type = NavType.StringType
-                        defaultValue = "Lainnya"
+                        defaultValue = "cat_lainnya_expense"
                     },
                     navArgument("isIncome") {
                         type = NavType.BoolType
@@ -36,11 +36,11 @@ fun NavGraphBuilder.transactionGraph(
                     },
                 ),
         ) { backStackEntry ->
-            val category = backStackEntry.arguments?.getString("category") ?: "Lainnya"
+            val categoryId = backStackEntry.arguments?.getString("categoryId") ?: "cat_lainnya_expense"
             val isIncome = backStackEntry.arguments?.getBoolean("isIncome") ?: false
 
             TransactionRoute(
-                category = category,
+                categoryId = categoryId,
                 isIncome = isIncome,
                 onBackClick = onBackClick,
                 onSaveSuccess = onSaveSuccess,

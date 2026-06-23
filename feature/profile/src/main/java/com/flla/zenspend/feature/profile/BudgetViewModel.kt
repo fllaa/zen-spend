@@ -2,9 +2,11 @@ package com.flla.zenspend.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.flla.zenspend.core.domain.repository.BudgetRepository
-import com.flla.zenspend.core.domain.repository.CategoryRepository
-import com.flla.zenspend.core.domain.repository.TransactionRepository
+import com.flla.zenspend.core.domain.usecase.DeleteBudgetUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveBudgetsUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveTransactionsUseCase
+import com.flla.zenspend.core.domain.usecase.SaveBudgetUseCase
 import com.flla.zenspend.core.model.Budget
 import com.flla.zenspend.core.model.BudgetPeriod
 import com.flla.zenspend.core.model.Category
@@ -40,15 +42,17 @@ data class CategoryBudgetInfo(
 class BudgetViewModel
     @Inject
     constructor(
-        private val budgetRepository: BudgetRepository,
-        private val categoryRepository: CategoryRepository,
-        private val transactionRepository: TransactionRepository,
+        observeBudgetsUseCase: ObserveBudgetsUseCase,
+        observeCategoriesUseCase: ObserveCategoriesUseCase,
+        observeTransactionsUseCase: ObserveTransactionsUseCase,
+        private val saveBudgetUseCase: SaveBudgetUseCase,
+        private val deleteBudgetUseCase: DeleteBudgetUseCase,
     ) : ViewModel() {
         val uiState: StateFlow<BudgetUiState> =
             combine(
-                budgetRepository.observeBudgets(),
-                categoryRepository.observeCategories(),
-                transactionRepository.observeTransactions(),
+                observeBudgetsUseCase(),
+                observeCategoriesUseCase(),
+                observeTransactionsUseCase(),
             ) { budgets, categories, transactions ->
                 // Calculate spent per category
                 val categoryBudgets =
@@ -58,7 +62,7 @@ class BudgetViewModel
                         // Sum transactions matching category name
                         val categoryTransactions =
                             transactions.filter { tx ->
-                                !tx.isIncome && isCategoryMatch(tx.category, category.name)
+                                !tx.isIncome && tx.categoryId == category.id
                             }
                         val spentAmount = categoryTransactions.sumOf { it.amount }
                         val remainingAmount = budget.limitAmount - spentAmount
@@ -125,22 +129,13 @@ class BudgetViewModel
                         limitAmount = limitAmount,
                         period = period,
                     )
-                budgetRepository.saveBudget(budget)
+                saveBudgetUseCase(budget)
             }
         }
 
         fun deleteBudget(budgetId: String) {
             viewModelScope.launch {
-                budgetRepository.deleteBudget(budgetId)
+                deleteBudgetUseCase(budgetId)
             }
-        }
-
-        private fun isCategoryMatch(
-            transactionCategory: String,
-            categoryName: String,
-        ): Boolean {
-            return transactionCategory.equals(categoryName, ignoreCase = true) ||
-                transactionCategory.startsWith(categoryName, ignoreCase = true) ||
-                categoryName.startsWith(transactionCategory, ignoreCase = true)
         }
     }

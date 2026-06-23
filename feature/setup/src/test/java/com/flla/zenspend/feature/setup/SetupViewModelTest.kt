@@ -1,12 +1,23 @@
 package com.flla.zenspend.feature.setup
 
 import com.flla.zenspend.core.domain.repository.UserPreferencesRepository
+import com.flla.zenspend.core.domain.usecase.CompleteSetupUseCase
+import com.flla.zenspend.core.domain.usecase.ObserveCategoriesUseCase
+import com.flla.zenspend.core.domain.usecase.SaveAccountUseCase
+import com.flla.zenspend.core.domain.usecase.SaveCategoryUseCase
+import com.flla.zenspend.core.domain.usecase.SetCurrencyUseCase
 import com.flla.zenspend.core.domain.usecase.SetSetupCompletedUseCase
+import com.flla.zenspend.core.model.Category
 import com.flla.zenspend.core.model.ThemeMode
 import com.flla.zenspend.core.model.UserPreferences
 import com.flla.zenspend.core.testing.MainDispatcherRule
+import com.flla.zenspend.core.testing.repository.FakeAccountRepository
+import com.flla.zenspend.core.testing.repository.FakeCategoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -18,8 +29,35 @@ class SetupViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val userPreferencesRepository = FakeUserPreferencesRepository()
-    private val setSetupCompletedUseCase = SetSetupCompletedUseCase(userPreferencesRepository)
-    private val viewModel = SetupViewModel(setSetupCompletedUseCase)
+    private val accountRepository = FakeAccountRepository()
+    private val categoryRepository = FakeCategoryRepository()
+    private val completeSetupUseCase =
+        CompleteSetupUseCase(
+            setCurrencyUseCase = SetCurrencyUseCase(userPreferencesRepository),
+            saveAccountUseCase = SaveAccountUseCase(accountRepository),
+            observeCategoriesUseCase = ObserveCategoriesUseCase(categoryRepository),
+            saveCategoryUseCase = SaveCategoryUseCase(categoryRepository),
+            setSetupCompletedUseCase = SetSetupCompletedUseCase(userPreferencesRepository),
+        )
+    private val viewModel = SetupViewModel(completeSetupUseCase)
+
+    init {
+        categoryRepository.setCategories(
+            listOf(
+                Category("cat_makan", "Makanan", "restaurant", "#E65100", isIncome = false, isPrimary = true),
+                Category(
+                    "cat_transport",
+                    "Transportasi",
+                    "directions_car",
+                    "#0D47A1",
+                    isIncome = false,
+                    isPrimary = true,
+                ),
+                Category("cat_belanja", "Belanja", "shopping_bag", "#4A148C", isIncome = false, isPrimary = true),
+                Category("cat_hiburan", "Hiburan", "movie", "#004D40", isIncome = false, isPrimary = false),
+            ),
+        )
+    }
 
     @Test
     fun initialState_isCorrect() {
@@ -29,7 +67,7 @@ class SetupViewModelTest {
         assertEquals(AccountType.BANK, state.accountType)
         assertEquals("", state.accountBalance)
         assertEquals("", state.accountName)
-        assertEquals(setOf("Makanan", "Transportasi", "Belanja"), state.selectedCategories)
+        assertEquals(setOf("cat_makan", "cat_transport", "cat_belanja"), state.selectedCategories)
         assertFalse(state.hasCompleted)
     }
 
@@ -59,13 +97,13 @@ class SetupViewModelTest {
 
     @Test
     fun toggleCategory_addsAndRemovesCategory() {
-        // "Makanan" is selected by default, toggling it should remove it
-        viewModel.toggleCategory("Makanan")
-        assertFalse(viewModel.uiState.value.selectedCategories.contains("Makanan"))
+        // "cat_makan" is selected by default, toggling it should remove it
+        viewModel.toggleCategory("cat_makan")
+        assertFalse(viewModel.uiState.value.selectedCategories.contains("cat_makan"))
 
-        // "Hiburan" is not selected, toggling it should add it
-        viewModel.toggleCategory("Hiburan")
-        assertTrue(viewModel.uiState.value.selectedCategories.contains("Hiburan"))
+        // "cat_hiburan" is not selected, toggling it should add it
+        viewModel.toggleCategory("cat_hiburan")
+        assertTrue(viewModel.uiState.value.selectedCategories.contains("cat_hiburan"))
     }
 
     @Test
@@ -89,11 +127,20 @@ class SetupViewModelTest {
     }
 
     @Test
-    fun completeSetup_updatesStateAndRepository() {
-        viewModel.completeSetup()
+    fun completeSetup_updatesStateAndRepository() =
+        runTest {
+            viewModel.updateAccountName("Dompet Utama")
+            viewModel.updateAccountBalance("150000")
+            viewModel.completeSetup()
+            runCurrent()
 
-        assertTrue(viewModel.uiState.value.hasCompleted)
-    }
+            assertTrue(viewModel.uiState.value.hasCompleted)
+            assertEquals("IDR", userPreferencesRepository.preferences.first().currency)
+            assertTrue(userPreferencesRepository.preferences.first().hasCompletedSetup)
+            assertEquals(1, accountRepository.observeAccounts().first().size)
+            val updatedCategories = categoryRepository.observeCategories().first()
+            assertTrue(updatedCategories.first { it.id == "cat_makan" }.isPrimary)
+        }
 }
 
 class FakeUserPreferencesRepository : UserPreferencesRepository {

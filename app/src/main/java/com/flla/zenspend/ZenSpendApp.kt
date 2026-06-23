@@ -116,7 +116,10 @@ fun ZenSpendApp(
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = mainDestinations.any { it.selectedRoute == currentRoute }
+    val showBottomBar =
+        mainDestinations.any { dest ->
+            currentRoute == dest.selectedRoute || currentRoute == dest.route
+        }
 
     var showCategorySheet by rememberSaveable { mutableStateOf(false) }
 
@@ -150,9 +153,9 @@ fun ZenSpendApp(
         if (showCategorySheet) {
             CategorySelectionBottomSheet(
                 onDismissRequest = { showCategorySheet = false },
-                onCategorySelected = { categoryName, isIncome ->
+                onCategorySelected = { categoryId, isIncome ->
                     showCategorySheet = false
-                    navController.navigateToTransactionDetails(categoryName, isIncome)
+                    navController.navigateToTransactionDetails(categoryId, isIncome)
                 },
             )
         }

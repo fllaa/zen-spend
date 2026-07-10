@@ -8,5 +8,7 @@ interface AccountRepository {
 
     suspend fun saveAccount(account: Account)
 
+    suspend fun clearAccounts()
+
     suspend fun toggleAccountVisibility(accountId: String)
 }

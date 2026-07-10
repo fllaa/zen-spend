@@ -128,7 +128,7 @@ fun HomeScreen(state: HomeUiState) {
         topBar = {
             HomeTopBar(
                 user = state.user,
-                currentMonth = "Oktober",
+                currentMonth = state.currentMonthLabel,
                 onMonthClick = {},
                 onProfileClick = {},
             )
@@ -156,7 +156,7 @@ fun HomeScreen(state: HomeUiState) {
             verticalArrangement = Arrangement.spacedBy(spacing.lg),
         ) {
             // Welcome Greeting
-            WelcomeGreeting(userName = state.user?.name ?: "Avall")
+            WelcomeGreeting(userName = state.user?.name.orEmpty())
 
             // Balance Card
             BalanceCard(
@@ -172,8 +172,13 @@ fun HomeScreen(state: HomeUiState) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(spacing.md),
             ) {
-                BudgetProgressCard()
-                StatisticsPreviewCard()
+                BudgetProgressCard(
+                    spentProgress = state.budgetProgress,
+                    remainingAmount = state.budgetRemaining,
+                    spentAmount = state.budgetSpent,
+                    limitAmount = state.budgetLimit,
+                )
+                StatisticsPreviewCard(bars = state.weeklyExpenseBars)
             }
 
             // Top Categories section
@@ -277,12 +282,13 @@ fun WelcomeGreeting(
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalZenSpendSpacing.current
+    val displayName = userName.ifBlank { "teman" }
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(spacing.xs),
     ) {
         Text(
-            text = "Selamat pagi, $userName",
+            text = "Selamat pagi, $displayName",
             style =
                 MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -478,7 +484,13 @@ fun BalanceCard(
 
 @Suppress("LongMethod")
 @Composable
-fun BudgetProgressCard(modifier: Modifier = Modifier) {
+fun BudgetProgressCard(
+    spentProgress: Float,
+    remainingAmount: Long,
+    spentAmount: Long,
+    limitAmount: Long,
+    modifier: Modifier = Modifier,
+) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
@@ -521,15 +533,28 @@ fun BudgetProgressCard(modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val remainingLabel =
+                        if (limitAmount <= 0L) {
+                            "Belum ada budget"
+                        } else if (remainingAmount >= 0L) {
+                            "Sisa ${formatCompactCurrency(remainingAmount)}"
+                        } else {
+                            "Lebih ${formatCompactCurrency(-remainingAmount)}"
+                        }
                     Text(
-                        text = "75% Terpakai",
+                        text =
+                            if (limitAmount <= 0L) {
+                                "Tambahkan budget pertamamu"
+                            } else {
+                                "${(spentProgress * 100).toInt()}% Terpakai"
+                            },
                         style =
                             MaterialTheme.typography.labelSmall.copy(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             ),
                     )
                     Text(
-                        text = "Sisa Rp1.250.000",
+                        text = remainingLabel,
                         style =
                             MaterialTheme.typography.labelSmall.copy(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -538,7 +563,7 @@ fun BudgetProgressCard(modifier: Modifier = Modifier) {
                 }
 
                 LinearProgressIndicator(
-                    progress = { 0.75f },
+                    progress = { spentProgress },
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -549,7 +574,12 @@ fun BudgetProgressCard(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = "Rp3.750.000 dari Rp5.000.000",
+                    text =
+                        if (limitAmount <= 0L) {
+                            "Budget akan muncul setelah kamu menambahkannya dari halaman profile."
+                        } else {
+                            "${formatCompactCurrency(spentAmount)} dari ${formatCompactCurrency(limitAmount)}"
+                        },
                     style =
                         MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -563,7 +593,10 @@ fun BudgetProgressCard(modifier: Modifier = Modifier) {
 
 @Suppress("LongMethod")
 @Composable
-fun StatisticsPreviewCard(modifier: Modifier = Modifier) {
+fun StatisticsPreviewCard(
+    bars: List<HomeStatisticBar>,
+    modifier: Modifier = Modifier,
+) {
     val spacing = LocalZenSpendSpacing.current
     val darkTheme = isSystemInDarkTheme()
 
@@ -610,17 +643,25 @@ fun StatisticsPreviewCard(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom,
             ) {
-                val barHeights = listOf(0.4f, 0.65f, 0.9f, 0.3f, 0.55f, 0.45f, 0.7f)
-                barHeights.forEachIndexed { index, height ->
+                bars.ifEmpty {
+                    List(7) { index ->
+                        HomeStatisticBar(
+                            label = index.toString(),
+                            amount = 0L,
+                            heightPercentage = 0.12f,
+                            isHighlighted = index == 6,
+                        )
+                    }
+                }.forEach { bar ->
                     Box(
                         modifier =
                             Modifier
                                 .weight(1f)
                                 .padding(horizontal = 4.dp)
-                                .fillMaxHeight(height)
+                                .fillMaxHeight(bar.heightPercentage)
                                 .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
                                 .background(
-                                    if (index == 2) {
+                                    if (bar.isHighlighted) {
                                         MaterialTheme.colorScheme.primary
                                     } else {
                                         MaterialTheme.colorScheme.surfaceContainerHighest

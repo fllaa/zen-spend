@@ -15,6 +15,10 @@ class FakeTransactionRepository : TransactionRepository {
         transactionsFlow.update { listOf(transaction) + it }
     }
 
+    override suspend fun clearTransactions() {
+        transactionsFlow.value = emptyList()
+    }
+
     fun setTransactions(transactions: List<Transaction>) {
         transactionsFlow.value = transactions
     }

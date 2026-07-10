@@ -156,4 +156,19 @@ class TransactionViewModelTest {
             assertEquals("Tunai", saved.accountName)
             assertEquals(false, saved.isIncome)
         }
+
+    @Test
+    fun saveTransaction_usesCanonicalAccountName_forSelectedAccount() =
+        runTest {
+            viewModel.initialize(categoryId = "cat_makan", isIncome = false)
+            viewModel.selectAccount("acc_bca")
+            viewModel.appendDigit("2")
+            viewModel.appendDigit("000")
+
+            viewModel.saveTransaction()
+
+            val saved = fakeTransactionRepository.observeTransactions().first().first()
+            assertEquals("acc_bca", saved.accountId)
+            assertEquals("BCA Personal", saved.accountName)
+        }
 }

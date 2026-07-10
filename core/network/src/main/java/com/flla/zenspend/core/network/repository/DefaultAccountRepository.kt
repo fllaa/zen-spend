@@ -1,11 +1,10 @@
 package com.flla.zenspend.core.network.repository
 
-import com.flla.zenspend.core.database.seed.FinanceSeedData
 import com.flla.zenspend.core.database.source.AccountLocalDataSource
 import com.flla.zenspend.core.domain.repository.AccountRepository
 import com.flla.zenspend.core.model.Account
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,17 +13,16 @@ class DefaultAccountRepository
     @Inject
     constructor(
         private val localDataSource: AccountLocalDataSource,
+        private val financeLocalInitializer: FinanceLocalInitializer,
     ) : AccountRepository {
-        init {
-            runBlocking { seedIfEmpty() }
-        }
-
         override fun observeAccounts(): Flow<List<Account>> {
-            runBlocking { seedIfEmpty() }
-            return localDataSource.observeAccounts()
+            return localDataSource.observeAccounts().onStart {
+                financeLocalInitializer.ensureInitialized()
+            }
         }
 
         override suspend fun saveAccount(account: Account) {
+            financeLocalInitializer.ensureInitialized()
             val existingAccounts = localDataSource.getAccounts()
             val normalizedAccounts =
                 if (account.isPrimary) {
@@ -36,7 +34,13 @@ class DefaultAccountRepository
             localDataSource.upsertAccount(account)
         }
 
+        override suspend fun clearAccounts() {
+            financeLocalInitializer.ensureInitialized()
+            localDataSource.clear()
+        }
+
         override suspend fun toggleAccountVisibility(accountId: String) {
+            financeLocalInitializer.ensureInitialized()
             val updatedAccounts =
                 localDataSource.getAccounts().map { account ->
                     if (account.id == accountId) {
@@ -46,11 +50,5 @@ class DefaultAccountRepository
                     }
                 }
             localDataSource.upsertAccounts(updatedAccounts)
-        }
-
-        private suspend fun seedIfEmpty() {
-            if (localDataSource.isEmpty()) {
-                localDataSource.upsertAccounts(FinanceSeedData.accounts)
-            }
         }
     }

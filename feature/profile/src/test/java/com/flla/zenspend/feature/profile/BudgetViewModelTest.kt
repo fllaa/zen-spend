@@ -23,6 +23,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BudgetViewModelTest {
@@ -49,8 +51,28 @@ class BudgetViewModelTest {
 
     private val testTransactions =
         listOf(
-            Transaction("1", "Makan Siang", 200000L, "cat_makan", "Makanan", "acc_bca", "BCA", isIncome = false, 1000L),
-            Transaction("2", "Gaji", 5000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", isIncome = true, 2000L),
+            Transaction(
+                "1",
+                "Makan Siang",
+                200000L,
+                "cat_makan",
+                "Makanan",
+                "acc_bca",
+                "BCA",
+                isIncome = false,
+                LocalDate.now().atTime(12, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+            ),
+            Transaction(
+                "2",
+                "Gaji",
+                5000000L,
+                "cat_gaji",
+                "Gaji",
+                "acc_mandiri",
+                "Mandiri",
+                isIncome = true,
+                LocalDate.now().atTime(10, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+            ),
         )
 
     @Before
@@ -129,5 +151,46 @@ class BudgetViewModelTest {
             val state = viewModel.uiState.value
             assertTrue(state.categoryBudgets.isEmpty())
             assertEquals(0L, state.totalBudgetLimit)
+        }
+
+    @Test
+    fun loadBudgets_respectsBudgetPeriodWhenSummingSpent() =
+        runTest {
+            val zoneId = ZoneId.systemDefault()
+            budgetRepository.setBudgets(
+                listOf(Budget("b_transport_weekly", "cat_transport", 500000L, BudgetPeriod.WEEKLY)),
+            )
+            transactionRepository.setTransactions(
+                listOf(
+                    Transaction(
+                        "1",
+                        "Transport Minggu Ini",
+                        100000L,
+                        "cat_transport",
+                        "Transportasi",
+                        "acc_bca",
+                        "BCA",
+                        isIncome = false,
+                        LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli(),
+                    ),
+                    Transaction(
+                        "2",
+                        "Transport Lama",
+                        175000L,
+                        "cat_transport",
+                        "Transportasi",
+                        "acc_bca",
+                        "BCA",
+                        isIncome = false,
+                        LocalDate.now().minusDays(10).atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli(),
+                    ),
+                ),
+            )
+            backgroundScope.launch { viewModel.uiState.collect {} }
+            runCurrent()
+
+            val transportBudget = viewModel.uiState.value.categoryBudgets.first()
+            assertEquals(100000L, transportBudget.spentAmount)
+            assertEquals(400000L, transportBudget.remainingAmount)
         }
 }

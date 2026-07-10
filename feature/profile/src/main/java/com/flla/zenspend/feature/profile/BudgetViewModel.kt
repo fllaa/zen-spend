@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.UUID
 import javax.inject.Inject
 
@@ -54,15 +57,22 @@ class BudgetViewModel
                 observeCategoriesUseCase(),
                 observeTransactionsUseCase(),
             ) { budgets, categories, transactions ->
-                // Calculate spent per category
+                val today = LocalDate.now()
+                val zoneId = ZoneId.systemDefault()
                 val categoryBudgets =
                     budgets.mapNotNull { budget ->
                         val category = categories.find { it.id == budget.categoryId } ?: return@mapNotNull null
 
-                        // Sum transactions matching category name
                         val categoryTransactions =
                             transactions.filter { tx ->
-                                !tx.isIncome && tx.categoryId == category.id
+                                !tx.isIncome &&
+                                    tx.categoryId == category.id &&
+                                    matchesBudgetPeriod(
+                                        timestamp = tx.timestamp,
+                                        period = budget.period,
+                                        today = today,
+                                        zoneId = zoneId,
+                                    )
                             }
                         val spentAmount = categoryTransactions.sumOf { it.amount }
                         val remainingAmount = budget.limitAmount - spentAmount
@@ -136,6 +146,19 @@ class BudgetViewModel
         fun deleteBudget(budgetId: String) {
             viewModelScope.launch {
                 deleteBudgetUseCase(budgetId)
+            }
+        }
+
+        private fun matchesBudgetPeriod(
+            timestamp: Long,
+            period: BudgetPeriod,
+            today: LocalDate,
+            zoneId: ZoneId,
+        ): Boolean {
+            val transactionDate = Instant.ofEpochMilli(timestamp).atZone(zoneId).toLocalDate()
+            return when (period) {
+                BudgetPeriod.WEEKLY -> !transactionDate.isBefore(today.minusDays(6))
+                BudgetPeriod.MONTHLY -> transactionDate.month == today.month && transactionDate.year == today.year
             }
         }
     }

@@ -7,12 +7,18 @@ import com.flla.zenspend.core.domain.usecase.SaveAccountUseCase
 import com.flla.zenspend.core.domain.usecase.SaveCategoryUseCase
 import com.flla.zenspend.core.domain.usecase.SetCurrencyUseCase
 import com.flla.zenspend.core.domain.usecase.SetSetupCompletedUseCase
+import com.flla.zenspend.core.model.Budget
+import com.flla.zenspend.core.model.BudgetPeriod
 import com.flla.zenspend.core.model.Category
+import com.flla.zenspend.core.model.Transaction
 import com.flla.zenspend.core.model.ThemeMode
 import com.flla.zenspend.core.model.UserPreferences
 import com.flla.zenspend.core.testing.MainDispatcherRule
 import com.flla.zenspend.core.testing.repository.FakeAccountRepository
+import com.flla.zenspend.core.testing.repository.FakeBudgetRepository
 import com.flla.zenspend.core.testing.repository.FakeCategoryRepository
+import com.flla.zenspend.core.testing.repository.FakeTransactionRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -24,19 +30,25 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SetupViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val userPreferencesRepository = FakeUserPreferencesRepository()
     private val accountRepository = FakeAccountRepository()
+    private val budgetRepository = FakeBudgetRepository()
     private val categoryRepository = FakeCategoryRepository()
+    private val transactionRepository = FakeTransactionRepository()
     private val completeSetupUseCase =
         CompleteSetupUseCase(
             setCurrencyUseCase = SetCurrencyUseCase(userPreferencesRepository),
             saveAccountUseCase = SaveAccountUseCase(accountRepository),
             observeCategoriesUseCase = ObserveCategoriesUseCase(categoryRepository),
             saveCategoryUseCase = SaveCategoryUseCase(categoryRepository),
+            accountRepository = accountRepository,
+            budgetRepository = budgetRepository,
+            transactionRepository = transactionRepository,
             setSetupCompletedUseCase = SetSetupCompletedUseCase(userPreferencesRepository),
         )
     private val viewModel = SetupViewModel(completeSetupUseCase)
@@ -129,6 +141,37 @@ class SetupViewModelTest {
     @Test
     fun completeSetup_updatesStateAndRepository() =
         runTest {
+            accountRepository.setAccounts(
+                listOf(
+                    com.flla.zenspend.core.model.Account(
+                        id = "demo-account",
+                        name = "Demo",
+                        balance = 10_000L,
+                        type = "Bank",
+                        iconType = "Demo",
+                        isVisible = true,
+                        isPrimary = true,
+                    ),
+                ),
+            )
+            budgetRepository.setBudgets(
+                listOf(Budget("demo-budget", "cat_makan", 100_000L, BudgetPeriod.MONTHLY)),
+            )
+            transactionRepository.setTransactions(
+                listOf(
+                    Transaction(
+                        id = "demo-transaction",
+                        title = "Demo",
+                        amount = 5_000L,
+                        categoryId = "cat_makan",
+                        categoryName = "Makanan",
+                        accountId = "demo-account",
+                        accountName = "Demo",
+                        isIncome = false,
+                        timestamp = 1_000L,
+                    ),
+                ),
+            )
             viewModel.updateAccountName("Dompet Utama")
             viewModel.updateAccountBalance("150000")
             viewModel.completeSetup()
@@ -138,6 +181,9 @@ class SetupViewModelTest {
             assertEquals("IDR", userPreferencesRepository.preferences.first().currency)
             assertTrue(userPreferencesRepository.preferences.first().hasCompletedSetup)
             assertEquals(1, accountRepository.observeAccounts().first().size)
+            assertEquals("Dompet Utama", accountRepository.observeAccounts().first().first().name)
+            assertTrue(budgetRepository.observeBudgets().first().isEmpty())
+            assertTrue(transactionRepository.observeTransactions().first().isEmpty())
             val updatedCategories = categoryRepository.observeCategories().first()
             assertTrue(updatedCategories.first { it.id == "cat_makan" }.isPrimary)
         }

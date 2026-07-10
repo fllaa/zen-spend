@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
+    testImplementation(project(":core:testing"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -21,4 +22,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

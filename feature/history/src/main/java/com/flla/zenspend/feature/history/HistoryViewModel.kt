@@ -72,32 +72,36 @@ class HistoryViewModel
                 val period = args[5] as String
                 val accountId = args[6] as String?
                 val categoryId = args[7] as String?
+                val zoneId = ZoneId.systemDefault()
+                val today = LocalDate.now()
 
-                // 1. Calculate Monthly Summary
-                val totalIncome = transactions.filter { it.isIncome }.sumOf { it.amount }
-                val totalExpense = transactions.filter { !it.isIncome }.sumOf { it.amount }
+                val periodFilteredTransactions =
+                    transactions.filter { tx ->
+                        val matchesPeriod = matchesPeriod(tx.timestamp, period, today, zoneId)
+                        val matchesAccount = accountId == null || tx.accountId == accountId
+                        val matchesCategory = categoryId == null || tx.categoryId == categoryId
+
+                        matchesPeriod && matchesAccount && matchesCategory
+                    }
+
+                val totalIncome = periodFilteredTransactions.filter { it.isIncome }.sumOf { it.amount }
+                val totalExpense = periodFilteredTransactions.filter { !it.isIncome }.sumOf { it.amount }
                 val remainingBudget = totalIncome - totalExpense
 
-                // 2. Filter transactions based on UI state
-                val filtered =
-                    transactions.filter { tx ->
+                val filteredTransactions =
+                    periodFilteredTransactions.filter { tx ->
                         val matchesQuery =
                             query.isEmpty() ||
                                 tx.title.contains(query, ignoreCase = true) ||
                                 tx.categoryName.contains(query, ignoreCase = true)
-
-                        val matchesAccount = accountId == null || tx.accountId == accountId
-                        val matchesCategory = categoryId == null || tx.categoryId == categoryId
-
-                        matchesQuery && matchesAccount && matchesCategory
+                        matchesQuery
                     }
 
-                // 3. Group transactions by relative dates
-                val grouped = groupTransactionsByDate(filtered)
+                val grouped = groupTransactionsByDate(filteredTransactions)
 
                 HistoryUiState(
                     user = user,
-                    transactions = filtered,
+                    transactions = filteredTransactions,
                     accounts = accounts,
                     categories = categories,
                     searchQuery = query,
@@ -164,6 +168,20 @@ class HistoryViewModel
                         "${txLocalDate.dayOfMonth} $monthName"
                     }
                 }
+            }
+        }
+
+        private fun matchesPeriod(
+            timestamp: Long,
+            period: String,
+            today: LocalDate,
+            zoneId: ZoneId,
+        ): Boolean {
+            val transactionDate = Instant.ofEpochMilli(timestamp).atZone(zoneId).toLocalDate()
+            return when (period) {
+                "Bulan Ini" -> transactionDate.month == today.month && transactionDate.year == today.year
+                "Semua" -> true
+                else -> true
             }
         }
     }

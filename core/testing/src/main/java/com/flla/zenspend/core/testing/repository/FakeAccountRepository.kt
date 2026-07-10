@@ -23,6 +23,10 @@ class FakeAccountRepository : AccountRepository {
         }
     }
 
+    override suspend fun clearAccounts() {
+        accountsFlow.value = emptyList()
+    }
+
     override suspend fun toggleAccountVisibility(accountId: String) {
         accountsFlow.update { currentList ->
             currentList.map { account ->

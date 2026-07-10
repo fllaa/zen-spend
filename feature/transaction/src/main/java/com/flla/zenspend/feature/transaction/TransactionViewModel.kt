@@ -155,12 +155,14 @@ class TransactionViewModel
                     val state = _uiState.value
                     val selectedAccount =
                         latestAccounts.firstOrNull { account -> account.id == state.selectedAccountId }
+                            ?: latestAccounts.firstOrNull { it.isPrimary }
+                            ?: latestAccounts.firstOrNull()
                     val noteTitle =
                         state.note.ifBlank {
                             if (state.isIncome) {
-                                "Pemasukan ${state.categoryName}"
+                                "Pemasukan ${state.categoryName.ifBlank { "Tanpa Kategori" }}"
                             } else {
-                                "Pengeluaran ${state.categoryName}"
+                                "Pengeluaran ${state.categoryName.ifBlank { "Tanpa Kategori" }}"
                             }
                         }
                     val transaction =
@@ -171,7 +173,7 @@ class TransactionViewModel
                             categoryId = state.categoryId,
                             categoryName = state.categoryName,
                             accountId = selectedAccount?.id ?: state.selectedAccountId,
-                            accountName = selectedAccount?.iconType ?: selectedAccount?.name.orEmpty(),
+                            accountName = selectedAccount?.name.orEmpty(),
                             isIncome = state.isIncome,
                             timestamp = state.dateEpochMillis,
                             note = state.note.ifBlank { null },

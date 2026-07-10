@@ -8,5 +8,7 @@ interface BudgetRepository {
 
     suspend fun saveBudget(budget: Budget)
 
+    suspend fun clearBudgets()
+
     suspend fun deleteBudget(id: String)
 }

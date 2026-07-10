@@ -1,5 +1,8 @@
 package com.flla.zenspend.core.domain.usecase
 
+import com.flla.zenspend.core.domain.repository.AccountRepository
+import com.flla.zenspend.core.domain.repository.BudgetRepository
+import com.flla.zenspend.core.domain.repository.TransactionRepository
 import com.flla.zenspend.core.model.Account
 import kotlinx.coroutines.flow.first
 import java.util.UUID
@@ -21,10 +24,16 @@ class CompleteSetupUseCase
         private val saveAccountUseCase: SaveAccountUseCase,
         private val observeCategoriesUseCase: ObserveCategoriesUseCase,
         private val saveCategoryUseCase: SaveCategoryUseCase,
+        private val accountRepository: AccountRepository,
+        private val budgetRepository: BudgetRepository,
+        private val transactionRepository: TransactionRepository,
         private val setSetupCompletedUseCase: SetSetupCompletedUseCase,
     ) {
         suspend operator fun invoke(request: CompleteSetupRequest) {
             setCurrencyUseCase(request.currency)
+            accountRepository.clearAccounts()
+            budgetRepository.clearBudgets()
+            transactionRepository.clearTransactions()
 
             val account =
                 Account(

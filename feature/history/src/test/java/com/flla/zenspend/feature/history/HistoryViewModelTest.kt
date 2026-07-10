@@ -19,6 +19,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HistoryViewModelTest {
@@ -34,6 +36,7 @@ class HistoryViewModelTest {
     private lateinit var observeCategoriesUseCase: ObserveCategoriesUseCase
     private lateinit var observeCurrentUserUseCase: ObserveCurrentUserUseCase
     private lateinit var viewModel: HistoryViewModel
+    private val zoneId = ZoneId.systemDefault()
 
     @Before
     fun setUp() {
@@ -97,10 +100,11 @@ class HistoryViewModelTest {
     @Test
     fun uiState_filtersBySearchQuery() =
         runTest {
+            val todayTimestamp = LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
             val testTransactions =
                 listOf(
-                    Transaction("1", "Kopi Starbucks", 50000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, 1000L),
-                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, 2000L),
+                    Transaction("1", "Kopi Starbucks", 50000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, todayTimestamp),
+                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, todayTimestamp),
                     Transaction(
                         "3",
                         "Bensin",
@@ -110,7 +114,7 @@ class HistoryViewModelTest {
                         "acc_tunai",
                         "Tunai",
                         false,
-                        3000L,
+                        todayTimestamp,
                     ),
                 )
             fakeTransactionRepository.setTransactions(testTransactions)
@@ -128,10 +132,11 @@ class HistoryViewModelTest {
     @Test
     fun uiState_filtersByAccount() =
         runTest {
+            val todayTimestamp = LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
             val testTransactions =
                 listOf(
-                    Transaction("1", "Makan Siang", 80000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, 1000L),
-                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, 2000L),
+                    Transaction("1", "Makan Siang", 80000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, todayTimestamp),
+                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, todayTimestamp),
                 )
             fakeTransactionRepository.setTransactions(testTransactions)
             viewModel.uiState.first()
@@ -146,10 +151,11 @@ class HistoryViewModelTest {
     @Test
     fun uiState_filtersByCategory() =
         runTest {
+            val todayTimestamp = LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
             val testTransactions =
                 listOf(
-                    Transaction("1", "Makan Siang", 80000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, 1000L),
-                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, 2000L),
+                    Transaction("1", "Makan Siang", 80000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, todayTimestamp),
+                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, todayTimestamp),
                 )
             fakeTransactionRepository.setTransactions(testTransactions)
             viewModel.uiState.first()
@@ -164,10 +170,11 @@ class HistoryViewModelTest {
     @Test
     fun uiState_calculatesSummaryCorrectly() =
         runTest {
+            val todayTimestamp = LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
             val testTransactions =
                 listOf(
-                    Transaction("1", "Makan Siang", 100000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, 1000L),
-                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, 2000L),
+                    Transaction("1", "Makan Siang", 100000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, todayTimestamp),
+                    Transaction("2", "Gaji", 10000000L, "cat_gaji", "Gaji", "acc_mandiri", "Mandiri", true, todayTimestamp),
                     Transaction(
                         "3",
                         "Bensin",
@@ -177,7 +184,7 @@ class HistoryViewModelTest {
                         "acc_tunai",
                         "Tunai",
                         false,
-                        3000L,
+                        todayTimestamp,
                     ),
                 )
             fakeTransactionRepository.setTransactions(testTransactions)
@@ -187,5 +194,27 @@ class HistoryViewModelTest {
             assertEquals(300000L, state.totalExpense)
             assertEquals(10000000L, state.totalIncome)
             assertEquals(9700000L, state.remainingBudget)
+        }
+
+    @Test
+    fun uiState_periodFilter_excludesOldTransactions_untilSemuaSelected() =
+        runTest {
+            val todayTimestamp = LocalDate.now().atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
+            val lastMonthTimestamp = LocalDate.now().minusMonths(1).atTime(12, 0).atZone(zoneId).toInstant().toEpochMilli()
+            fakeTransactionRepository.setTransactions(
+                listOf(
+                    Transaction("1", "Makan Siang", 100000L, "cat_makan", "Makanan", "acc_bca", "BCA", false, todayTimestamp),
+                    Transaction("2", "Bensin Lama", 200000L, "cat_transport", "Transportasi", "acc_tunai", "Tunai", false, lastMonthTimestamp),
+                ),
+            )
+            viewModel.uiState.first()
+
+            assertEquals(1, viewModel.uiState.value.transactions.size)
+            assertEquals(100000L, viewModel.uiState.value.totalExpense)
+
+            viewModel.onPeriodChange("Semua")
+            val allPeriodsState = viewModel.uiState.first { it.selectedPeriod == "Semua" }
+            assertEquals(2, allPeriodsState.transactions.size)
+            assertEquals(300000L, allPeriodsState.totalExpense)
         }
 }

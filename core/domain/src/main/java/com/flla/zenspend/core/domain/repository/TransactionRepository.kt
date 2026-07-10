@@ -7,4 +7,6 @@ interface TransactionRepository {
     fun observeTransactions(): Flow<List<Transaction>>
 
     suspend fun saveTransaction(transaction: Transaction)
+
+    suspend fun clearTransactions()
 }

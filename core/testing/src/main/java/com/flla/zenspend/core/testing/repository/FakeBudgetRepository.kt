@@ -24,6 +24,10 @@ class FakeBudgetRepository : BudgetRepository {
         }
     }
 
+    override suspend fun clearBudgets() {
+        budgetsFlow.value = emptyList()
+    }
+
     override suspend fun deleteBudget(id: String) {
         budgetsFlow.update { currentList ->
             currentList.filterNot { it.id == id }
